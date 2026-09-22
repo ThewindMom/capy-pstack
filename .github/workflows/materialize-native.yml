@@ -1,0 +1,75 @@
+name: Materialize complete native pstack
+on:
+  push:
+    branches: [main]
+    paths: ['.native-port/**']
+permissions:
+  contents: write
+jobs:
+  materialize:
+    if: github.repository == 'ThewindMom/capy-pstack'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          submodules: recursive
+      - name: Verify and unpack the one-time migration
+        run: |
+          cat .native-port/part-1 .native-port/part-2 .native-port/part-3 .native-port/part-4 > "$RUNNER_TEMP/native-port.tar.xz"
+          echo "06e1b1cecbf8271fe52f39943ddadd1e1c707b69aa58043998da345882657571  $RUNNER_TEMP/native-port.tar.xz" | sha256sum --check
+          mkdir "$RUNNER_TEMP/native-materializer"
+          python3 - <<'PY'
+          import os, tarfile
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])
+          with tarfile.open(root / 'native-port.tar.xz') as archive:
+              archive.extractall(root / 'native-materializer', filter='data')
+          PY
+      - name: Materialize and test full native files before replacing the adapter
+        run: |
+          python3 "$RUNNER_TEMP/native-materializer/port.py" "$GITHUB_WORKSPACE/_upstream/pstack" "$RUNNER_TEMP/native-output" "$RUNNER_TEMP/native-materializer/extras"
+          cd "$RUNNER_TEMP/native-output"
+          python3 tools/catalog.py --check
+          python3 -m unittest discover -s tests -v
+          cmp .github/workflows/test.yml "$GITHUB_WORKSPACE/.github/workflows/test.yml"
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version: latest
+      - name: Verify original bundled utilities after native changes
+        run: |
+          cp -a "$RUNNER_TEMP/native-output/.agents/skills/poteto-mode/scripts" "$RUNNER_TEMP/native-tool-tests"
+          cd "$RUNNER_TEMP/native-tool-tests"
+          bun install --frozen-lockfile
+          bun test orch watch-pr
+          bun run typecheck
+      - name: Replace the adapter and submodule with tested ordinary files
+        run: |
+          git rm -r --ignore-unmatch -- .agents .capy tools tests docs examples provenance assets .gitignore AGENTS.md LICENSE NOTICE README.md pstack.json adapter _upstream .gitmodules
+          python3 - <<'PY'
+          import os, shutil
+          from pathlib import Path
+          source = Path(os.environ['RUNNER_TEMP']) / 'native-output'
+          target = Path(os.environ['GITHUB_WORKSPACE'])
+          for item in source.iterdir():
+              if item.name == '.github':
+                  continue
+              if item.is_dir():
+                  shutil.copytree(item, target / item.name, dirs_exist_ok=True)
+              else:
+                  shutil.copy2(item, target / item.name)
+          PY
+          test ! -e .gitmodules
+          test ! -e _upstream
+          python3 tools/catalog.py --check
+          python3 -m unittest discover -s tests -v
+          git add .agents .capy tools tests docs examples provenance assets .gitignore AGENTS.md LICENSE NOTICE README.md pstack.json
+          test -z "$(git diff --cached --name-only -- .github .native-port)"
+          test -z "$(git ls-files --stage | awk '$1 == "160000" {print $4}')"
+          git diff --cached --stat
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'feat: replace adapter with complete self-contained Capy pstack'
+          git push origin HEAD:main

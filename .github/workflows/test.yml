@@ -1,34 +1,51 @@
-name: Capy port verification
+name: Native pstack verification
 on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
   test:
+    if: "!contains(github.event.head_commit.message, '[native-materialize]')"
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          submodules: recursive
           persist-credentials: false
-      - name: Require pinned source
-        run: test -f _upstream/pstack/LICENSE
-      - name: Tests including full upstream integration
-        run: python3 -m unittest discover -s tests -v
-      - name: Build and verify both installation scopes
+          submodules: false
+      - name: Require a complete ordinary checkout
         run: |
-          python3 tools/pstack.py install --target dist/project > /tmp/pstack-project-install.json
+          test ! -e .gitmodules
+          test ! -e _upstream
+          test -f .agents/skills/poteto-mode/SKILL.md
+          test -z "$(git ls-files --stage | awk '$1 == "160000" {print $4}')"
+          python3 tools/catalog.py --check
+      - name: Native workflow and offline installation tests
+        run: python3 -m unittest discover -s tests -v
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version: latest
+      - name: Test bundled orchestration and PR utilities
+        working-directory: .agents/skills/poteto-mode/scripts
+        run: |
+          bun install --frozen-lockfile
+          bun test orch watch-pr
+          bun run typecheck
+      - name: Build and verify both standalone installation layouts
+        run: |
+          python3 tools/pstack.py install --target dist/project > /tmp/project-install.json
           python3 tools/pstack.py doctor --target dist/project
-          python3 tools/pstack.py install --volume --target dist/volume > /tmp/pstack-volume-install.json
+          python3 tools/pstack.py install --volume --target dist/volume > /tmp/volume-install.json
           python3 tools/pstack.py doctor --volume --target dist/volume
-          python3 tools/tasks.py prepare examples/plan.json > dist/example-work-order.json
-          tar -czf pstack-capy-bundles.tar.gz -C dist .
+          tar -czf capy-pstack-native-bundles.tar.gz -C dist .
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: pstack-capy-bundles
-          path: pstack-capy-bundles.tar.gz
+          name: capy-pstack-native-bundles
+          path: capy-pstack-native-bundles.tar.gz
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 30
