@@ -1,0 +1,9 @@
+Original pstack is Copyright (c) Lauren Tan and contributors, licensed under MIT.
+The original LICENSE is retained unchanged at the repository and bundle roots.
+Capy-native adaptations and additional tools are Copyright (c) 2026 ThewindMom,
+and distributed under the same MIT terms.
+
+Source: cursor/plugins, pstack subtree f235052692fba08f7ff40df62775339cb4794c4c,
+verified at repository revision 53e579f1481697931fc44f5445171397cfa2b24b.
+provenance/source.json records every source file and its native destination.
+There is no runtime or installation dependency on that repository.

@@ -1,138 +1,158 @@
-# pstack for Capy
+# capy-pstack
 
-A Capy-native adaptation of Lauren Tan's [pstack](https://github.com/cursor/plugins/tree/640ea3abfbdef74aad432b58d8586e4bf645f42d/pstack), version 0.15.2. It preserves the complete upstream workflows, playbooks, principles, supporting files, and MIT license while translating execution to Capy skills, tasks, machines, volumes, and authorized automations.
+**The complete pstack workflow suite, ported to Capy and committed in this repository.**
+This is not a loader for Cursor's plugin. A normal clone contains the full skills,
+playbooks, principles, role prompts, scripts, reference material, guide and Benny pack.
+There are no Git submodules and installation never contacts an upstream repository.
+Deleting the original pstack repository does not remove this port's source or workflows.
 
-This implementation lives on **`ThewindMom/capy-pstack`, branch `main`**. The separate [Grok](https://github.com/ThewindMom/grok-pstack) and [Amp](https://github.com/ThewindMom/amp-pstack) ports are unchanged.
+Based on Lauren Tan's MIT-licensed pstack 0.15.2. The source inventory and revision are
+recorded in [provenance/source.json](provenance/source.json). The original MIT license
+is retained. This is an independent Capy adaptation, not an official integration.
 
-## What is different from the Cursor plugin
+## What is in the repository
 
-This is a native skill bundle and an executable adapter, not a Cursor process inside Capy or an invented Capy plugin SDK.
+| Component | Actual committed files |
+| --- | --- |
+| 47 ported pstack skills and 5 native support skills | [.agents/skills](.agents/skills/) |
+| 23 complete engineering playbooks | [poteto-mode/playbooks](.agents/skills/poteto-mode/playbooks/) |
+| 23 engineering principles | [Skill catalog](docs/skill-catalog.md) |
+| Poteto and Comment Sicko role prompts | [.agents/roles](.agents/roles/) |
+| Full dormant Benny automation pack | [.agents/automations/benny](.agents/automations/benny/) |
+| PR watcher, orchestration ledger, validators and audit scripts | [scripts](.agents/skills/poteto-mode/scripts/) |
+| Ten-chapter guide and original illustrations | [Guide](docs/guide/README.md) |
+| Safe offline installer and integrity checks | [tools](tools/) |
 
-- **Progressive loading.** Each skill has a small `.agents/skills/<name>/SKILL.md` entry. Capy reads the adapter and the requested full upstream workflow on demand. There is no giant always-loaded prompt.
-- **Task and machine ownership.** Use shared machines for readers of the current checkout and fresh machines for writers. Work orders check disjoint writable scopes, dependency cycles, nesting depth, parallelism, and explicit branch inheritance for stacks. Native task IDs remain the source of lifecycle truth.
-- **Real handoffs.** Children get self-contained briefs. Cross-machine files travel through Capy's native `transfer_files`, not an assumed shared filesystem. Fresh machines must have the installed skills or an attached skill volume before starting dependent work.
-- **Evidence, not a done-shaped summary.** Result validation requires completed native tasks, actual base/head commits, scoped changed paths, and a passing artifact for each acceptance criterion. Idle is not done. This is not a shipping approval; independent whole-PR review still applies.
-- **Capy models and persistence.** Defaults inherit the parent model. Explicit model choices must be available in the actual session. Durable state belongs in a selected volume or an authorized pushed commit, not an ephemeral machine's home directory. Long-running workflows use authorized native tasks and automations, not detached cron loops.
+Open [poteto-mode/SKILL.md](.agents/skills/poteto-mode/SKILL.md) or
+[how/SKILL.md](.agents/skills/how/SKILL.md): each contains its real workflow, not an
+instruction to load a preserved Cursor file elsewhere. Edit these native files directly.
+The [porting record](docs/porting.md) explains semantic changes and remaining limits.
 
-The source is deliberately not rewritten with global string replacements. That would risk deleting mandatory steps, changing exceptions, or breaking relative script paths. Generated entry points read [the controlling Capy adapter](adapter/CAPY.md) and then the byte-preserved workflow. `setup-pstack` instead uses [Capy-specific setup](adapter/SETUP.md). Cursor tools, model names, storage paths, and source autonomy language never grant Capy capabilities or permissions.
+## Use directly in Capy
 
-## Install into a project
-
-Requires Git and Python **3.10 or later**. The installer has no third-party Python dependencies and performs no network requests, task creation, pushes, or package installation.
-
-```bash
-git clone --recurse-submodules \
-  https://github.com/ThewindMom/capy-pstack.git pstack-capy
-cd pstack-capy
-
-python3 tools/pstack.py install --target /path/to/your-project --dry-run
-python3 tools/pstack.py install --target /path/to/your-project
-python3 tools/pstack.py doctor --target /path/to/your-project
-```
-
-For an existing clone without its source submodule:
-
-```bash
-git submodule update --init --depth 1 _upstream
-```
-
-The installer verifies the exact upstream commit **`640ea3abfbdef74aad432b58d8586e4bf645f42d`** and refuses modified source. The generated project layout is:
+Add `ThewindMom/capy-pstack` as a repository in the Capy project alongside the application
+repository. Capy discovers the complete `.agents/skills/<name>/SKILL.md` catalog from
+this checkout. A fresh task must have this repository selected or the installed skill
+volume attached. In multi-repository projects, check repository order when skill names
+conflict. There is no plugin activation command or special mode registration.
 
 ```text
-.agents/skills/<skill>/SKILL.md       Native Capy entries for all source skills
-.agents/pstack/CAPY.md               Platform translation and execution contract
-.agents/pstack/SETUP.md              Capy model and workflow configuration
-.agents/pstack/tasks.py              Work-order and evidence checker
-.agents/pstack/upstream/             Complete byte-preserved pstack subtree
-.agents/pstack/provenance.json       Source revision, inventory, per-file hashes
-.capy/rules/pstack-capy.mdc           Small, always-applied opt-in routing rule
-.pstack-capy-manifest.json           Installer ownership and integrity information
+Use setup-pstack, then poteto-mode.
+Work on the application repository, not capy-pstack.
+Reproduce the bug, fix its cause, and verify the real user-visible result.
+Use native Capy tasks for independent work.
 ```
 
-`AGENTS.md`, unrelated skills, and user configuration are not overwritten. Existing conflicting skills stop the whole operation before any managed file is changed. There is no force-overwrite option. Choose an unambiguous installation scope or explicitly reconcile the existing skill yourself.
+## Copy into one project, completely offline
 
-Make the generated files available to the project's Capy checkout. For fresh machines, use a caller-authorized commit/push of the installed files or attach the intended persistent skill volume. A clone of this port elsewhere on a machine is not automatically visible to every task. Do not publish private project files merely to transfer them.
-
-## Install on an attached volume
-
-Use the **actual mounted volume root** shown by your Capy session. No home-directory convention is assumed.
+Only Python 3.10+ is needed. A ZIP/tar extraction works too; Git metadata is not required.
 
 ```bash
-python3 tools/pstack.py install --volume --target /actual/mounted/volume --dry-run
-python3 tools/pstack.py install --volume --target /actual/mounted/volume
-python3 tools/pstack.py doctor --volume --target /actual/mounted/volume
+git clone https://github.com/ThewindMom/capy-pstack.git
+cd capy-pstack
+python3 tools/pstack.py doctor
+python3 tools/pstack.py install --target /path/to/application --dry-run
+python3 tools/pstack.py install --target /path/to/application
+python3 tools/pstack.py doctor --target /path/to/application
 ```
 
-This writes `skills/<skill>/SKILL.md` and `pstack/` at that root, not `.agents/skills`. It does not replace volume instructions. Attach the volume to the intended thread/tasks. Capy's documented discovery rules decide precedence; do not keep conflicting copies or assume both implementations of a same-named skill will run. See [Capy skills](https://docs.capy.ai/skills).
+The installer copies full `.agents/skills`, `.agents/roles`, `.agents/automations`,
+licenses, model example and catalog. It never downloads or generates the skill bodies.
+It also adds a small `.capy/rules/pstack-capy.mdc` rule for explicit pstack requests.
+It does not overwrite `AGENTS.md`, user model settings or unrelated skills. A collision
+or locally changed managed file stops the update before any managed write. Commit the
+installed project files when authorized so fresh machines receive them.
 
-## Use it
+## Share through a Capy volume
 
-After installing, start a Capy thread with the project or selected volume attached. Ask:
-
-```text
-Use setup-pstack to configure this Capy installation.
-Then use poteto-mode to reproduce the export retry bug, fix its root cause,
-and verify the actual export. Use native tasks for independent work.
-```
-
-No provider override is required. The source's slash-prefixed names are workflow names; this port does not claim to register a separate Capy command palette or mode dial.
-
-The bootstrap skill in this port's own `.agents/skills/pstack-capy/` helps an agent install the pinned bundle. It is not the full installed catalog.
-
-## Work orders and model roles
-
-Copy [examples/plan.json](examples/plan.json) and replace its repository, goals, scopes, and acceptance criteria. It demonstrates two independent writers and a reviewer that starts from the implementation's actual branch.
+Choose the actual mounted Personal, Organization, Project or Project + personal volume.
+**Automation volumes hold state, not discoverable instructions/skills.**
 
 ```bash
-python3 /path/to/your-project/.agents/pstack/tasks.py prepare plan.json
+python3 tools/pstack.py install --volume --target /actual/skill-volume --dry-run
+python3 tools/pstack.py install --volume --target /actual/skill-volume
+python3 tools/pstack.py doctor --volume --target /actual/skill-volume
 ```
 
-For a volume installation, run `python3 /actual/mounted/volume/pstack/tasks.py` and set `pstack_root` in the plan to that installed directory. The output is **a work order for the native agent**, not a payload to POST to an API. The coordinator must draft/start tasks using its real Capy tools and verify actual machine placement, model availability, ownership, and live-task counts.
+The same complete files install at `skills/`, `roles/` and `automations/` in that root.
+Relative skill references work in both layouts. Volume instructions and personal files
+remain untouched. Use only one intentional copy of a same-named skill in a given scope.
 
-Dependent writers that touch overlapping paths require both `depends_on` and `base_from`. Merely setting `max_parallel: 1` does not make independent branches a valid stack. Reviewers use `base_from` to inspect the implementation commit on a fresh machine. `parent_depth` must reflect the actual nesting depth, not always zero.
+## Native Capy behavior
 
-Optional adapter model settings live at `.agents/pstack.models.json`, or `pstack.models.json` beside `pstack/` on a volume. These are not native Capy configuration files. See [setup](adapter/SETUP.md) for the schema and precedence.
+Read-only investigations share the current machine; writers and candidate artifacts use
+fresh machines at explicit bases. Task prompts carry their own context. `transfer_files`
+moves required inputs/evidence, and dependent writers inherit the accepted branch/head.
+Task completion and PR/CI/review events wake the owner. Periodic programs use explicitly
+authorized Capy automations and durable volume records, never detached VM sleepers.
 
-```bash
-python3 .agents/pstack/tasks.py prepare plan.json --models .agents/pstack.models.json
-```
+Models inherit the parent by default. The complete per-role example is
+[.agents/pstack.models.example.json](.agents/pstack.models.example.json). Configure only
+IDs observed in the actual account. Panel arrays preserve four seats by default; repeated
+inherited seats are not misrepresented as multi-model diversity. No provider IDs or
+reasoning suffixes are guessed. The native support skills `create-skill`, `deslop`,
+`control-cli`, `control-ui` and `capy-automation` replace editor-only dependencies.
 
-Collect native results in a JSON array. Each record has `id`, `native_task_id`, `machine_id`, `status`, `base_sha`, `head_sha`, `branch` for writers, `changed_paths`, and `evidence`. Each evidence item has an exact `criterion` from the work order, `result: "pass"`, and an actual artifact reference. Read-only tasks must not change commits or files. Stack bases must equal the reported predecessor head.
+Benny's complete triage and reproduction workflows are included but remain dormant.
+Its setup normalizes Slack bursts into independent root reports and uses trusted triage
+marker events for reproduction, with durable deduplication and thread-only posting.
+Creating or enabling an automation is a separate authorized action.
 
-```bash
-python3 .agents/pstack/tasks.py check-results plan.json --results results.json
-```
-
-Successful structural validation returns `safe_to_ship: false`. Inspect the real diffs and artifacts, confirm the current PR head and required checks, and obtain an independent whole-PR verdict before any authorized shipping. A schema cannot authenticate a task's claims.
-
-## Maintenance and removal
-
-Rerun the installer from this pinned port to update an intact managed installation. Identical installs leave files unchanged. Local edits or missing managed files stop an update; preserve and reconcile them first. Keep custom skills, project instructions, and the model profile outside the managed source tree.
-
-```bash
-python3 tools/pstack.py uninstall --target /path/to/your-project --dry-run
-python3 tools/pstack.py uninstall --target /path/to/your-project
-```
-
-Add `--volume` when removing a volume installation. Only tracked, hash-matching files are removed. Unrelated files and directories remain.
-
-The installer uses an exclusive lock, a complete collision preflight, staged file replacements, and rollback on Python exceptions. It is **not a filesystem transaction across power loss or SIGKILL** and is not a defense against a malicious process with the same filesystem permissions. After an interrupted run, inspect the lock and manifest, preserve changed files, and reconcile before retrying. Never delete a lock held by a live installer.
-
-An upstream update is an explicit port change: review the diff, update the gitlink and `PIN` together, update version metadata when needed, and rerun the complete integration tests. The installer never silently downloads a newer source.
-
-## Verification and limits
+## Tools and development
 
 ```bash
 python3 -m unittest discover -s tests -v
-python3 tools/tasks.py prepare examples/plan.json
+python3 tools/catalog.py --check
+python3 .agents/skills/poteto-mode/scripts/tasks.py prepare examples/plan.json
+python3 .agents/skills/poteto-mode/scripts/models.py validate \
+  .agents/pstack.models.example.json
 ```
 
-Tests cover installation behavior, ownership conflicts, symlinks and traversal, safe uninstall, rollback, volume layout, model profiles, task graph/stack validation, evidence gates, and the real command-line interface. The integration test requires the initialized pinned submodule, installs every source file, checks byte equality and all generated entry links, and checks idempotence. CI initializes that source and builds both project and volume bundles.
+Optional Bun tools keep the complete original implementation and tests, adapted where
+platform behavior differs. They depend on Bun and the locked registry packages, **not**
+on Cursor's repository:
 
-**Local installer tests are not a live Capy smoke test.** No authenticated Capy workspace was available during this implementation. Native discovery, actual task starts and notifications, machine handoff, volume persistence, model selection, browser verification, and automation wakeups still need the [live smoke checklist](docs/live-smoke.md). No Capy API key is needed for normal skill use or these local tests.
+```bash
+cd .agents/skills/poteto-mode/scripts
+bun install --frozen-lockfile
+bun test orch watch-pr
+bun run typecheck
+```
 
-Capy's public task API is read-only. This port deliberately does not invent task-creation endpoints or pretend to have runtime hooks. Its workflow guarantees are instructions plus validation, not a sandbox, distributed lock, exactly-once scheduler, or proof that every future agent follows them. Source dependencies outside pstack, including Cursor's control and cleanup skills, are not magically bundled: the adapter requires a real equivalent capability or a blocked gate.
+Native Capy events are the default wake path. Use `bun watch-pr/cli.ts --status-only`
+for a one-pass GitHub snapshot. The ledger is local bookkeeping; set `ORCH_STORE` to an
+explicit selected volume/run directory. It is not a distributed ownership lock.
 
-## Attribution
+After editing bundled files, inspect the diff and run `python3 tools/catalog.py` to
+refresh hashes, then tests. The [catalog](docs/skill-catalog.md) links every full skill.
+The installer uses a lock, collision preflight, staged replacement and exception rollback;
+it is not a power-loss transaction or a defense against another malicious same-user process.
 
-Original pstack: **Lauren Tan and contributors**, MIT. The upstream submodule and generated `upstream/LICENSE` retain its license. The adapter and tools are MIT, Copyright 2026 ThewindMom; see [LICENSE](LICENSE). The source is pinned, not vendored from your private repositories. This is an independent adaptation, not an official Cursor or Capy integration.
+```bash
+python3 tools/pstack.py uninstall --target /path/to/application --dry-run
+python3 tools/pstack.py uninstall --target /path/to/application
+```
+
+Uninstall removes only intact owned files. Add `--volume` for a volume installation.
+Older adapter installations use a different ownership manifest; reconcile those files
+rather than force-overwriting them. No installer removes unrelated work.
+
+## Verification boundary
+
+CI checks the full direct-file catalog, local links, forbidden editor runtime mechanics,
+all source-file destinations, task/model validation, safe installation and offline
+source-free packaging. It also runs the bundled Bun tests and typecheck. These are not
+claims that an authenticated Capy session has executed every workflow. Follow the
+[live smoke checklist](docs/live-smoke.md) to record actual task/machine IDs, wakeups,
+model choices, browser proof and volume behavior. Missing platform capabilities remain
+explicitly blocked. Instruction text and structural validators are not a sandbox.
+
+## References and license
+
+Capy contracts checked on 2026-09-22: [skills](https://docs.capy.ai/skills),
+[tasks](https://docs.capy.ai/tasks), [machines](https://docs.capy.ai/machines),
+[volumes](https://docs.capy.ai/volumes), [instructions](https://docs.capy.ai/instructions),
+[environment](https://docs.capy.ai/environment), [pull requests](https://docs.capy.ai/pull-requests),
+and [automations](https://docs.capy.ai/automations). These links are documentation,
+not runtime dependencies. Original work: Lauren Tan and contributors. Native additions:
+ThewindMom. Both are MIT; see [LICENSE](LICENSE) and [NOTICE](NOTICE).

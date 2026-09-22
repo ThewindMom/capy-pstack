@@ -2,13 +2,14 @@
   "version": 1,
   "max_parallel": 3,
   "parent_depth": 0,
-  "pstack_root": ".agents/pstack",
+  "pstack_root": ".agents",
   "tasks": [
     {
       "id": "api",
       "repository": "owner/application",
       "role": "implementation",
-      "goal": "Fix duplicate export rows on retry after reproducing the issue.",
+      "model_role": "bug-fix",
+      "goal": "Reproduce and fix duplicate export rows after retry.",
       "write": true,
       "scope_paths": ["src/export", "tests/export"],
       "base_ref": "main",
@@ -18,22 +19,22 @@
       "id": "docs",
       "repository": "owner/application",
       "role": "implementation",
-      "goal": "Document existing export retry behavior without changing application code.",
+      "goal": "Document the existing retry behavior independently of the fix.",
       "write": true,
       "scope_paths": ["docs/export.md"],
       "base_ref": "main",
-      "acceptance": ["The documentation matches observed retry behavior and passes the docs checks."]
+      "acceptance": ["The documentation matches observed behavior and passes the docs checks."]
     },
     {
       "id": "review-api",
       "repository": "owner/application",
       "role": "review",
-      "goal": "Independently review the export fix at its exact head and inspect the reproduction evidence.",
+      "goal": "Independently review the exact export fix and actual reproduction evidence.",
       "write": false,
       "scope_paths": ["src/export", "tests/export"],
       "depends_on": ["api"],
       "base_from": "api",
-      "acceptance": ["The full export diff and actual regression evidence have an explicit independent verdict."]
+      "acceptance": ["The full diff and actual regression evidence have an independent verdict."]
     }
   ]
 }

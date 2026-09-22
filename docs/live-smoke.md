@@ -1,37 +1,37 @@
-# Live Capy smoke test
+# Live Capy verification
 
-Status: not executed in an authenticated Capy workspace during implementation.
-Run on a disposable repository and, for the volume checks, a caller-selected test volume.
-Record actual task/machine IDs and artifact references. Never use fabricated IDs from a fixture.
+Status: not run in an authenticated Capy workspace by this change. Repository, installer,
+model-profile, task-plan and bundled script tests are separate from these live checks.
+Use an authorized disposable project, not customer data. Record actual thread/task IDs,
+model choices, machine IDs, commit SHAs and artifact paths for every performed check.
 
-1. Install from the pinned submodule into the test project. Run `doctor`, commit the
-   generated files with authorization, and start a new Capy thread on that revision.
-   Confirm `poteto-mode`, `setup-pstack`, `how`, and a principle appear as discovered
-   skills. Read their actual paths; confirm adapter-first and source-relative loading.
-2. Ask for a small read-only investigation. Confirm the complete matching playbook
-   and referenced principle are read, not the whole catalog or Cursor-local history.
-3. Prepare two disjoint writer tasks and a dependent reviewer. Start them through
-   the native tools, explicitly choosing fresh machines for writers. Confirm actual
-   placement and base commits, and confirm each child has the adapter files.
-4. Inspect live progress without restarting the owners. Verify that a final child
-   report wakes its parent and that idle/stopped is not accepted as done.
-5. Create an input that exists only on the parent machine. Confirm that it is absent
-   from a fresh child until transferred using native `transfer_files`. Verify content
-   after transfer; never push a private file solely to make the test pass.
-6. Give a dependent writer overlapping paths. Confirm it is based on the predecessor's
-   actual branch/head, not merely launched later from main. Run the result checker
-   against actual commits and evidence, then perform independent whole-diff review.
-7. Try an overlapping independent writer plan, missing evidence, failed/idle result,
-   and an unavailable model. Each must block, without creating duplicate tasks or
-   claiming model diversity. Recheck available models through the live session.
-8. Install into the intended test volume, attach it, and repeat skill discovery on
-   another machine. Confirm real file visibility and precedence. Test restart/wake
-   behavior through Capy's normal lifecycle, not a destructive VM operation.
-9. Only with explicit authorization, create one bounded native automation and verify
-   its observed wakeup and idempotent domain action. Without authorization, mark this
-   check not run; never substitute a detached cron or a promise to monitor.
-10. Uninstall from the test target and confirm unrelated skills, AGENTS.md, and the
-    user model profile remain. Record any unavailable platform capability as blocked.
+1. Add this repository to the project's repository list. Start a fresh thread and confirm
+   the discovered paths for poteto-mode, how, arena and a principle point to full local
+   SKILL.md bodies. No source download or interpreter adapter should run.
+2. Invoke a small investigation. Inspect the actual skill reads, complete playbook steps,
+   cited code and relevant principle. A skill appearing in the catalog is not execution.
+3. Draft two disjoint writer tasks with complete prompts. Choose fresh machines and inspect
+   the returned placement, IDs and bases. Choose shared placement for one read-only audit.
+   Confirm a child without a transferred file cannot read the parent's private path.
+4. Transfer that harmless fixture with transfer_files, verify its bytes on the child,
+   and run the real acceptance checks. A stopped idle task must not count as done.
+5. Inspect the final report notification and diff on each writer's machine. Send a follow-up
+   to its existing owner; do not start a replacement after an ordinary timeout.
+6. Start a dependent task from the accepted predecessor's actual branch/head. Validate its
+   result with tasks.py and perform independent whole-diff review at the exact current head.
+7. Test model inheritance and one account-observed override. Check four-seat arena and one
+   cross-judge-after-candidates. Record real models rather than calling same-model runs diverse.
+8. Install to a selected non-Automation skill volume, attach it, and verify discovery and
+   cross-machine access. Put only state in Automation volumes. Test wake/startup with the
+   normal lifecycle; verify pushed files and retained evidence after backing replacement.
+9. Only after explicit authorization, create one disabled test automation, inspect its
+   principal, triggers, run cap and model, then enable and test it. Verify event payloads
+   are data, URL secrets remain private, and duplicate delivery reconciles one domain action.
+   Disable the test afterward. Without authorization, record this check as not run.
+10. Test Benny only in a configured test channel with a complete app-control adapter and
+    tracker actions. Use a burst with two root reports, an untrusted marker, a retry and a
+    missing-parent case. Verify no source-channel root post, no duplicate fixer, two real
+    UI reproductions before a fix, and draft-only publishing within the authorized budget.
 
-Do not label the live port verified until the applicable checks pass on the actual
-Capy version/account. Local unit tests and reported task summaries are not substitutes.
+Record failed or unavailable gates as blocked. Never substitute unit tests, static text
+checks or a task's own summary for an unobserved native tool interaction.

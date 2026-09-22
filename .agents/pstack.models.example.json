@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "max_parallel": 3,
+  "confirmed_models": [],
+  "roles": {
+    "feature": "inherit-parent",
+    "refactoring": "inherit-parent",
+    "bug-fix": "inherit-parent",
+    "perf-issue": "inherit-parent",
+    "hillclimb": "inherit-parent",
+    "judgment and prose": "inherit-parent",
+    "hardest tasks": "inherit-parent",
+    "how explorer": "inherit-parent",
+    "how explainer": "inherit-parent",
+    "why investigators": "inherit-parent",
+    "why synthesizer": "inherit-parent",
+    "reflect tooling": "inherit-parent",
+    "reflect judgment": "inherit-parent",
+    "reflect divergent": "inherit-parent",
+    "reflect synthesizer": "inherit-parent",
+    "swarm workers": "inherit-parent",
+    "comment review": "inherit-parent"
+  },
+  "panels": {
+    "arena runners": [
+      "inherit-parent",
+      "inherit-parent",
+      "inherit-parent",
+      "inherit-parent"
+    ],
+    "arena cross-judge pool": [
+      "inherit-parent",
+      "inherit-parent",
+      "inherit-parent",
+      "inherit-parent"
+    ],
+    "architect runners": [
+      "inherit-parent",
+      "inherit-parent",
+      "inherit-parent",
+      "inherit-parent"
+    ],
+    "interrogate reviewers": [
+      "inherit-parent",
+      "inherit-parent",
+      "inherit-parent",
+      "inherit-parent"
+    ]
+  }
+}

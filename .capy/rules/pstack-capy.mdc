@@ -1,0 +1,7 @@
+---
+description: Use the bundled pstack workflows when explicitly requested.
+alwaysApply: true
+---
+When the user requests pstack or poteto-mode, read the complete discovered poteto-mode
+skill and its matching playbook. Otherwise this rule adds no workflow requirement.
+Use the actual installed skill paths. Never fetch Cursor's plugin to run this bundle.
