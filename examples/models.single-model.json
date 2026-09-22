@@ -1,0 +1,6 @@
+{
+  "version": 2,
+  "preset": "single-model",
+  "budget": "unlimited",
+  "max_parallel": 3
+}

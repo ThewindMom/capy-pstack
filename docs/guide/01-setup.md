@@ -21,3 +21,12 @@ When no project verify-* skill exists, create-verification-skill builds one and 
 it through the real application before handoff. Configure dependencies in the project's
 initialize/update_after_checkout phases and restartable services in startup. A snapshot
 accelerates that recipe; it never replaces the committed source or durable work record.
+
+## Faithful model policy (version 2)
+
+The shipped preset restores upstream role assignments and four different panel models.
+Run setup-pstack and follow [the model contract](../../.agents/skills/poteto-mode/references/model-policy.md).
+Current account observations must include supported effort and priority controls. Missing
+choices block; parent inheritance is an explicitly approved alternate profile, except the
+upstream-unspecified Comment Sicko role. Old version 1 profiles require deliberate migration.
+The example JSON is policy, never evidence that a model is available in your account.

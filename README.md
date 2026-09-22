@@ -18,7 +18,7 @@ The original Cursor plugin uses Cursor's tools, subagents, model choices, and ed
 
 ## What pstack brings
 
-The suite includes **47 ported pstack skills, including 23 principles, and 23 complete playbooks**. Five additional Capy support skills bring the main catalog to **52**. The separate Benny automation pack contains its own setup, triage, and reproduction workflows.
+The suite includes **47 ported pstack skills, including 23 principles, and 23 complete playbooks**. Five bundled support skills bring the main catalog to **52**. The separate Benny automation pack contains its own setup, triage, and reproduction workflows.
 
 | Work you need to do | What the workflow adds |
 | --- | --- |
@@ -71,7 +71,9 @@ Capy's [skill discovery](https://docs.capy.ai/skills) exposes names and descript
 
 Capy supports a model choice per task. [setup-pstack](.agents/skills/setup-pstack/SKILL.md) and the [model validator](.agents/skills/poteto-mode/scripts/models.py) preserve pstack's distinct implementation, investigation, judgment, and review roles while accepting only account-observed choices.
 
-The default is **parent-model inheritance for every role**, not a promised provider lineup. Configure less expensive available models for mechanical work and stronger available models for difficult judgment according to your budget. Review and design panels default to four independent seats; repeated inherited seats are same-model runs, not multi-model diversity. The arena cross-judge pool selects one judge after candidates finish, not another whole panel.
+The default policy is **upstream-faithful**. It restores Grok 4.6 for implementation and exploration, Fable 5.1 for difficult judgment and explanation, GPT-5.6 Sol for reflection tooling, and the four-model Fable/Sol/Grok/Opus design/review panels. Comment Sicko retains its unspecified upstream model. Reasoning effort and priority are separate settings, checked against current account observations before launch. Unsupported settings block rather than silently downgrading. A single-model or custom budget/provider choice is explicit and labelled; billing aliases to the same weights do not add diversity. The arena cross-judge is exactly one independent task selected after all accepted candidates finish.
+
+See the [model policy](.agents/skills/poteto-mode/references/model-policy.md), the [upstream preset](.agents/pstack.model-presets.json), and [requirement-to-evidence map](docs/parity-requirements.md). Saved profiles use version 2. Existing version 1 profiles are preserved and must be migrated explicitly; they are not silently converted into a different spending policy.
 
 Use the [complete example profile](.agents/pstack.models.example.json) to tune roles, panels, and concurrency. More agents are not automatically better; use parallelism where the extra coverage or alternative is worth it.
 
@@ -190,7 +192,7 @@ Run the checks from the repository root:
 ```bash
 python3 -m unittest discover -s tests -v
 python3 tools/catalog.py --check
-python3 .agents/skills/poteto-mode/scripts/tasks.py prepare examples/plan.json
+python3 .agents/skills/poteto-mode/scripts/tasks.py prepare examples/plan.json --structure-only
 python3 .agents/skills/poteto-mode/scripts/models.py validate \
   .agents/pstack.models.example.json
 ```
@@ -222,3 +224,23 @@ This README describes the port based on pstack **0.15.2**, not a promise of auto
 The linked local skills are the implementation contract. Capy's official references describe the platform: [welcome](https://docs.capy.ai/welcome), [tasks](https://docs.capy.ai/tasks), [machines](https://docs.capy.ai/machines), [threads](https://docs.capy.ai/threads), [PRs](https://docs.capy.ai/pull-requests), [environment](https://docs.capy.ai/environment), [skills](https://docs.capy.ai/skills), [volumes](https://docs.capy.ai/volumes), and [automations](https://docs.capy.ai/automations).
 
 Original pstack: **Lauren Tan and contributors**. Capy port and native additions: **ThewindMom**. Both are MIT; see [LICENSE](LICENSE), [NOTICE](NOTICE), and the [source inventory](provenance/source.json). This is an independent adaptation, not an official Cursor or Capy integration.
+
+## Fidelity checks and control probes
+
+The restored control-cli and control-ui workflows include detailed terminal/browser harness,
+page selection, keyboard/resize, tracing, memory and cleanup recipes. Their original Cursor
+MIT notices are included, as is the original deslop checklist. create-skill and capy-automation
+implement the required authoring/continuation outcomes using Capy's actual discovery and
+lifecycle rather than claiming to copy unavailable editor built-ins.
+
+Normal Python tests cover the model resolver, settings/identity checks, task-plan wiring,
+real PTY interaction and safe installation. CI additionally runs the optional real Chromium
+scenarios (including a broken-then-fixed UI), with Python Playwright 1.57.0. Enable them in
+a prepared local browser environment with `PSTACK_BROWSER_TESTS=1`; they are not prerequisites
+for normal installation. Browser dependencies are standard registry packages, not upstream
+pstack downloads. The probes test their own fixtures, not an authenticated Capy workspace.
+
+Use `models.py resolve` with current `--observed` capabilities before native task starts.
+`tasks.py prepare --structure-only` only validates a dependency/scope graph. Omit that flag
+and supply `--observed` for role/settings resolution. No JSON checker authenticates a native
+task result; the [live checks](docs/live-smoke.md) still require actual Capy evidence.

@@ -20,7 +20,7 @@ When in doubt, take the simple path.
 
 Decompose the question into 2 to 4 exploration angles, each a distinct slice of the subsystem. Spawn all explorers in a single message:
 
-- `model`: your configured how-explorer model (default `inherit-parent`)
+- `model`: your configured how-explorer model (default from the upstream-faithful role preset)
 - Read-only scope on a shared Capy machine; return the report as a task message.
 
 Each explorer gets the prompt in `references/explorer-prompt.md` with its angle filled in. Then go to Step 3.
@@ -29,7 +29,7 @@ Each explorer gets the prompt in `references/explorer-prompt.md` with its angle 
 
 Spawn one native Capy task that explores and explains in one pass:
 
-- `model`: your configured how-explainer model (default `inherit-parent`)
+- `model`: your configured how-explainer model (default from the upstream-faithful role preset)
 - Read-only scope on a shared Capy machine; return the report as a task message.
 
 Build its prompt from `references/explainer-prompt.md` without the explorer-findings section. Go to Step 4.
@@ -38,7 +38,7 @@ Build its prompt from `references/explainer-prompt.md` without the explorer-find
 
 Once all explorers have returned, spawn one native Capy task to synthesize their findings into one explanation:
 
-- `model`: your configured how-explainer model (default `inherit-parent`)
+- `model`: your configured how-explainer model (default from the upstream-faithful role preset)
 - Read-only scope on a shared Capy machine; return the report as a task message.
 
 Build its prompt from `references/explainer-prompt.md` with every explorer's findings filled in.
@@ -63,11 +63,14 @@ A report returned in the task message is not a filesystem write. Verify the plac
 and machine ID returned at start. Use `transfer_files` for inputs and reports crossing
 machines; a path on another machine is not an accessible input.
 
-Read the selected role from `pstack.models.json` at the bundle root, then apply an
-explicit project `.agents/pstack.models.json` override. Absent configuration means
-`inherit-parent`: omit the native model override. Recheck configured IDs against the
-current account. Four-seat design/review panels retain four independent seats by
-default; report same-model seats honestly rather than claiming model diversity.
+Read the selected role from `pstack.models.json` at the bundle root, with the project
+profile overriding matching fields. Absent configuration uses `upstream-faithful` from
+`pstack.model-presets.json`. Follow `skills/poteto-mode/references/model-policy.md` at
+that root and run its models.py resolver with current account observations before launch.
+Preserve the role-specific model, reasoning effort, priority and panel count. Unsupported
+settings block the affected seat; never silently inherit or substitute. Same-model/custom
+profiles require an explicit user-approved difference. Four faithful seats are four models
+across three families. Inspect returned native settings, not only the requested prompt.
 
 Use the native task tools available in this session, not a shell that starts another
 agent. Drafts are not running, working/waiting tasks remain live, and idle/stopped is

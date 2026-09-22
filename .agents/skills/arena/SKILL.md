@@ -24,7 +24,7 @@ The N candidates will receive the same prompt, so the prompt is the contract.
 
 1. State the artifact each candidate is producing.
 2. Derive the rubric. State what success looks like for *this* task, then turn it into 3-6 concrete gradeable criteria. The rubric is the picker's tool in Phase D. Candidates only see the task.
-3. Pick the runners. Use `arena runners` from `pstack.models.json` at the selected bundle root when present. Otherwise default to one each on `inherit-parent`, `inherit-parent`, `inherit-parent`, `inherit-parent`. Spawn more when the arena covers multiple design directions. Same model N times when the work is generation-bound rather than judgment-sensitive.
+3. Pick the runners. Use `arena runners` from `pstack.models.json` at the selected bundle root when present. Otherwise resolve the four upstream-faithful `arena runners` seats through models.py with current observations. Spawn more when the arena covers multiple design directions. Same model N times when the work is generation-bound rather than judgment-sensitive.
 4. Assign output paths. Each candidate writes to its own location (a fresh candidate machine with its own branch and a named artifact directory), per the **separate-before-serializing-shared-state** principle skill.
 
 ## Phase B: Fan out
@@ -37,7 +37,7 @@ Only a terminal failed or reconciled-stopped candidate may be a dropout. Proceed
 
 ## Phase C: Cross-judge
 
-After all Phase B candidates complete, choose one model from the `arena cross-judge pool` in `pstack.models.json` at the selected bundle root when present. Otherwise use `inherit-parent`, `inherit-parent`, `inherit-parent`, `inherit-parent`. Prefer a different model family from the parent's. Draft one read-only native Capy judge task on that model, with the transferred candidate artifacts and exact rubric. It sees the rubric and the candidates by path label, scores each criterion, and recommends a base with rationale. It runs in parallel with the parent's reading in Phase D, not with the candidates themselves. Don't spawn the judge while candidates are still writing.
+After all Phase B candidates complete, choose one model from the `arena cross-judge pool` in `pstack.models.json` at the selected bundle root when present. Otherwise use the upstream-faithful `arena cross-judge pool` and models.py select-judge after all accepted candidate results exist. Prefer a different model family from the parent's. Draft one read-only native Capy judge task on that model, with the transferred candidate artifacts and exact rubric. It sees the rubric and the candidates by path label, scores each criterion, and recommends a base with rationale. It runs in parallel with the parent's reading in Phase D, not with the candidates themselves. Don't spawn the judge while candidates are still writing.
 
 ## Phase D: Pick a base
 
@@ -81,11 +81,14 @@ A report returned in the task message is not a filesystem write. Verify the plac
 and machine ID returned at start. Use `transfer_files` for inputs and reports crossing
 machines; a path on another machine is not an accessible input.
 
-Read the selected role from `pstack.models.json` at the bundle root, then apply an
-explicit project `.agents/pstack.models.json` override. Absent configuration means
-`inherit-parent`: omit the native model override. Recheck configured IDs against the
-current account. Four-seat design/review panels retain four independent seats by
-default; report same-model seats honestly rather than claiming model diversity.
+Read the selected role from `pstack.models.json` at the bundle root, with the project
+profile overriding matching fields. Absent configuration uses `upstream-faithful` from
+`pstack.model-presets.json`. Follow `skills/poteto-mode/references/model-policy.md` at
+that root and run its models.py resolver with current account observations before launch.
+Preserve the role-specific model, reasoning effort, priority and panel count. Unsupported
+settings block the affected seat; never silently inherit or substitute. Same-model/custom
+profiles require an explicit user-approved difference. Four faithful seats are four models
+across three families. Inspect returned native settings, not only the requested prompt.
 
 Use the native task tools available in this session, not a shell that starts another
 agent. Drafts are not running, working/waiting tasks remain live, and idle/stopped is

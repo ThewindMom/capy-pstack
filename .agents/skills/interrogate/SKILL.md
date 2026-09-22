@@ -33,8 +33,9 @@ Write one clear paragraph. If you're unsure about the intent, ask the user befor
 ## Step 3, Spawn Reviewers
 
 Draft independent read-only Capy review tasks with the same exact diff, intent and rubric.
-Use `interrogate reviewers` from the profile, one task per entry. Without a configured
-panel, use four inherited-model tasks and explicitly report that diversity is unverified.
+Resolve `interrogate reviewers` through models.py using the active profile and current
+account observations. Without an override, use the four upstream-faithful seats. A repeated
+same-model panel requires an explicitly approved single-model/custom profile, not fallback.
 Choose shared machines for a stable current checkout or fresh machines pinned to the PR
 head for an independent checkout. Wait for all final reports; a timeout is still pending.
 An unavailable model blocks that seat until an authorized replacement is selected.
@@ -113,11 +114,14 @@ A report returned in the task message is not a filesystem write. Verify the plac
 and machine ID returned at start. Use `transfer_files` for inputs and reports crossing
 machines; a path on another machine is not an accessible input.
 
-Read the selected role from `pstack.models.json` at the bundle root, then apply an
-explicit project `.agents/pstack.models.json` override. Absent configuration means
-`inherit-parent`: omit the native model override. Recheck configured IDs against the
-current account. Four-seat design/review panels retain four independent seats by
-default; report same-model seats honestly rather than claiming model diversity.
+Read the selected role from `pstack.models.json` at the bundle root, with the project
+profile overriding matching fields. Absent configuration uses `upstream-faithful` from
+`pstack.model-presets.json`. Follow `skills/poteto-mode/references/model-policy.md` at
+that root and run its models.py resolver with current account observations before launch.
+Preserve the role-specific model, reasoning effort, priority and panel count. Unsupported
+settings block the affected seat; never silently inherit or substitute. Same-model/custom
+profiles require an explicit user-approved difference. Four faithful seats are four models
+across three families. Inspect returned native settings, not only the requested prompt.
 
 Use the native task tools available in this session, not a shell that starts another
 agent. Drafts are not running, working/waiting tasks remain live, and idle/stopped is

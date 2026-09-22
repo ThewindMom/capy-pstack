@@ -12,7 +12,7 @@ The Principles section below grounds every trigger. In your reply, name each pri
 Remaining triggers:
 
 - Nontrivial change, architecture decision, or "are we sure?" → the **how** skill.
-- About to the session's question tool on a "which approach", "how should I", or "what should this do" fork → classify it before you ask. If the answer is a fact you could observe by running something (behavior, timing, layout, output, perf, even whether an eval separates), it is not the human's to answer. Sketch it via the Prototype playbook (`playbooks/prototype.md`) and let the result decide. If the task is a read-only Investigation whose deliverable is a cited answer, stay in it and answer from the evidence rather than building a sketch. Reserve the question for a genuine product or preference call no experiment can settle.
+- About to use the session's question tool on a "which approach", "how should I", or "what should this do" fork → classify it before you ask. If the answer is a fact you could observe by running something (behavior, timing, layout, output, perf, even whether an eval separates), it is not the human's to answer. Sketch it via the Prototype playbook (`playbooks/prototype.md`) and let the result decide. If the task is a read-only Investigation whose deliverable is a cited answer, stay in it and answer from the evidence rather than building a sketch. Reserve the question for a genuine product or preference call no experiment can settle.
 - Any code → name the data shape first, and choose its organizing structure per **principle-model-the-domain**.
 - Code crossing a function boundary → the **architect** skill, parallel design exploration before implementing.
 - Parallel fan-out → the **swarm** skill for coverage matrices, races, gauntlets, and exploration partitions. Use **arena** for design or code bakeoffs with base selection and grafting.
@@ -93,11 +93,14 @@ A report returned in the task message is not a filesystem write. Verify the plac
 and machine ID returned at start. Use `transfer_files` for inputs and reports crossing
 machines; a path on another machine is not an accessible input.
 
-Read the selected role from `pstack.models.json` at the bundle root, then apply an
-explicit project `.agents/pstack.models.json` override. Absent configuration means
-`inherit-parent`: omit the native model override. Recheck configured IDs against the
-current account. Four-seat design/review panels retain four independent seats by
-default; report same-model seats honestly rather than claiming model diversity.
+Read the selected role from `pstack.models.json` at the bundle root, with the project
+profile overriding matching fields. Absent configuration uses `upstream-faithful` from
+`pstack.model-presets.json`. Follow `skills/poteto-mode/references/model-policy.md` at
+that root and run its models.py resolver with current account observations before launch.
+Preserve the role-specific model, reasoning effort, priority and panel count. Unsupported
+settings block the affected seat; never silently inherit or substitute. Same-model/custom
+profiles require an explicit user-approved difference. Four faithful seats are four models
+across three families. Inspect returned native settings, not only the requested prompt.
 
 Use the native task tools available in this session, not a shell that starts another
 agent. Drafts are not running, working/waiting tasks remain live, and idle/stopped is

@@ -3,11 +3,17 @@
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 from pathlib import Path
 import re
 import sys
 from itertools import combinations
+
+
+_spec = importlib.util.spec_from_file_location('_pstack_models', Path(__file__).with_name('models.py'))
+model_policy = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(model_policy)
 
 
 class PlanError(ValueError):
@@ -56,7 +62,7 @@ def prepare(plan: dict) -> dict:
     require(isinstance(tasks, list) and bool(tasks), "Plan needs a nonempty tasks list")
     require(len(tasks) <= 256, "Split plans larger than 256 tasks into explicit runs")
     root = plan.get("pstack_root", ".agents")
-    require(text(root), "pstack_root must identify the installed adapter")
+    require(text(root), "pstack_root must identify the installed bundle")
     by_id = {}
     for original in tasks:
         require(isinstance(original, dict), "Task must be an object")
@@ -151,7 +157,8 @@ def prepare(plan: dict) -> dict:
                          "Idle is not done. Keep an existing live owner; do not launch a duplicate on timeout.")
         prepared.append(task)
     return {"version": 1, "max_parallel": cap, "waves": waves, "tasks": prepared,
-            "dispatch": "Use the Capy agent's native task tools; this JSON is a work order, not an API request."}
+            "model_policy_resolved": False,
+            "dispatch": "Scope validation only. Resolve roles/settings through models.py before native task start; this is not an API request."}
 
 
 def check_results(plan: dict, results: object) -> dict:
@@ -197,20 +204,30 @@ def check_results(plan: dict, results: object) -> dict:
             "next": "Inspect actual diffs and artifacts and obtain independent whole-PR review. This checker cannot authenticate evidence."}
 
 
-def with_profile(plan: dict, profile: dict) -> dict:
-    require(isinstance(plan, dict) and isinstance(profile, dict), "Plan and profile must be objects")
-    roles = profile.get("roles", {})
-    require(isinstance(roles, dict) and all(text(k) and text(v) for k, v in roles.items()), "Invalid role profile")
+def with_profile(plan: dict, profile: dict, observed: dict | None = None) -> dict:
+    require(isinstance(plan, dict), "Plan must be an object")
+    profile = model_policy.validate(profile)
+    observed = model_policy.observations(observed)
     merged = dict(plan)
-    if "max_parallel" not in merged and "max_parallel" in profile:
-        merged["max_parallel"] = profile["max_parallel"]
-    if "confirmed_models" not in merged:
-        merged["confirmed_models"] = profile.get("confirmed_models", [])
-    tasks = merged.get("tasks")
-    require(isinstance(tasks, list) and all(isinstance(t, dict) for t in tasks), "Invalid profile task list")
+    merged.setdefault("max_parallel", profile.get("max_parallel", 3))
+    merged["confirmed_models"] = list(observed["models"])
+    items = plan.get("tasks")
+    require(isinstance(items, list) and all(isinstance(t, dict) for t in items), "Invalid task list")
     defaults = {"implementation": "feature", "research": "how explorer", "design": "judgment and prose",
                 "review": "judgment and prose", "comment-review": "comment review"}
-    merged["tasks"] = [dict(t, model=t.get("model", roles.get(t.get("model_role", defaults.get(t.get("role"))), "inherit-parent"))) for t in tasks]
+    result = []
+    for item in items:
+        role = item.get("model_role", defaults.get(item.get("role")))
+        local = model_policy.validate(profile)
+        if any(key in item for key in ("model", "reasoning_effort", "fast")):
+            selected = model_policy.requested(local, role)[0]
+            selected.update({key: item[key] for key in ("model", "reasoning_effort", "fast") if key in item})
+            local.setdefault("roles", {})[role] = selected
+        settings = model_policy.resolve(local, role, observed)[0]
+        result.append(dict(item, **{key:value for key,value in settings.items() if key not in item},
+                           expected_settings=settings))
+        result[-1].update(settings)
+    merged["tasks"] = result
     return merged
 
 
@@ -219,17 +236,24 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("command", choices=("prepare", "check-results"))
     parser.add_argument("plan", type=Path)
     parser.add_argument("--results", type=Path)
-    parser.add_argument("--models", type=Path, help="Explicit adapter model profile")
+    parser.add_argument("--models", type=Path, help="Explicit model profile")
+    parser.add_argument("--observed", type=Path, help="Current model/effort/priority observations")
+    parser.add_argument("--structure-only", action="store_true", help="Validate scope graph only; not a launch plan")
     args = parser.parse_args(argv)
     try:
         plan = json.loads(args.plan.read_text())
-        if args.models is not None:
-            plan = with_profile(plan, json.loads(args.models.read_text()))
+        if not args.structure_only and args.command == "prepare":
+            profile = json.loads(args.models.read_text()) if args.models else {}
+            require(args.observed is not None, "--observed is required; --structure-only does not prepare model dispatch")
+            plan = with_profile(plan, profile, json.loads(args.observed.read_text()))
         if args.command == "check-results":
             require(args.results is not None, "--results is required")
             result = check_results(plan, json.loads(args.results.read_text()))
         else:
             result = prepare(plan)
+            result["model_policy_resolved"] = not args.structure_only
+            if not args.structure_only:
+                result["dispatch"] = "Map expected_settings into the actual native schema and verify returned settings. Block unsupported fields."
         print(json.dumps(result, indent=2))
         return 0
     except (PlanError, OSError, ValueError, TypeError, KeyError) as exc:

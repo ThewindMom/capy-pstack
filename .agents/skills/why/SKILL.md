@@ -78,7 +78,7 @@ Launch all matching investigators in a single message so they run concurrently. 
 
 Subagent config (each):
 - Native Capy task with the complete role brief
-- `model`: your configured why-investigators model (default `inherit-parent`)
+- `model`: your configured why-investigators model (default from the upstream-faithful role preset)
 - Read-only scope on a shared Capy machine, with authorized connected reads. Do not write to evidence sources. Do not assume a scope instruction removes MCP capabilities.
 
 Each investigator gets:
@@ -122,7 +122,7 @@ If your scope assessment suggests a single-commit trivial target where the PR de
 Spawn one synthesizer subagent:
 
 - Native Capy task with the complete role brief
-- `model`: your configured why-synthesizer model (default `inherit-parent`)
+- `model`: your configured why-synthesizer model (default from the upstream-faithful role preset)
 - Read-only native synthesis scope on a shared machine, with authorized connected reads to spot-check citations. Do not write to source systems.
 
 The synthesizer gets:
@@ -166,11 +166,14 @@ A report returned in the task message is not a filesystem write. Verify the plac
 and machine ID returned at start. Use `transfer_files` for inputs and reports crossing
 machines; a path on another machine is not an accessible input.
 
-Read the selected role from `pstack.models.json` at the bundle root, then apply an
-explicit project `.agents/pstack.models.json` override. Absent configuration means
-`inherit-parent`: omit the native model override. Recheck configured IDs against the
-current account. Four-seat design/review panels retain four independent seats by
-default; report same-model seats honestly rather than claiming model diversity.
+Read the selected role from `pstack.models.json` at the bundle root, with the project
+profile overriding matching fields. Absent configuration uses `upstream-faithful` from
+`pstack.model-presets.json`. Follow `skills/poteto-mode/references/model-policy.md` at
+that root and run its models.py resolver with current account observations before launch.
+Preserve the role-specific model, reasoning effort, priority and panel count. Unsupported
+settings block the affected seat; never silently inherit or substitute. Same-model/custom
+profiles require an explicit user-approved difference. Four faithful seats are four models
+across three families. Inspect returned native settings, not only the requested prompt.
 
 Use the native task tools available in this session, not a shell that starts another
 agent. Drafts are not running, working/waiting tasks remain live, and idle/stopped is

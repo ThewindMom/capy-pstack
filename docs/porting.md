@@ -19,7 +19,7 @@ verification; a live timeout is not a completed candidate. Architect keeps at le
 structurally different sketches. Reviewers stay independent of implementers.
 
 Provider-specific slugs and reasoning suffix transformations became observed-account
-role profiles with parent inheritance as the safe default. Role/panel validation is
+role profiles with an upstream-faithful default and explicitly approved alternatives. Role/panel validation is
 executable; an inherited model never appears as a literal model argument. Same-model
 panels are disclosed. Reflection retains its three lenses, synthesis, structural check,
 explicit approval before skill edits, and evidence of what the agent actually read.
@@ -43,9 +43,14 @@ state; discoverable skills live in supported skill volumes or project repositori
 make-bot-ui uses Capy's secret URL webhook protocol, server-side relay, stable idempotency
 keys and actual accepted-versus-completed semantics, not editor-specific credentials.
 
-Native create-skill, deslop, control-cli, control-ui and capy-automation workflows replace
-external editor-only dependencies. They are new Capy implementations of the required
-outcomes, not claims to have copied another plugin's exact implementation.
+Deslop, control-cli and control-ui now retain Cursor team kit's portable checklist,
+interaction and profiling detail, with original MIT notices. Runnable PTY/browser probes
+supplement, rather than replace, native/project verification. create-skill and capy-automation
+implement the authoring/continuation requirements through Capy's own contracts. These two
+are not claimed copies of unavailable built-ins. See parity-requirements.md for requirement,
+implementation and evidence links. The native model resolver checks effort and priority
+separately, collapses documented billing aliases for identity, and fails missing settings.
+It preserves the upstream four-model panels, three reflection lenses and single cross-judge.
 
 ## Maintenance
 

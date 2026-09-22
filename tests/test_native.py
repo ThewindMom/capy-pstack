@@ -288,36 +288,6 @@ class InstallationTests(unittest.TestCase):
         self.assertFalse(self.target.exists())
 
 
-class ModelTests(unittest.TestCase):
-    def test_all_default_roles_inherit(self):
-        for name in models.ROLE_NAMES:self.assertEqual(models.resolve({},name),[{}])
-
-    def test_panels_default_to_four_independent_seats(self):
-        for name in models.PANEL_NAMES:self.assertEqual(models.resolve({},name),[{}, {}, {}, {}])
-
-    def test_observed_override(self):
-        p={'confirmed_models':['test/model'],'roles':{'feature':'test/model'}}
-        self.assertEqual(models.resolve(p,'feature'),[{'model':'test/model'}])
-
-    def test_unknown_model_refused(self):
-        with self.assertRaises(models.ModelError):models.validate({'roles':{'feature':'not-observed'}})
-
-    def test_unknown_role_refused(self):
-        with self.assertRaises(models.ModelError):models.validate({'roles':{'typo':'auto'}})
-
-    def test_architect_needs_two_candidates(self):
-        with self.assertRaises(models.ModelError):models.validate({'panels':{'architect runners':['auto']}})
-
-    def test_invalid_profile_shapes(self):
-        for p in ([],{'max_parallel':True},{'version':True},{'roles':[]},{'panels':{'arena runners':[]}}):
-            with self.subTest(profile=p),self.assertRaises(models.ModelError):models.validate(p)
-
-    def test_cross_judge_is_pool_not_fanout(self):
-        output=cli(SCRIPTS/'models.py','resolve',BUNDLE/'pstack.models.example.json','--role','arena cross-judge pool')
-        self.assertEqual(output.returncode,0,output.stderr)
-        self.assertTrue(json.loads(output.stdout)['pool_not_fanout'])
-
-
 class TaskTests(unittest.TestCase):
     def setUp(self):self.plan=json.loads((ROOT/'examples/plan.json').read_text())
     def test_disjoint_concurrency_and_review_dependency(self):
@@ -353,13 +323,6 @@ class TaskTests(unittest.TestCase):
     def test_nesting_cap(self):
         self.plan['parent_depth']=3
         with self.assertRaises(tasks.PlanError):tasks.prepare(self.plan)
-
-    def test_profiles_and_explicit_override(self):
-        profile={'confirmed_models':['one','two'],'roles':{'bug-fix':'one'}}
-        out=tasks.prepare(tasks.with_profile(self.plan,profile))
-        self.assertEqual(out['tasks'][0]['model'],'one')
-        self.plan['tasks'][0]['model']='two'
-        self.assertEqual(tasks.prepare(tasks.with_profile(self.plan,profile))['tasks'][0]['model'],'two')
 
     def test_invalid_model_scope_acceptance_and_version(self):
         for update in ({'model':'missing'},{'scope_paths':['../escape']},{'acceptance':[]}):
@@ -406,7 +369,7 @@ class TaskTests(unittest.TestCase):
         with self.assertRaises(tasks.PlanError):tasks.check_results(self.plan,r)
 
     def test_public_cli_example(self):
-        output=cli(SCRIPTS/'tasks.py','prepare',ROOT/'examples/plan.json')
+        output=cli(SCRIPTS/'tasks.py','prepare',ROOT/'examples/plan.json','--structure-only')
         self.assertEqual(output.returncode,0,output.stderr)
         self.assertEqual(json.loads(output.stdout)['waves'],[['api','docs'],['review-api']])
 

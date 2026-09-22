@@ -77,7 +77,7 @@ def permitted(name: str, volume: bool) -> bool:
     relative(name)
     if volume:
         return name.startswith(('skills/', 'roles/', 'automations/')) or name in (
-            'catalog.json', 'LICENSE', 'NOTICE', 'pstack.models.example.json')
+            'catalog.json', 'LICENSE', 'NOTICE', 'pstack.models.example.json', 'pstack.model-presets.json')
     return name.startswith('.agents/') and name != '.agents/pstack.models.json' or name == RULE
 
 
