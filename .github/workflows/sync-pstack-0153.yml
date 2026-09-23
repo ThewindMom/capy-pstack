@@ -1,0 +1,107 @@
+name: Verify and publish pstack 0.15.3
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  publish:
+    if: github.repository == 'ThewindMom/capy-pstack' && contains(github.event.head_commit.message, '[sync-pstack-0153]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      PSTACK_BROWSER_TESTS: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 2
+          submodules: false
+      - name: Apply the hash-verified update to its exact base
+        shell: python
+        run: |
+          import base64, hashlib, json, lzma, subprocess
+          from pathlib import Path, PurePosixPath
+          base = '62aaa45a989678817ffdc5d886dc6974ece2a1cb'
+          expected = 'd51e0cee5c4ee591bf52b681a1521f4ae8a24d16'
+          workflow = '.github/workflows/sync-pstack-0153.yml'
+          def git(*args):
+              return subprocess.check_output(['git', *args], text=True).strip()
+          assert git('rev-parse', 'HEAD^') == base
+          assert git('rev-parse', base + '^{tree}') == 'dfed4c448644722eb5722b287561510e9317c1e1'
+          encoded = ''.join(Path(f'.ci/pstack-0153-{i}.b64').read_text() for i in range(1, 5))
+          assert hashlib.sha256(encoded.encode()).hexdigest() == '0344a564c6b4306991a3f8bbe01cdbdfb94f93312879253fa13a0bfd3f2d2cca'
+          raw = lzma.decompress(base64.b64decode(encoded, validate=True))
+          assert hashlib.sha256(raw).hexdigest() == '89ae47bb2176c0e83c5c67242fe5130f819563fd3e7cd8ec1679d848564e830a'
+          update = json.loads(raw)
+          assert update['base_commit'] == base and update['final_tree'] == expected
+          assert len(update['files']) == 44
+          assert len({item['path'] for item in update['files']}) == 44
+          changed = []
+          for item in update['files']:
+              name = item['path']
+              rel = PurePosixPath(name)
+              assert not rel.is_absolute() and not set(rel.parts) & {'.', '..', '.git'}
+              assert rel.parts[0] in {'.agents', 'docs', 'provenance', 'tests'} or name in {'README.md', 'pstack.json'}
+              path = Path(name)
+              assert not any(p.is_symlink() for p in [path, *path.parents])
+              old = path.read_text() if path.exists() else ''
+              actual_old = hashlib.sha256(old.encode()).hexdigest() if path.exists() else None
+              assert actual_old == item['before_sha256'], name
+              original = subprocess.run(['git', 'show', base + ':' + name], capture_output=True)
+              assert old == (original.stdout.decode() if original.returncode == 0 else ''), name
+              previous = 0
+              for start, end, text in item['edits']:
+                  assert type(start) is int and type(end) is int
+                  assert previous <= start <= end <= len(old) and isinstance(text, str)
+                  previous = end
+              new = old
+              for start, end, text in reversed(item['edits']):
+                  new = new[:start] + text + new[end:]
+              assert hashlib.sha256(new.encode()).hexdigest() == item['after_sha256'], name
+              assert item['mode'] in (0o644, 0o755)
+              path.parent.mkdir(parents=True, exist_ok=True)
+              path.write_text(new)
+              path.chmod(item['mode'])
+              changed.append(name)
+          for i in range(1, 5):
+              name = f'.ci/pstack-0153-{i}.b64'
+              Path(name).unlink()
+              changed.append(name)
+          subprocess.run(['git', 'add', '-A', '--', *changed], check=True)
+          # Verify the distribution without changing the workflow in the bot's commit.
+          subprocess.run(['git', 'rm', '--cached', '--', workflow], check=True)
+          assert git('write-tree') == expected
+          subprocess.run(['git', 'add', '--', workflow], check=True)
+          assert git('diff', '--cached', '--name-only', '--', '.github') == ''
+          Path('/tmp/pstack-0153-publish-tree').write_text(git('write-tree'))
+          print('Verified complete native distribution tree:', expected)
+      - name: Install the real-browser test dependency
+        run: |
+          python3 -m pip install playwright==1.57.0
+          python3 -m playwright install --with-deps chromium
+      - name: Test models, logs, real controls and offline installation
+        run: |
+          python3 tools/catalog.py --check
+          python3 -m unittest discover -s tests -v
+          python3 tools/pstack.py install --target dist/project > /tmp/pstack-project.json
+          python3 tools/pstack.py doctor --target dist/project
+          python3 tools/pstack.py install --volume --target dist/volume > /tmp/pstack-volume.json
+          python3 tools/pstack.py doctor --volume --target dist/volume
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+      - name: Test bundled Bun utilities and strict types
+        working-directory: .agents/skills/poteto-mode/scripts
+        run: |
+          bun install --frozen-lockfile
+          bun test orch watch-pr
+          bun run typecheck
+      - name: Commit and fast-forward only the verified source
+        run: |
+          test "$(git write-tree)" = "$(cat /tmp/pstack-0153-publish-tree)"
+          test -z "$(git diff --cached --name-only -- .github)"
+          git diff --exit-code
+          git diff --cached --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'feat: synchronize native Capy pstack with upstream 0.15.3'
+          git push origin HEAD:main
