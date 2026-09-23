@@ -40,7 +40,7 @@ profile overriding matching fields. Absent configuration uses `upstream-faithful
 that root and run its models.py resolver with current account observations before launch.
 Preserve the role-specific model, reasoning effort, priority and panel count. Unsupported
 settings block the affected seat; never silently inherit or substitute. Same-model/custom
-profiles require an explicit user-approved difference. Four faithful seats are four models
+profiles require an explicit user-approved difference. Three faithful seats are three models
 across three families. Inspect returned native settings, not only the requested prompt.
 
 Use the native task tools available in this session, not a shell that starts another

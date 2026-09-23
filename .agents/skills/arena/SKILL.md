@@ -24,7 +24,7 @@ The N candidates will receive the same prompt, so the prompt is the contract.
 
 1. State the artifact each candidate is producing.
 2. Derive the rubric. State what success looks like for *this* task, then turn it into 3-6 concrete gradeable criteria. The rubric is the picker's tool in Phase D. Candidates only see the task.
-3. Pick the runners. Use `arena runners` from `pstack.models.json` at the selected bundle root when present. Otherwise resolve the four upstream-faithful `arena runners` seats through models.py with current observations. Spawn more when the arena covers multiple design directions. Same model N times when the work is generation-bound rather than judgment-sensitive.
+3. Pick the runners. Use `arena runners` from `pstack.models.json` at the selected bundle root when present. Otherwise resolve the three upstream-faithful `arena runners` seats through models.py with current observations. Spawn more when the arena covers multiple design directions. Same model N times when the work is generation-bound rather than judgment-sensitive.
 4. Assign output paths. Each candidate writes to its own location (a fresh candidate machine with its own branch and a named artifact directory), per the **separate-before-serializing-shared-state** principle skill.
 
 ## Phase B: Fan out
@@ -87,7 +87,7 @@ profile overriding matching fields. Absent configuration uses `upstream-faithful
 that root and run its models.py resolver with current account observations before launch.
 Preserve the role-specific model, reasoning effort, priority and panel count. Unsupported
 settings block the affected seat; never silently inherit or substitute. Same-model/custom
-profiles require an explicit user-approved difference. Four faithful seats are four models
+profiles require an explicit user-approved difference. Three faithful seats are three models
 across three families. Inspect returned native settings, not only the requested prompt.
 
 Use the native task tools available in this session, not a shell that starts another

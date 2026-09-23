@@ -2,7 +2,7 @@
 
 ## Complete source, native execution
 
-All 158 files in the pstack 0.15.2 source subtree are accounted for in
+All 158 files in the pstack 0.15.3 source subtree are accounted for in
 [the provenance inventory](../provenance/source.json). Skills moved to `.agents/skills`,
 agent prompts to `.agents/roles`, and the dormant Benny pack to `.agents/automations`.
 References, examples, illustrations, licenses, scripts and script tests are local files.
@@ -50,7 +50,7 @@ implement the authoring/continuation requirements through Capy's own contracts. 
 are not claimed copies of unavailable built-ins. See parity-requirements.md for requirement,
 implementation and evidence links. The native model resolver checks effort and priority
 separately, collapses documented billing aliases for identity, and fails missing settings.
-It preserves the upstream four-model panels, three reflection lenses and single cross-judge.
+It preserves the upstream three-model panels, three reflection lenses and single cross-judge.
 
 ## Maintenance
 
@@ -60,3 +60,12 @@ for audit; they do not freeze the native files or fetch anything at install time
 README references to Capy documentation are citations, not executable dependencies.
 Local/CI contract tests cannot prove every future agent obeys prose. Live Capy execution
 still needs the [smoke checks](live-smoke.md).
+
+## pstack 0.15.3
+
+See [the update record](updates/0.15.3.md). Code-ready and changed-patch verification rounds,
+merge-prep checks, per-lane build comparisons, child liveness trails and complete swarm
+receipts now follow 0.15.3. Native wakeups and machine-scoped ownership remain intentional:
+a stuck writer does not release its branch merely because a stop was requested. The audit
+program stays responsible until every child is reconciled; an individual Capy turn may
+end while blocked so native events can wake it. This is not a detached polling loop.

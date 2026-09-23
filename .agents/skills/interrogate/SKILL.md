@@ -34,7 +34,7 @@ Write one clear paragraph. If you're unsure about the intent, ask the user befor
 
 Draft independent read-only Capy review tasks with the same exact diff, intent and rubric.
 Resolve `interrogate reviewers` through models.py using the active profile and current
-account observations. Without an override, use the four upstream-faithful seats. A repeated
+account observations. Without an override, use the three upstream-faithful seats. A repeated
 same-model panel requires an explicitly approved single-model/custom profile, not fallback.
 Choose shared machines for a stable current checkout or fresh machines pinned to the PR
 head for an independent checkout. Wait for all final reports; a timeout is still pending.
@@ -120,7 +120,7 @@ profile overriding matching fields. Absent configuration uses `upstream-faithful
 that root and run its models.py resolver with current account observations before launch.
 Preserve the role-specific model, reasoning effort, priority and panel count. Unsupported
 settings block the affected seat; never silently inherit or substitute. Same-model/custom
-profiles require an explicit user-approved difference. Four faithful seats are four models
+profiles require an explicit user-approved difference. Three faithful seats are three models
 across three families. Inspect returned native settings, not only the requested prompt.
 
 Use the native task tools available in this session, not a shell that starts another

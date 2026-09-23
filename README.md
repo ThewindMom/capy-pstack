@@ -4,9 +4,31 @@
 
 Start with the problem, investigate before changing code, compare designs when the choice matters, and verify the actual result. Then use Capy's isolated task machines, durable threads, and event-driven PR follow-up to carry the work through.
 
-This repository contains the full, self-contained Capy port of [Lauren Tan's pstack for Cursor](https://github.com/cursor/plugins/tree/53e579f1481697931fc44f5445171397cfa2b24b/pstack), based on version **0.15.2**. The skills and workflows are ordinary files you can read, edit, and install without the original repository.
+This repository contains the full, self-contained Capy port of [Lauren Tan's pstack for Cursor](https://github.com/cursor/plugins/tree/b42effe0aa50f59c693d7e2924714e015e00bf7c/pstack), based on version **0.15.3**. The skills and workflows are ordinary files you can read, edit, and install without the original repository.
 
 [Features](#what-pstack-brings) · [Why Capy](#how-this-port-plays-to-capys-strengths) · [Differences and limits](#what-does-not-carry-over-from-cursor) · [Get started](#get-started) · [Full catalog](docs/skill-catalog.md)
+
+## Updated for pstack 0.15.3
+
+This release ports [upstream PR #414](https://github.com/cursor/plugins/pull/414) and
+[its upgrade-help correction #416](https://github.com/cursor/plugins/pull/416). It updates
+all 34 changed source files: three-model defaults, code-ready verification rounds,
+merge-prep CI at the final head, constrained build-evidence reuse, complete swarm receipts,
+stuck-child tracking, change-only audit reports, append-only decision logs, and the smaller
+prose changes. See the [0.15.3 update record](docs/updates/0.15.3.md) for the mapping and limits.
+
+**Model availability is separate from the source upgrade.** The public Capy catalog checked
+on September 23, 2026 does not yet list Opus 5.5 or Grok 4.7. This port preserves them as
+required model identities, not guessed native route IDs. Setup requires a current account
+observation binding each identity to its exact available Capy route. If the account cannot
+supply one, the affected role stays blocked; no older model or inherited panel is silently
+substituted. An explicitly approved custom profile remains available. The
+[model contract](.agents/skills/poteto-mode/references/model-policy.md) documents the binding.
+
+Existing profiles can pin the old default models. Rerunning setup preserves explicit
+choices. Remove only the selected old role/panel entries to adopt the new defaults, or
+retain them in an approved custom profile. Back up the profile first; installation never
+deletes or rewrites personal configuration.
 
 ## What pstack is
 
@@ -71,7 +93,7 @@ Capy's [skill discovery](https://docs.capy.ai/skills) exposes names and descript
 
 Capy supports a model choice per task. [setup-pstack](.agents/skills/setup-pstack/SKILL.md) and the [model validator](.agents/skills/poteto-mode/scripts/models.py) preserve pstack's distinct implementation, investigation, judgment, and review roles while accepting only account-observed choices.
 
-The default policy is **upstream-faithful**. It restores Grok 4.6 for implementation and exploration, Fable 5.1 for difficult judgment and explanation, GPT-5.6 Sol for reflection tooling, and the four-model Fable/Sol/Grok/Opus design/review panels. Comment Sicko retains its unspecified upstream model. Reasoning effort and priority are separate settings, checked against current account observations before launch. Unsupported settings block rather than silently downgrading. A single-model or custom budget/provider choice is explicit and labelled; billing aliases to the same weights do not add diversity. The arena cross-judge is exactly one independent task selected after all accepted candidates finish.
+The default policy is **upstream-faithful**. It follows pstack 0.15.3: Grok 4.7 for implementation and exploration, Opus 5.5 for difficult judgment and explanation, GPT-5.6 Sol for reflection tooling, and three-model Opus 5.5/Sol/Grok 4.7 design/review panels. Comment Sicko retains its unspecified upstream model. Reasoning effort and priority are separate settings, checked against current account observations before launch. Unsupported settings block rather than silently downgrading. A single-model or custom budget/provider choice is explicit and labelled; billing aliases to the same weights do not add diversity. The arena cross-judge is exactly one independent task selected after all accepted candidates finish.
 
 See the [model policy](.agents/skills/poteto-mode/references/model-policy.md), the [upstream preset](.agents/pstack.model-presets.json), and [requirement-to-evidence map](docs/parity-requirements.md). Saved profiles use version 2. Existing version 1 profiles are preserved and must be migrated explicitly; they are not silently converted into a different spending policy.
 
@@ -219,7 +241,7 @@ Uninstall removes only intact owned files; add `--volume` for that layout. The i
 
 ## Sources and license
 
-This README describes the port based on pstack **0.15.2**, not a promise of automatic parity with future upstream versions. Capy documentation was checked on **September 22, 2026**. Platform behavior, available models, and integrations can change; follow the actual account's capabilities.
+This README describes the port based on pstack **0.15.3**, not a promise of automatic parity with future upstream versions. Capy documentation was checked on **September 22, 2026**. Platform behavior, available models, and integrations can change; follow the actual account's capabilities.
 
 The linked local skills are the implementation contract. Capy's official references describe the platform: [welcome](https://docs.capy.ai/welcome), [tasks](https://docs.capy.ai/tasks), [machines](https://docs.capy.ai/machines), [threads](https://docs.capy.ai/threads), [PRs](https://docs.capy.ai/pull-requests), [environment](https://docs.capy.ai/environment), [skills](https://docs.capy.ai/skills), [volumes](https://docs.capy.ai/volumes), and [automations](https://docs.capy.ai/automations).
 

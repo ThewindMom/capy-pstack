@@ -34,13 +34,17 @@ def catalog() -> dict:
     return json.loads(PRESETS.read_text())
 
 
-def identity(model: str) -> str:
-    # Billing routes are not independent weights. Only documented aliases are collapsed.
+def identity(model: str, observed: dict | None = None) -> str:
+    # An observed route can name new weights before the public Capy catalog lists them.
+    if observed is not None:
+        for required, binding in observed.get('bindings', {}).items():
+            if binding['model'] == model:
+                return required
     return catalog()['identities'].get(model, model)
 
 
-def family(model: str) -> str:
-    return identity(model).split('/', 1)[0]
+def family(model: str, observed: dict | None = None) -> str:
+    return identity(model, observed).split('/', 1)[0]
 
 
 def choice(value: object) -> dict:
@@ -108,10 +112,10 @@ def requested(profile: object, role: str) -> list[dict]:
         values = [override] if group == 'roles' else override
     values = [choice(v) for v in values]
     if preset == 'upstream-faithful':
-        require(len(values) == len(defaults), f'{role}: faithful seat count changed; select an approved custom profile')
+        require(len(values) == len(defaults), f'{role}: faithful seat count changed. Pre-0.15.3 overrides pin the old panel; remove only the selected override to use new defaults, or choose an approved custom profile')
         for selected, original in zip(values, defaults):
             require(identity(selected['model']) == identity(original['model']),
-                    f'{role}: faithful identity changed; select an approved custom profile')
+                    f'{role}: faithful identity changed. Existing overrides are preserved; remove only the selected old pin to use new defaults, or choose an approved custom profile')
             # A subscription route to the same weights is fine; dropped effort/priority is not.
             require({k:v for k,v in selected.items() if k != 'model'} ==
                     {k:v for k,v in original.items() if k != 'model'},
@@ -135,6 +139,24 @@ def observations(value: object) -> dict:
         efforts = capabilities.get('reasoning_efforts', [])
         require(isinstance(efforts, list) and all(nonempty(x) for x in efforts), 'Invalid effort choices')
         require(type(capabilities.get('fast', False)) is bool, 'Invalid fast capability')
+    bindings = value.get('bindings', {})
+    require(isinstance(bindings, dict), 'Observed bindings must be an object')
+    config = catalog()
+    pending = set(config.get('requires_observed_binding', []))
+    known = set(config['identities']) | set(config['identities'].values())
+    routes = set()
+    for required, binding in bindings.items():
+        require(required in pending, f'Unknown upstream binding identity: {required}')
+        require(isinstance(binding, dict) and set(binding) == {'model', 'source'},
+                'Binding needs the exact observed model route and its identity observation source')
+        route = binding['model']
+        require(nonempty(route) and route in value['models'], f'Bound route unavailable: {route!r}')
+        require(nonempty(binding['source']), 'Binding requires an identity observation source')
+        require(route not in routes, 'One native route cannot stand for different upstream weights')
+        routes.add(route)
+        require(route not in pending or route == required, 'Cannot bind another required model as this identity')
+        require(route not in known or identity(route) == required,
+                'A documented older or different model cannot satisfy the required new identity')
     if 'parent' in value:
         parent = choice(value['parent'])
         require(parent['model'] not in ALIASES and parent['model'] in value['models'], 'Observe the actual parent model')
@@ -149,6 +171,14 @@ def resolve(profile: object, role: str, observed: object = None) -> list[dict]:
         if selected['model'] in ALIASES:
             require('parent' in observed, 'Inheritance requires the observed parent settings')
             selected = choice(observed['parent'])
+        else:
+            required = identity(selected['model'])
+            if required in catalog().get('requires_observed_binding', []):
+                binding = observed.get('bindings', {}).get(required)
+                require(binding is not None,
+                        f'Upstream model unavailable or unobserved in Capy: {required}. '
+                        'Provide a current observed route binding; never guess an ID or substitute older weights')
+                selected = dict(selected, model=binding['model'])
         model = selected['model']
         require(model in observed['models'], f'Model unavailable in current observation: {model}')
         capabilities = observed['models'][model]
@@ -159,7 +189,11 @@ def resolve(profile: object, role: str, observed: object = None) -> list[dict]:
             require(capabilities.get('fast') is True, f'Priority/fast unavailable for {model}; no silent downgrade')
         result.append(dict(selected))
     if validate(profile).get('preset', 'upstream-faithful') == 'upstream-faithful' and role in PANEL_NAMES:
-        require(len({identity(x['model']) for x in result}) == 4, 'Faithful panels require four distinct models')
+        defaults = catalog()['panels'][role]
+        expected = {identity(x['model']) for x in defaults}
+        actual = {identity(x['model'], observed) for x in result}
+        require(len(actual) == len(defaults) and actual == expected,
+                'Faithful panels require every distinct upstream model identity')
     return result
 
 
@@ -169,8 +203,10 @@ def work_order(profile: object, role: str, observed: object) -> dict:
     cap = profile.get('max_parallel', 3)
     return {'role': role, 'preset': profile.get('preset', 'upstream-faithful'),
             'budget': profile.get('budget', 'unlimited'), 'choices': values,
-            'distinct_models': len({identity(x['model']) for x in values}),
-            'families': sorted({family(x['model']) for x in values}),
+            'distinct_models': len({identity(x['model'], observed) for x in values}),
+            'model_identities': [identity(x['model'], observed) for x in values],
+            'upstream_version': catalog()['upstream_version'],
+            'families': sorted({family(x['model'], observed) for x in values}),
             'waves': [list(range(i, min(i+cap, len(values)))) for i in range(0, len(values), cap)],
             'pool_not_fanout': role == 'arena cross-judge pool',
             'source': observations(observed)['source'], 'native_execution_verified': False,
@@ -208,10 +244,10 @@ def select_judge(profile: object, observed: object, candidates: object, records:
     pool = resolve(profile, 'arena cross-judge pool', observed)
     obs = observations(observed)
     require('parent' in obs, 'Observe the parent model before choosing a cross-judge')
-    selected = next((x for x in pool if family(x['model']) != family(obs['parent']['model'])), pool[0])
+    selected = next((x for x in pool if family(x['model'], obs) != family(obs['parent']['model'], obs)), pool[0])
     return {'role': 'arena judge', 'choices': [selected], 'pool_not_fanout': False,
             'after_task_ids': [r['native_task_id'] for r in records],
-            'different_parent_family': family(selected['model']) != family(obs['parent']['model']),
+            'different_parent_family': family(selected['model'], obs) != family(obs['parent']['model'], obs),
             'native_execution_verified': False,
             'dispatch': 'Transfer the accepted artifacts first, then start exactly one independent read-only native judge.'}
 

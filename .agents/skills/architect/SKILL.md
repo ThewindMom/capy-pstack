@@ -29,7 +29,7 @@ Skip Phase A only when the work is genuinely greenfield with no surrounding syst
 
 Run the **arena** skill with the design-sketch task and the Phase A grounding artifacts. Pass `references/runner-prompt.md` as each runner's prompt. Each candidate produces a design package shaped per `references/rationale-template.md`.
 
-Resolve `architect runners` through models.py with current observations; the upstream-faithful preset keeps its four different models and effort settings.
+Resolve `architect runners` through models.py with current observations; the upstream-faithful preset keeps its three different models and effort settings.
 
 Design it twice. Require at least two structurally distinct candidates before synthesis, even when the first looks sufficient. This is the **exhaust-the-design-space** principle skill made concrete. Whole-shape alternatives, not point fixes inside one shape.
 
@@ -99,7 +99,7 @@ profile overriding matching fields. Absent configuration uses `upstream-faithful
 that root and run its models.py resolver with current account observations before launch.
 Preserve the role-specific model, reasoning effort, priority and panel count. Unsupported
 settings block the affected seat; never silently inherit or substitute. Same-model/custom
-profiles require an explicit user-approved difference. Four faithful seats are four models
+profiles require an explicit user-approved difference. Three faithful seats are three models
 across three families. Inspect returned native settings, not only the requested prompt.
 
 Use the native task tools available in this session, not a shell that starts another

@@ -17,23 +17,24 @@ def load(name, file):
 m = load('policy', SCRIPTS/'models.py')
 t = load('task_policy', SCRIPTS/'tasks.py')
 EXPECTED = [
-    {'model':'anthropic/claude-fable-5-1','reasoning_effort':'max'},
+    {'model':'anthropic/claude-opus-5-5','reasoning_effort':'max'},
     {'model':'openai/gpt-5.6-sol','reasoning_effort':'max'},
-    {'model':'xai/grok-4.6','reasoning_effort':'xhigh','fast':True},
-    {'model':'anthropic/claude-opus-5','reasoning_effort':'xhigh'},
+    {'model':'xai/grok-4.7','reasoning_effort':'xhigh','fast':True},
 ]
 
 def observed():
     return {'source':'synthetic unit fixture, NOT an authenticated Capy observation',
             'models':{x['model']:{'reasoning_efforts':['medium','high','xhigh','max'], 'fast':True} for x in EXPECTED},
-            'parent':EXPECTED[0]}
+            'parent':EXPECTED[0],
+            'bindings': {x['model']:{'model':x['model'],'source':'synthetic picker identity fixture, NOT live evidence'}
+                         for x in (EXPECTED[0],EXPECTED[2])}}
 
 def records():
     return [{'seat':i,'native_task_id':f'fixture-{i}','status':'done','settings':x,
              'accepted':True,'artifact':f'fixture-output-{i}'} for i,x in enumerate(EXPECTED)]
 
 class ModelPolicyTests(unittest.TestCase):
-    def test_faithful_panels_preserve_all_four_identities_and_efforts(self):
+    def test_faithful_panels_preserve_all_three_identities_and_efforts(self):
         for panel in m.PANEL_NAMES:
             self.assertEqual(m.resolve({}, panel, observed()), EXPECTED)
     def test_implementation_and_prose_do_not_collapse_to_parent(self):
@@ -58,7 +59,7 @@ class ModelPolicyTests(unittest.TestCase):
     def test_budget_is_explicit_and_applies_to_every_real_role(self):
         for budget, effort in [('large','xhigh'),('medium','high'),('small','medium')]:
             values=m.resolve({'budget':budget},'arena runners',observed())
-            self.assertEqual([v['reasoning_effort'] for v in values],[effort]*4)
+            self.assertEqual([v['reasoning_effort'] for v in values],[effort]*3)
             self.assertTrue(values[2]['fast'])
     def test_four_aliases_cannot_masquerade_as_four_faithful_models(self):
         values=[dict(EXPECTED[1],model=x) for x in ('openai/gpt-5.6-sol','codex/gpt-5.6-sol','copilot/gpt-5.6-sol','azure/gpt-5.6-sol')]
@@ -68,12 +69,12 @@ class ModelPolicyTests(unittest.TestCase):
         values=copy.deepcopy(EXPECTED);values[1]['model']='codex/gpt-5.6-sol'
         obs=observed();obs['models']['codex/gpt-5.6-sol']=obs['models']['openai/gpt-5.6-sol']
         order=m.work_order({'panels':{'arena runners':values}},'arena runners',obs)
-        self.assertEqual(order['choices'],values);self.assertEqual(order['distinct_models'],4)
+        self.assertEqual(order['choices'],values);self.assertEqual(order['distinct_models'],3)
         self.assertEqual(order['families'],['anthropic','openai','xai'])
     def test_same_model_is_opt_in_and_labelled_not_silent(self):
         with self.assertRaises(m.ModelError):m.resolve({'preset':'single-model'},'arena runners',observed())
         order=m.work_order({'preset':'single-model','approved_difference':'fixture explicit consent'},'arena runners',observed())
-        self.assertEqual(order['choices'],[EXPECTED[0]]*4);self.assertEqual(order['distinct_models'],1)
+        self.assertEqual(order['choices'],[EXPECTED[0]]*3);self.assertEqual(order['distinct_models'],1)
         self.assertEqual(order['preset'],'single-model')
     def test_custom_panel_needs_approval_and_architect_has_two_minimum(self):
         profile={'preset':'custom','approved_difference':'fixture consent','panels':{'architect runners':[EXPECTED[0]]}}
@@ -87,8 +88,8 @@ class ModelPolicyTests(unittest.TestCase):
                         {'roles':{'feature':{'model':'auto','reasoning_effort':'max'}}}):
             with self.subTest(profile=profile),self.assertRaises(m.ModelError):m.validate(profile)
     def test_concurrency_limits_waves_not_number_of_seats(self):
-        self.assertEqual(m.work_order({},'arena runners',observed())['waves'],[[0,1,2],[3]])
-        self.assertEqual(m.work_order({'max_parallel':1},'arena runners',observed())['waves'],[[0],[1],[2],[3]])
+        self.assertEqual(m.work_order({},'arena runners',observed())['waves'],[[0,1,2]])
+        self.assertEqual(m.work_order({'max_parallel':1},'arena runners',observed())['waves'],[[0],[1],[2]])
     def test_pool_is_not_a_launchable_panel(self):
         order=m.work_order({},'arena cross-judge pool',observed())
         with self.assertRaises(m.ModelError):m.check_run(order,records())
@@ -96,7 +97,7 @@ class ModelPolicyTests(unittest.TestCase):
         order=m.work_order({},'arena runners',observed())
         judge=m.select_judge({},observed(),order,records())
         self.assertEqual(judge['choices'],[EXPECTED[1]])
-        self.assertEqual(judge['after_task_ids'],['fixture-0','fixture-1','fixture-2','fixture-3'])
+        self.assertEqual(judge['after_task_ids'],['fixture-0','fixture-1','fixture-2'])
         self.assertTrue(judge['different_parent_family'])
     def test_judge_waits_for_live_failed_idle_and_missing_candidates(self):
         order=m.work_order({},'arena runners',observed())

@@ -5,17 +5,22 @@ description: Configure faithful pstack model roles, reasoning budgets, panel div
 
 # Set up pstack for Capy
 
-The complete skills are local files. Default policy is **upstream-faithful**, not four
+The complete skills are local files. Default policy is **upstream-faithful**, not repeated
 inherited tasks. Read the actual bundled `pstack.model-presets.json` and the model contract
-at `../poteto-mode/references/model-policy.md`. The model names are documented counterparts;
-requested reasoning/priority still needs live account support. Do not invent entitlements.
+at `../poteto-mode/references/model-policy.md`. Opus 5.5 and Grok 4.7 are required upstream identities, not documented Capy routes in the
+public catalog checked on September 23, 2026. Bind them only from an actual account
+observation; reasoning/priority also needs live support. Do not invent IDs or entitlements.
 
 ## 1. Observe available choices
 
 Find the actual bundle root from this skill's path, not the working directory. Inspect the
 native task-model choices in this Capy session and their available reasoning/fast controls.
 Record exact route IDs, supported efforts, fast support and actual parent settings in an
-observation file with its source reference. Recheck before every launch. A public model
+observation file with its source reference. For each identity marked
+`requires_observed_binding` in the preset, record `bindings[identity]` with its exact
+observed `model` route and an identity-observation `source`. An observed route can differ
+from the policy identity; never construct it by adding a provider prefix. Recheck before
+every launch. A public model
 list or previously saved confirmed_models is not proof of account availability. Never ask
 for an API key in chat. When a field cannot be set or observed through the current native
 schema, block that setting; prose asking the child to think harder is not an implementation.
@@ -28,6 +33,12 @@ bundled upstream-faithful preset. Do not silently convert an old v1 inherited pr
 show its choices, preserve the file, and explicitly migrate to version 2. The presets and
 observation format are pstack policy, not a new Capy SDK.
 
+Profiles created before 0.15.3 may explicitly pin the old defaults. A rerun retains any
+role, route or panel the user set. Back up the profile; remove only the chosen role/panel
+entries to restore bundled defaults, then validate and resolve again. Keep deliberate
+older choices under an approved custom profile. Do not erase the whole file or quietly
+rewrite a four-seat override to three. A faithful mismatch reports which pin needs review.
+
 ## 3. Budget, map and confirm
 
 Preserve the original setup's budget choice: unlimited (keep source efforts), large
@@ -36,17 +47,17 @@ cap. On reruns retain intentional user role, route and panel choices. Show every
 role, panel seat, effort, priority request and concurrency before saving a budget change.
 Do not silently choose a cheaper route or substitute another family.
 
-The faithful defaults are Grok 4.6 for implementation/exploration/swarm; Fable 5.1 for hard
-judgment, explanation and reflection; GPT-5.6 Sol for reflection tooling; four distinct
-Fable/Sol/Grok/Opus seats for arena, architect and interrogate. Comment Sicko has no explicit
+The faithful 0.15.3 defaults are Grok 4.7 for implementation/exploration/swarm; Opus 5.5 for
+hard judgment, explanation and reflection; GPT-5.6 Sol for reflection tooling; three
+distinct Opus/Sol/Grok seats for arena, architect and interrogate. Comment Sicko has no explicit
 upstream model and retains parent inheritance. Reflection remains three lenses plus a
-synthesizer, not a new four-seat panel. Architect requires at least two distinct designs.
+synthesizer, not a design/review panel. Architect requires at least two distinct designs.
 
 Single-model operation is an explicitly approved alternative. Use the named `single-model`
 preset and record the real approval reference; call its repeated seats same-model runs.
 Other changed families/settings/counts use `custom` with an approval reference. An explicit
-billing-route alias to the same weights does not increase diversity. Four faithful seats
-are four models across three provider families, not four different providers.
+billing-route alias to the same weights does not increase diversity. Three faithful seats
+are three models across three provider families.
 
 ## 4. Validate and save only the selected profile
 

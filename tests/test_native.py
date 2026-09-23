@@ -69,7 +69,7 @@ class DistributionTests(unittest.TestCase):
 
     def test_every_source_file_has_a_real_destination(self):
         origin = json.loads((ROOT / 'provenance/source.json').read_text())
-        self.assertEqual(origin['subtree'], 'f235052692fba08f7ff40df62775339cb4794c4c')
+        self.assertEqual(origin['subtree'], 'f66b1f3ed67364a915305457ee9099edc44f9333')
         self.assertEqual(len(origin['files']), 158)
         self.assertEqual(len({f['source'] for f in origin['files']}), 158)
         for item in origin['files']:

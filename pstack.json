@@ -1,7 +1,7 @@
 {
   "name": "capy-pstack",
-  "version": "1.1.0",
-  "upstream_version": "0.15.2",
+  "version": "1.2.0",
+  "upstream_version": "0.15.3",
   "skills": [
     "architect",
     "arena",

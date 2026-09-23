@@ -1,77 +1,77 @@
 {
   "version": 1,
-  "source_revision": "53e579f1481697931fc44f5445171397cfa2b24b",
-  "upstream_version": "0.15.2",
-  "capy_catalog_checked": "2026-09-22",
-  "source": "https://github.com/cursor/plugins/blob/53e579f1481697931fc44f5445171397cfa2b24b/pstack/skills/setup-pstack/SKILL.md",
+  "source_revision": "b42effe0aa50f59c693d7e2924714e015e00bf7c",
+  "upstream_version": "0.15.3",
+  "capy_catalog_checked": "2026-09-23",
+  "source": "https://github.com/cursor/plugins/blob/b42effe0aa50f59c693d7e2924714e015e00bf7c/pstack/skills/setup-pstack/SKILL.md",
   "capy_catalog": "https://docs.capy.ai/models-and-pricing",
   "roles": {
     "feature": {
-      "model": "xai/grok-4.6",
+      "model": "xai/grok-4.7",
       "reasoning_effort": "xhigh",
       "fast": true
     },
     "refactoring": {
-      "model": "xai/grok-4.6",
+      "model": "xai/grok-4.7",
       "reasoning_effort": "xhigh",
       "fast": true
     },
     "bug-fix": {
-      "model": "xai/grok-4.6",
+      "model": "xai/grok-4.7",
       "reasoning_effort": "xhigh",
       "fast": true
     },
     "perf-issue": {
-      "model": "xai/grok-4.6",
+      "model": "xai/grok-4.7",
       "reasoning_effort": "xhigh",
       "fast": true
     },
     "hillclimb": {
-      "model": "xai/grok-4.6",
+      "model": "xai/grok-4.7",
       "reasoning_effort": "xhigh",
       "fast": true
     },
     "how explorer": {
-      "model": "xai/grok-4.6",
+      "model": "xai/grok-4.7",
       "reasoning_effort": "xhigh",
       "fast": true
     },
     "why investigators": {
-      "model": "xai/grok-4.6",
+      "model": "xai/grok-4.7",
       "reasoning_effort": "xhigh",
       "fast": true
     },
     "swarm workers": {
-      "model": "xai/grok-4.6",
+      "model": "xai/grok-4.7",
       "reasoning_effort": "xhigh",
       "fast": true
     },
     "judgment and prose": {
-      "model": "anthropic/claude-fable-5-1",
+      "model": "anthropic/claude-opus-5-5",
       "reasoning_effort": "max"
     },
     "hardest tasks": {
-      "model": "anthropic/claude-fable-5-1",
+      "model": "anthropic/claude-opus-5-5",
       "reasoning_effort": "max"
     },
     "how explainer": {
-      "model": "anthropic/claude-fable-5-1",
+      "model": "anthropic/claude-opus-5-5",
       "reasoning_effort": "max"
     },
     "why synthesizer": {
-      "model": "anthropic/claude-fable-5-1",
+      "model": "anthropic/claude-opus-5-5",
       "reasoning_effort": "max"
     },
     "reflect judgment": {
-      "model": "anthropic/claude-fable-5-1",
+      "model": "anthropic/claude-opus-5-5",
       "reasoning_effort": "max"
     },
     "reflect divergent": {
-      "model": "anthropic/claude-fable-5-1",
+      "model": "anthropic/claude-opus-5-5",
       "reasoning_effort": "max"
     },
     "reflect synthesizer": {
-      "model": "anthropic/claude-fable-5-1",
+      "model": "anthropic/claude-opus-5-5",
       "reasoning_effort": "max"
     },
     "reflect tooling": {
@@ -85,7 +85,7 @@
   "panels": {
     "arena runners": [
       {
-        "model": "anthropic/claude-fable-5-1",
+        "model": "anthropic/claude-opus-5-5",
         "reasoning_effort": "max"
       },
       {
@@ -93,18 +93,14 @@
         "reasoning_effort": "max"
       },
       {
-        "model": "xai/grok-4.6",
+        "model": "xai/grok-4.7",
         "reasoning_effort": "xhigh",
         "fast": true
-      },
-      {
-        "model": "anthropic/claude-opus-5",
-        "reasoning_effort": "xhigh"
       }
     ],
     "arena cross-judge pool": [
       {
-        "model": "anthropic/claude-fable-5-1",
+        "model": "anthropic/claude-opus-5-5",
         "reasoning_effort": "max"
       },
       {
@@ -112,18 +108,14 @@
         "reasoning_effort": "max"
       },
       {
-        "model": "xai/grok-4.6",
+        "model": "xai/grok-4.7",
         "reasoning_effort": "xhigh",
         "fast": true
-      },
-      {
-        "model": "anthropic/claude-opus-5",
-        "reasoning_effort": "xhigh"
       }
     ],
     "architect runners": [
       {
-        "model": "anthropic/claude-fable-5-1",
+        "model": "anthropic/claude-opus-5-5",
         "reasoning_effort": "max"
       },
       {
@@ -131,18 +123,14 @@
         "reasoning_effort": "max"
       },
       {
-        "model": "xai/grok-4.6",
+        "model": "xai/grok-4.7",
         "reasoning_effort": "xhigh",
         "fast": true
-      },
-      {
-        "model": "anthropic/claude-opus-5",
-        "reasoning_effort": "xhigh"
       }
     ],
     "interrogate reviewers": [
       {
-        "model": "anthropic/claude-fable-5-1",
+        "model": "anthropic/claude-opus-5-5",
         "reasoning_effort": "max"
       },
       {
@@ -150,13 +138,9 @@
         "reasoning_effort": "max"
       },
       {
-        "model": "xai/grok-4.6",
+        "model": "xai/grok-4.7",
         "reasoning_effort": "xhigh",
         "fast": true
-      },
-      {
-        "model": "anthropic/claude-opus-5",
-        "reasoning_effort": "xhigh"
       }
     ]
   },
@@ -164,12 +148,22 @@
     "codex/gpt-5.6-sol": "openai/gpt-5.6-sol",
     "copilot/gpt-5.6-sol": "openai/gpt-5.6-sol",
     "azure/gpt-5.6-sol": "openai/gpt-5.6-sol",
-    "supergrok/grok-4.6": "xai/grok-4.6"
+    "supergrok/grok-4.6": "xai/grok-4.6",
+    "anthropic/claude-fable-5-1": "anthropic/claude-fable-5-1",
+    "anthropic/claude-opus-5": "anthropic/claude-opus-5",
+    "xai/grok-4.6": "xai/grok-4.6",
+    "openai/gpt-5.6-sol": "openai/gpt-5.6-sol"
   },
   "notes": [
+    "Opus 5.5 and Grok 4.7 identify upstream-required weights, NOT verified Capy route IDs. The public Capy catalog checked on 2026-09-23 does not list them.",
+    "Resolve each required identity through an explicit current account observation binding. Never guess a route, silently substitute an older model, or claim availability from this preset.",
     "Effort and fast are requested policy, not a claim about live account support.",
     "Comment Sicko has no explicit upstream model; only that role inherits by default.",
-    "Four distinct models represent three provider families.",
-    "Billing aliases are optional explicit overrides; no route is selected automatically."
+    "Three distinct panel models represent three provider families. Reflection keeps three lenses and a later synthesizer.",
+    "Documented billing aliases for older models remain valid only for those same weights. No route is selected automatically."
+  ],
+  "requires_observed_binding": [
+    "anthropic/claude-opus-5-5",
+    "xai/grok-4.7"
   ]
 }

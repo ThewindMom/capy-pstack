@@ -1,6 +1,6 @@
 # Model selection contract
 
-Default policy is `upstream-faithful` for pstack 0.15.2. Read the bundled
+Default policy is `upstream-faithful` for pstack 0.15.3. Read the bundled
 `pstack.model-presets.json` from the actual `.agents` or volume root. It retains each
 upstream role and panel, rather than changing every task to inheritance. There is no
 network fetch. The catalog source is documentation, not account entitlement.
@@ -33,6 +33,44 @@ when needed. An empty observation cannot resolve a faithful panel. Re-observe be
 a locally saved file can be stale and neither the validator nor this file proves access.
 Do not put secrets into the observation. Public documentation only confirms identifiers.
 
+## Bind new upstream identities without guessing a native route
+
+The 0.15.3 preset names `anthropic/claude-opus-5-5` and `xai/grok-4.7` as **policy
+identities** derived from upstream's requested models. They are not confirmed Capy route
+IDs. The public model catalog checked on 2026-09-23 does not list those versions. A name
+in this file or in an observation's `models` keys is not sufficient to resolve them.
+
+For each identity, use the current account picker or native tool evidence to record the
+actual route and the exact model version. Add a binding to the observation, for example:
+
+```json
+{
+  "source": "REPLACE with current native capability observation",
+  "models": {
+    "REPLACE_WITH_ACTUAL_ROUTE": {"reasoning_efforts": ["max"], "fast": false}
+  },
+  "bindings": {
+    "anthropic/claude-opus-5-5": {
+      "model": "REPLACE_WITH_ACTUAL_ROUTE",
+      "source": "REPLACE with evidence that this route is Opus 5.5"
+    }
+  }
+}
+```
+
+This is an incomplete illustrative shape, not account evidence or a launchable panel.
+Add the independently observed Grok 4.7 binding and the Sol capabilities for a full panel.
+The resolver copies the observed route literally, checks its settings, and retains the
+policy identity for diversity and cross-judge family selection. It rejects absent bindings,
+two identities mapped to one route, and a known older model relabelled as a new version.
+Neither an observation file nor its source string authenticates remote access; inspect the
+real Capy result. If the account cannot supply the required version, leave the role blocked
+or use an explicitly approved custom policy. Never invent native IDs or billing aliases.
+
+Existing explicit model/panel overrides keep their values. A pre-0.15.3 faithful pin may
+now fail validation. Back it up and remove only the entries selected for reset, or keep
+them under an approved custom profile. Rerunning setup does not reset them automatically.
+
 ## Resolve before drafting/starting
 
 Run from the actual bundle root, using absolute paths from other working directories:
@@ -46,15 +84,15 @@ python3 skills/poteto-mode/scripts/models.py resolve pstack.models.example.json 
 
 `requested` shows policy only, not a launch. `resolve` requires observations, rejects
 unavailable IDs/efforts/priority and reports every choice, real model identity, provider
-family and concurrency wave. Four faithful seats mean Fable 5.1, GPT-5.6 Sol, Grok 4.6 and
-Opus 5 (three families). Subscription and direct-billed routes to the same weights count
-once. All four seats still run with max_parallel 3, in two waves; a cap never drops a seat.
+family and concurrency wave. Three faithful seats mean Opus 5.5, GPT-5.6 Sol and Grok 4.7
+(three families). Subscription and direct-billed routes to the same weights count once.
+All three seats run with max_parallel 3 in one wave; a lower cap never drops a seat.
 
 The result is a **work order, not a Capy SDK payload**. Map model, reasoning and priority to
 the actual native tool schema. Verify returned settings. If the tool cannot set or reveal
 an essential field, block and report it. Do not omit the field and call it faithful. If the
 selected policy is inheritance, omit native overrides but audit against actual parent
-settings. Do not create four new threads as a substitute for native child tasks.
+settings. Do not create extra threads as a substitute for native child tasks.
 
 For implementation use feature/refactoring/bug-fix/perf-issue/hillclimb as applicable;
 hardest tasks take their own judgment role. How has explorer/explainer; Why has investigators/
@@ -91,6 +129,6 @@ not automatically equated; update the documented identity registry before making
 claims about such routes. Live model dispatch and workflow compliance remain separate
 acceptance checks in the repository's smoke checklist.
 
-Platform references checked 2026-09-22:
+Platform references checked 2026-09-23:
 https://docs.capy.ai/models-and-pricing
 https://docs.capy.ai/tasks

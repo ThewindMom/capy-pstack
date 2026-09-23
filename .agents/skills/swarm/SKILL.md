@@ -22,7 +22,7 @@ Open a todolist with one entry per phase before launching anything.
 2. Choose the shape. Partition into slices, race N workers on identical briefs, or mix both. For a race or mixed shape, declare `first pass`, `rank all`, or `best-of` before spawning.
 3. Set N from the user or derive it from the shape. N is total workers, not the cloud concurrency limit.
 4. Pick the worker model from `swarm workers` in `pstack.models.json` at the selected bundle root when present. Otherwise resolve the upstream-faithful `swarm workers` role. For a model race, name each arm's model up front.
-5. Give each worker its own writable output when it writes.
+5. Give each worker its own writable output when it writes. When workers verify or measure commits, each brief names the exact SHAs. A measurement brief also names the method (sample count, what one sample is, order). The worker records both in its result.
 
 ## Phase B: Fan out
 
@@ -32,12 +32,12 @@ candidates use fresh machines, explicit accepted bases and non-overlapping scope
 Transfer required files before the child uses them. A machine-only dependency unavailable
 in Capy is blocked, not a reason to invent a local-computer execution mode.
 Every brief names goal, scope, slice or race arm, verification and report shape.
-Reports use PASS, ISSUES, or BLOCKED with evidence. Only a terminal failed or explicitly
+Reports use PASS, ISSUES, or BLOCKED with evidence. A worker that can prove a defect reports ISSUES and lists every issue it can prove, not only the first. Only a terminal failed or explicitly
 reconciled stopped worker is a dropout; note it when continuing with N-1.
 
 ## Phase C: Aggregate
 
-Read the terminal results. For coverage, every required slice needs a result. For a race, apply the selection rule declared up front. Use first pass, rank all, or best-of. Do not paste raw worker dumps.
+Read the terminal results. Drop a result that does not record the SHAs and method its brief names, and rerun that worker once. After a second miss, record a gap. A gap does not count as a pass. For coverage, every required slice needs a result. For a race, apply the selection rule declared up front. Use first pass, rank all, or best-of. Do not paste raw worker dumps.
 
 Keep a compact result table, one-line evidenced issues, and explicit gaps or dropouts.
 
@@ -63,7 +63,7 @@ profile overriding matching fields. Absent configuration uses `upstream-faithful
 that root and run its models.py resolver with current account observations before launch.
 Preserve the role-specific model, reasoning effort, priority and panel count. Unsupported
 settings block the affected seat; never silently inherit or substitute. Same-model/custom
-profiles require an explicit user-approved difference. Four faithful seats are four models
+profiles require an explicit user-approved difference. Three faithful seats are three models
 across three families. Inspect returned native settings, not only the requested prompt.
 
 Use the native task tools available in this session, not a shell that starts another
