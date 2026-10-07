@@ -54,8 +54,11 @@ rewrite a three-seat override to two. A faithful mismatch reports which pin need
 
 Offer these budgets. Large is the ordinary default. Existing strict/custom profiles without a budget retain unlimited, so explicit effort pins remain intact.
 The choices are unlimited (keep source efforts), large
-(xhigh), medium (high), or small (medium). Explain that the largest budget is not a price
-cap. On reruns retain intentional user role, route and panel choices. Show every resolved
+(xhigh), medium (high), or small (medium).
+A role or panel named in a custom profile keeps an explicit `reasoning_effort`.
+For large, medium, or small budgets, a non-alias custom seat that omits
+`reasoning_effort` still gets the effort for the selected budget.
+Explain that the largest budget is not a price cap. On reruns retain intentional user role, route and panel choices. Show every resolved
 role, panel seat, effort, priority request and concurrency before saving a budget change.
 Do not silently choose a cheaper route or substitute another family.
 
