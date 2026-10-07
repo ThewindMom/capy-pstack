@@ -114,6 +114,102 @@ class NativePolicyTests(unittest.TestCase):
         self.assertEqual(m.resolve(profile, 'feature', observed()), [{'model': 'anthropic/claude-opus-5-5', 'reasoning_effort': 'max'}])
         self.assertEqual(m.work_order(profile, 'feature', observed())['budget'], 'unlimited')
 
+    def test_custom_luna_low_wins_over_medium_budget(self):
+        luna = {'model': 'openai/gpt-6-luna', 'reasoning_effort': 'low', 'fast': True}
+        profile = {'preset': 'custom', 'approved_difference': 'fixture consent', 'budget': 'medium',
+                   'roles': {'how explorer': luna}}
+        obs = observed()
+        obs['models'][luna['model']] = {
+            'reasoning_efforts': ['none', 'low', 'medium', 'high', 'xhigh', 'max'], 'fast': True}
+        self.assertEqual(m.requested(profile, 'how explorer'), [luna])
+        self.assertEqual(m.resolve(profile, 'how explorer', obs), [luna])
+        self.assertEqual(m.work_order(profile, 'how explorer', obs)['budget'], 'medium')
+
+    def test_custom_unsupported_effort_is_rejected(self):
+        profile = {'preset': 'custom', 'approved_difference': 'fixture consent', 'budget': 'medium',
+                   'roles': {'how explorer': {'model': 'openai/gpt-6-luna', 'reasoning_effort': 'low'}}}
+        obs = observed()
+        obs['models']['openai/gpt-6-luna'] = {'reasoning_efforts': ['high'], 'fast': False}
+        with self.assertRaisesRegex(m.ModelError, 'Unsupported reasoning'):
+            m.resolve(profile, 'how explorer', obs)
+
+    def test_custom_role_without_effort_still_takes_medium_budget(self):
+        profile = {'preset': 'custom', 'approved_difference': 'fixture consent', 'budget': 'medium',
+                   'roles': {'how explorer': {'model': 'openai/gpt-6-luna', 'fast': True}}}
+        obs = observed()
+        obs['models']['openai/gpt-6-luna'] = {'reasoning_efforts': ['high', 'low'], 'fast': True}
+        self.assertEqual(m.resolve(profile, 'how explorer', obs),
+                         [{'model': 'openai/gpt-6-luna', 'reasoning_effort': 'high', 'fast': True}])
+        other = {'preset': 'custom', 'approved_difference': 'fixture consent', 'budget': 'medium',
+                 'roles': {'how explorer': {'model': 'openai/gpt-6-luna', 'reasoning_effort': 'low', 'fast': True}}}
+        self.assertEqual(m.resolve(other, 'feature', obs),
+                         [{'model': 'xai/grok-4.7', 'reasoning_effort': 'high', 'fast': True}])
+
+    def test_mixed_custom_panel_keeps_pinned_medium_and_budgets_unpinned_seat(self):
+        pinned = {'model': 'openai/gpt-6-luna', 'reasoning_effort': 'medium'}
+        profile = {'preset': 'custom', 'approved_difference': 'fixture consent', 'budget': 'medium',
+                   'panels': {'arena runners': [pinned, {'model': 'xai/grok-4.7'}]}}
+        obs = observed()
+        obs['models'][pinned['model']] = {'reasoning_efforts': ['medium', 'high'], 'fast': False}
+        self.assertEqual(m.resolve(profile, 'arena runners', obs), [
+            pinned, {'model': 'xai/grok-4.7', 'reasoning_effort': 'high'}])
+
+    def test_aliases_faithful_native_and_single_model_keep_budget_contracts(self):
+        parent = {'model': 'anthropic/claude-opus-5-5', 'reasoning_effort': 'max', 'fast': True}
+        obs = observed()
+        obs['parent'] = parent
+        for alias in ('inherit-parent', 'auto'):
+            profile = {'preset': 'custom', 'approved_difference': 'fixture consent', 'budget': 'medium',
+                       'roles': {'feature': alias}}
+            with self.subTest(alias=alias):
+                self.assertEqual(m.resolve(profile, 'feature', obs), [parent])
+        self.assertEqual(m.resolve({'preset': 'capy-native', 'budget': 'medium'}, 'feature', observed()),
+                         [{'model': 'xai/grok-4.7', 'reasoning_effort': 'high', 'fast': True}])
+        self.assertEqual(m.resolve({'preset': 'upstream-faithful', 'budget': 'medium'}, 'how explainer', observed()),
+                         [{'model': 'anthropic/claude-opus-5-5', 'reasoning_effort': 'high'}])
+        for preset in ('capy-native', 'upstream-faithful'):
+            pinned = {'preset': preset, 'budget': 'medium',
+                      'roles': {'feature': {'model': 'xai/grok-4.7', 'reasoning_effort': 'low', 'fast': True}}}
+            with self.subTest(preset=preset), self.assertRaisesRegex(m.ModelError, 'faithful settings changed'):
+                m.requested(pinned, 'feature')
+        self.assertEqual(m.resolve({'preset': 'single-model', 'approved_difference': 'fixture consent',
+                                    'budget': 'medium'}, 'arena runners', obs), [parent, parent])
+        obs['models']['openai/gpt-6-luna'] = {'reasoning_efforts': ['low', 'high'], 'fast': False}
+        single_pin = {'preset': 'single-model', 'approved_difference': 'fixture consent', 'budget': 'medium',
+                      'roles': {'feature': {'model': 'openai/gpt-6-luna', 'reasoning_effort': 'low'}}}
+        self.assertEqual(m.resolve(single_pin, 'feature', obs),
+                         [{'model': 'openai/gpt-6-luna', 'reasoning_effort': 'high'}])
+
+    def test_cli_base_profile_keeps_medium_budget_and_custom_override(self):
+        with tempfile.TemporaryDirectory() as directory:
+            base = Path(directory) / 'base.json'
+            override = Path(directory) / 'override.json'
+            obs_path = Path(directory) / 'observed.json'
+            base.write_text(json.dumps({
+                'version': 2, 'preset': 'custom', 'approved_difference': 'fixture base consent',
+                'budget': 'medium',
+            }))
+            override.write_text(json.dumps({
+                'version': 2, 'preset': 'custom', 'approved_difference': 'fixture override consent',
+                'roles': {'how explorer': {'model': 'openai/gpt-6-luna', 'reasoning_effort': 'low', 'fast': True}},
+            }))
+            obs = observed()
+            obs['models']['openai/gpt-6-luna'] = {'reasoning_efforts': ['low', 'high'], 'fast': True}
+            obs_path.write_text(json.dumps(obs))
+            cases = (
+                ('how explorer', [{'model': 'openai/gpt-6-luna', 'reasoning_effort': 'low', 'fast': True}]),
+                ('feature', [{'model': 'xai/grok-4.7', 'reasoning_effort': 'high', 'fast': True}]),
+            )
+            for role, expected in cases:
+                command = [sys.executable, str(SCRIPTS / 'models.py'), 'resolve', str(override),
+                           '--base-profile', str(base), '--role', role, '--observed', str(obs_path)]
+                result = subprocess.run(command, capture_output=True, text=True)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                output = json.loads(result.stdout)
+                self.assertEqual(output['budget'], 'medium')
+                self.assertEqual(output['preset'], 'custom')
+                self.assertEqual(output['choices'], expected)
+
     def test_merge_preserves_explicit_policy_selection_and_strict_legacy(self):
         cases = [({}, {}, 'capy-native'), ({}, {'version': 2}, 'upstream-faithful'),
                  ({'version': 2}, {}, 'upstream-faithful'),

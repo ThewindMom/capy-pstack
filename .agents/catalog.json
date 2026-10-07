@@ -338,7 +338,7 @@
       "mode": "644"
     },
     "skills/poteto-mode/references/model-policy.md": {
-      "sha256": "e366a1567ee384b87550fd13ed44efab4e67d816e2f03e508eb91ac184c1c811",
+      "sha256": "6060bb48b0448bcc4d6a4e7e0f116ece4c68e0219dc073dbaeac3213b959225c",
       "mode": "644"
     },
     "skills/poteto-mode/scripts/bootstrap.ts": {
@@ -354,7 +354,7 @@
       "mode": "755"
     },
     "skills/poteto-mode/scripts/models.py": {
-      "sha256": "9e0a5252e414ea8b11fdfd81d443d8d5f838789d74f57a5ce1635b6f09dfb625",
+      "sha256": "b7090c1dcabaf2cab0d9dbf9425b2fab32a20e4e6d54427a875760c9194f31e7",
       "mode": "644"
     },
     "skills/poteto-mode/scripts/orch/orch.test.ts": {
@@ -550,7 +550,7 @@
       "mode": "644"
     },
     "skills/setup-pstack/SKILL.md": {
-      "sha256": "0c7ac30e836f5a0377cbf6360a3deaa5041399cf3afd82589fadc28065f7d155",
+      "sha256": "73dcd9cf72085062178c475b7920b9e06f02837d9338c0f61db6a9d02497a9aa",
       "mode": "644"
     },
     "skills/show-me-your-work/SKILL.md": {

@@ -132,8 +132,9 @@ def requested(profile: object, role: str) -> list[dict]:
     budget = policy_budget(profile)
     if budget != 'unlimited':
         target = {'large':'xhigh', 'medium':'high', 'small':'medium'}[budget]
+        named = preset == 'custom' and role in profile.get(group, {})
         for selected in values:
-            if selected['model'] not in ALIASES:
+            if selected['model'] not in ALIASES and not (named and 'reasoning_effort' in selected):
                 selected['reasoning_effort'] = target
     return values
 

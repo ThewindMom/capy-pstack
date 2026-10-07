@@ -17,9 +17,12 @@ Roles take a choice; panels take lists. A choice has `model`, optional `reasonin
 and optional boolean `fast`. Strings are allowed for inheritance or custom choices.
 Native and faithful overrides preserve weights and requested settings, though a documented billing alias
 may be selected explicitly. Native also allows explicitly selected `inherit-parent` and `auto`.
-Both aliases inherit every parent setting without effort or priority overrides. Alias seats still count toward fan-out, not diversity. Budget unlimited preserves source efforts; large/xhigh,
-medium/high and small/medium set the requested effort separately. Unsupported settings
-fail, never silently approximate. Native defaults to large. Existing strict/custom profiles without a budget retain unlimited and their effort pins. No measured reasoning equivalence between platforms is
+Both aliases inherit every parent setting without effort or priority overrides. Alias seats still count toward fan-out, not diversity.
+Budget unlimited preserves source efforts. Large sets xhigh, medium sets high, and small sets medium.
+A role or panel named in a custom profile keeps an explicit `reasoning_effort`.
+For large, medium, or small budgets, a non-alias custom seat that omits
+`reasoning_effort` still gets the effort for that budget.
+Unsupported settings fail, never silently approximate. Native defaults to large. Existing strict/custom profiles without a budget retain unlimited and their effort pins. No measured reasoning equivalence between platforms is
 claimed. Fast is a priority request, not a guaranteed latency.
 Native resolution omits unsupported fast. Each work order records the seat, requested value, omitted value, and reason in `adaptations`.
 The requested policy retains fast. Strict upstream-faithful, custom, single-model, and inherited parent settings reject unsupported priority.
