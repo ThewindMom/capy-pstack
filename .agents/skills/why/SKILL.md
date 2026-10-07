@@ -9,6 +9,9 @@ Investigate the motivation and intent behind code.
 
 Companion to the `how` skill. `how` answers what the code does and how it works. `why` answers what forces led to its shape.
 
+Resolve every role through the installed model policy. A rejected native route is blocked,
+not permission to substitute a default or another model from the same family.
+
 ## Operating Posture
 
 Operate as a **careful, cautious, and precise investigator**. Be honest about what you know vs what you're inferring. Read `references/epistemics.md` for the full confidence framework and phrasing guide. The synthesizer must follow it.
@@ -78,7 +81,7 @@ Launch all matching investigators in a single message so they run concurrently. 
 
 Subagent config (each):
 - Native Capy task with the complete role brief
-- `model`: your configured why-investigators model (default from the upstream-faithful role preset)
+- `model`: your configured why-investigators model (resolved through the model policy)
 - Read-only scope on a shared Capy machine, with authorized connected reads. Do not write to evidence sources. Do not assume a scope instruction removes MCP capabilities.
 
 Each investigator gets:
@@ -122,7 +125,7 @@ If your scope assessment suggests a single-commit trivial target where the PR de
 Spawn one synthesizer subagent:
 
 - Native Capy task with the complete role brief
-- `model`: your configured why-synthesizer model (default from the upstream-faithful role preset)
+- `model`: your configured why-synthesizer model (resolved through the model policy)
 - Read-only native synthesis scope on a shared machine, with authorized connected reads to spot-check citations. Do not write to source systems.
 
 The synthesizer gets:
@@ -156,30 +159,36 @@ After the Sources Consulted block, if the user's `why` question is a precursor t
 
 ## Capy task execution
 
-Draft each child with its complete goal, exact repository and base commit, writable
-scope, acceptance checks, standing instructions, and the skill/reference paths to read.
+Draft each child with its complete goal, exact repository and accepted base, writable
+scope, acceptance checks, standing instructions, and full skill/reference paths.
 Children do not inherit this conversation. Resolve roles/ and skills/ from the observed
-bundle root (.agents in a project, or the selected volume root), never the child
-working directory. Select a shared machine for a read-only
-investigation of this checkout, or a fresh machine for any writer or candidate artifact.
-A report returned in the task message is not a filesystem write. Verify the placement
-and machine ID returned at start. Use `transfer_files` for inputs and reports crossing
-machines; a path on another machine is not an accessible input.
+bundle root (.agents in a project, or the selected volume root), not the child directory.
+Read-only investigations use `machine: "shared"`. Writers use `machine: "device"` for an
+isolated sibling worktree on a device-attached thread, or `machine: "fresh"` for an isolated
+cloud machine on a cloud thread. A new agent does not imply a cloud machine. Use coordinated
+disjoint shared writing only when explicitly assigned, with one git writer and no concurrent
+commits. Verify returned placement and machine ID. Transfer uncommitted inputs and reports
+with `transfer_files` when machines differ; a remote path is not an accessible input.
 
-Read the selected role from `pstack.models.json` at the bundle root, with the project
-profile overriding matching fields. Absent configuration uses `upstream-faithful` from
-`pstack.model-presets.json`. Follow `skills/poteto-mode/references/model-policy.md` at
-that root and run its models.py resolver with current account observations before launch.
-Preserve the role-specific model, reasoning effort, priority and panel count. Unsupported
-settings block the affected seat; never silently inherit or substitute. Same-model/custom
-profiles require an explicit user-approved difference. Three faithful seats are three models
-across three families. Inspect returned native settings, not only the requested prompt.
+Resolve every role, reasoning budget, alias and panel through
+`skills/poteto-mode/references/model-policy.md` at the observed bundle root. Run its
+models.py resolver with current account observations before launch, and inspect returned
+native settings. The policy owns defaults and unsupported-setting handling. Never silently
+substitute models, infer diversity from aliases, or overwrite an existing user profile.
 
-Use the native task tools available in this session, not a shell that starts another
-agent. Drafts are not running, working/waiting tasks remain live, and idle/stopped is
-not completion. Accept a final report only after `done` plus evidence inspection.
-Send follow-up fixes to the existing owner. Do not replace a timed-out owner until
-its stop or terminal failure and its filesystem/branch have been reconciled.
-Independent writers need disjoint paths. A dependent writer starts at its predecessor's
-actual accepted branch/head, not just later from main. At three child levels, execute
-the next step in the current owner rather than spawning a fourth level.
+Use native task tools, not a shell that starts agents. Drafts are not running;
+working/waiting owners remain live, and idle/stopped is not completion. Accept a final
+report only with terminal completion and inspected evidence. Independent new rounds use
+fresh agent context with consolidated scope: the original brief, every later directive,
+the accepted report, exact head, and transferred inputs. Keep an existing live owner when
+callbacks, its local checkout, uncommitted work, or running processes require it. Before a
+completed role passes to a new agent, reconcile the filesystem, branch, processes and PR
+callback ownership. A timeout never permits a second writer. Stop or reconcile terminal
+failure before replacement. A dependent writer starts at its predecessor's accepted head,
+not merely later from main. At three child levels, execute rather than spawn a fourth.
+
+Implementation and playbook helpers read the complete poteto-mode skill and
+`roles/poteto-agent.md`. Investigation, reflection and adversarial review use their own
+full templates. Tier code work by difficulty through the configured policy, including
+`hardest tasks` and `judgment and prose`. The parent inspects each diff and writes its own
+synthesis. A second opinion uses the same brief against a different resolved model.

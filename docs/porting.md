@@ -2,7 +2,7 @@
 
 ## Complete source, native execution
 
-All 158 files in the pstack 0.15.3 source subtree are accounted for in
+All 164 files in the pstack 0.15.15 source subtree are accounted for in
 [the provenance inventory](../provenance/source.json). Skills moved to `.agents/skills`,
 agent prompts to `.agents/roles`, and the dormant Benny pack to `.agents/automations`.
 References, examples, illustrations, licenses, scripts and script tests are local files.
@@ -12,14 +12,14 @@ and its required upstream checkout are gone.
 
 ## Deliberate semantic changes
 
-Task calls became native Capy drafts/starts with explicit shared/fresh placement,
+Task calls became native Capy drafts/starts with explicit shared, device, or fresh placement,
 self-contained context, native IDs, accepted dependency branches and transfer_files.
 Arena preserves framing, independent candidates, cross-judge, selection, grafting and
 verification; a live timeout is not a completed candidate. Architect keeps at least two
 structurally different sketches. Reviewers stay independent of implementers.
 
 Provider-specific slugs and reasoning suffix transformations became observed-account
-role profiles with an upstream-faithful default and explicitly approved alternatives. Role/panel validation is
+role profiles with a capy-native default and a strict upstream-faithful option. Role/panel validation is
 executable; an inherited model never appears as a literal model argument. Same-model
 panels are disclosed. Reflection retains its three lenses, synthesis, structural check,
 explicit approval before skill edits, and evidence of what the agent actually read.
@@ -50,7 +50,14 @@ implement the authoring/continuation requirements through Capy's own contracts. 
 are not claimed copies of unavailable built-ins. See parity-requirements.md for requirement,
 implementation and evidence links. The native model resolver checks effort and priority
 separately, collapses documented billing aliases for identity, and fails missing settings.
-It preserves the upstream three-model panels, three reflection lenses and single cross-judge.
+It preserves the upstream two-model panels, three reflection lenses and single cross-judge.
+Native mode records omitted unsupported fast priority without substituting weights or
+reasoning effort. Strict mode rejects that difference. Existing user profiles stay intact.
+
+Agent freshness is independent of machine placement. Shared agents use this runner and
+checkout. Device agents get local sibling worktrees; fresh agents get cloud machines.
+Completed roles can pass to new context after ownership reconciliation. Live writers,
+uncommitted changes and running services keep their owner until a safe handoff.
 
 ## Maintenance
 
@@ -60,6 +67,19 @@ for audit; they do not freeze the native files or fetch anything at install time
 README references to Capy documentation are citations, not executable dependencies.
 Local/CI contract tests cannot prove every future agent obeys prose. Live Capy execution
 still needs the [smoke checks](live-smoke.md).
+
+The optional `tools/source_inventory.py` audits a provided local source directory against
+its complete Git subtree hash and records every destination. It neither downloads source
+nor executes the upstream plugin. Normal installation and catalog maintenance stay offline.
+
+## pstack 0.15.15
+
+See [the update record](updates/0.15.15.md). The update includes benchmark-checklist,
+correct, poteto-help, Explain the Number, consolidated fresh-agent rounds, and the new
+Opus/Grok defaults. Native publication requires user authorization, and dependent PR
+stacks use the installed gh-stack workflow rather than untracked raw PR creation.
+Same-runner native subagent starts were observed during maintenance. Other platform
+integration gates remain separately listed, not inferred from that result.
 
 ## pstack 0.15.3
 

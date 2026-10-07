@@ -56,7 +56,7 @@ not a confident diagnosis without an artifact. Heap snapshots can expose sensiti
 ## Capy ownership, persistence and safety
 
 Keep one controller for a shared UI instance. Writers and independently modified candidate
-apps use fresh machines; the judge gets accepted artifacts via native `transfer_files`.
+apps use isolated device worktrees on device threads or fresh cloud machines on cloud threads; the judge gets accepted artifacts via native `transfer_files`.
 Verify transferred files before relying on their paths. Read-only task does not mean a UI
 interaction cannot mutate application data: use disposable local fixtures and stay within
 explicit authorization for external side effects.

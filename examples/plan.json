@@ -1,5 +1,6 @@
 {
   "version": 1,
+  "runner": "cloud",
   "max_parallel": 3,
   "parent_depth": 0,
   "pstack_root": ".agents",

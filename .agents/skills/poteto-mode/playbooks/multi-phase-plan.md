@@ -1,6 +1,9 @@
 ### Multi-phase or multi-PR plan
 
-For volume installations, substitute the actual installed skill paths for the repository git-show examples below. Only use git show for files committed in that repository. Copy the selected paths into the generated plan.
+Resolve the installed bundle root and record its version and catalog identity at program
+start. Copy those exact skill paths into the plan. Re-read that selected contract at each
+tick. Do not substitute application trunk, remote main, or published web documentation for
+unpublished or volume-installed skill files. A deliberate contract upgrade needs re-grounding.
 
 **You own the plan, not the code. The plan is a checklist an owner runs box by box and the operator audits from the evidence.** The plan is the deliverable. Do not implement.
 
@@ -35,14 +38,14 @@ Tests alone are not sufficient verification. A PR is verified only when its unit
 
 - [ ] State the protocol and this plan to the operator, then stop. Start execution only on the operator's explicit go.
 - [ ] On the operator's go, arm a durable program goal record with this exact text. "<The plan path, the PR ids in order, the verification rule, who merges, and the done condition.>"
-- [ ] Read these from trunk at program start. Re-read them at every tick.
-  - [ ] `git show origin/main:.agents/skills/poteto-mode/playbooks/<execution playbook>.md`
-  - [ ] `git show origin/main:.agents/skills/swarm/SKILL.md`
-  - [ ] `git show origin/main:<control skill path>`
-  - [ ] `git show origin/main:.agents/skills/poteto-mode/playbooks/opening-a-pr.md`
-  - [ ] `git show origin/main:.agents/skills/<each other leaf skill the program uses>`
-- [ ] Set up an explicitly authorized native Capy 30-minute audit schedule with a bounded run cap and durable program record. Immediate task/PR events stay native. Without periodic-run authorization, mark that cadence unarmed rather than claiming a wake chain exists.
-- [ ] Use this tick prompt, verbatim. "Re-read the execution playbook from trunk and the saved program goal. Audit the operation against both and fix drift in this tick. Probe every active lane and judge progress by side effects only. Stop a stuck lane, confirm termination and reconcile its branch/scope before dispatching one replacement. Then post a short status message to the operator in chat only when the audit found a tracked change that no earlier status message reported, such as a PR opened, a code-ready head, a round launched or closed, a verdict, a merge, a stuck agent and the action taken, a blocker added or cleared, or a decision only the operator can make. Name every such change and nothing else. Do not repeat a table, the merged list, or an unchanged blocker. If the audit found none, end the turn with no reply text. Either way, log this tick's row in your decision trail. The row names the items reported, or none."
+- [ ] Record the installed bundle root, version and catalog identity. Read these installed files at program start and every tick.
+  - [ ] `<installed bundle root>/skills/poteto-mode/playbooks/<execution playbook>.md`
+  - [ ] `<installed bundle root>/skills/swarm/SKILL.md`
+  - [ ] `<installed control skill path>`
+  - [ ] `<installed bundle root>/skills/poteto-mode/playbooks/opening-a-pr.md`
+  - [ ] `<installed bundle root>/skills/<each other leaf skill the program uses>/SKILL.md`
+- [ ] Set up an explicitly authorized native Capy hourly audit schedule with a bounded run cap and durable program record. Immediate task/PR events stay native. Without periodic-run authorization, mark that cadence unarmed rather than claiming a wake chain exists.
+- [ ] Use this tick prompt, verbatim. "Re-read the execution playbook from the recorded installed bundle and the saved program goal. Audit the operation against both and fix drift in this tick. Probe every active lane and judge progress by side effects only. Stop a stuck lane, confirm termination and reconcile its branch/scope before dispatching one replacement. Then post a short status message to the operator in chat only when the audit found a tracked change that no earlier status message reported, such as a PR opened, a code-ready head, a round launched or closed, a verdict, a merge, a stuck agent and the action taken, a blocker added or cleared, or a decision only the operator can make. Name every such change and nothing else. Do not repeat a table, the merged list, or an unchanged blocker. If the audit found none, end the turn with no reply text. Either way, log this tick's row in your decision trail. The row names the items reported, or none."
 - [ ] On the operator's hold or stand-down, send every owner a zero-writes order at once.
 
 ### Spawn owners
@@ -56,8 +59,8 @@ Tests alone are not sufficient verification. A PR is verified only when its unit
 
 ### PR mechanics, for every PR
 
-- [ ] Resolve the forge once. Default to `gh`; if `command -v origin` succeeds and Origin can resolve the repository, use `origin pr` for every PR operation. Record any fallback to `gh`. Never require `gt`.
-- [ ] Open the PR ready, never draft, with `origin pr create --status open --base <base-branch>` or `gh pr create --base <base-branch>` according to the resolved forge. A stack child targets its parent branch.
+- [ ] Resolve the forge once. Default to `gh`; if `command -v origin` succeeds and Origin can resolve the repository, use native tools for creation and editing, and `origin pr` only for authorized operations they do not express. Record any fallback to `gh`. Never require `gt`.
+- [ ] Open the PR ready, never draft, per **Opening a PR**. Use native `pr_create` with the explicit accepted base. Read the installed gh-stack skill for stack operations. A stack child targets its parent branch.
 - [ ] Run the repo's lint and typecheck once before the PR-facing push. Push with hooks on.
 - [ ] Run `/deslop` before each commit and `/no-comments` before review.
 - [ ] Triage every Bugbot and security-reviewer comment per `../references/bugbot-triage.md`.
@@ -71,7 +74,7 @@ Tests alone are not sufficient verification. A PR is verified only when its unit
 
 ### Boot recipe, for every live lane
 
-Each live lane runs on its own fresh Capy machine at the PR head. Drive through `control-ui` or `control-cli` bundled with this port.
+Each live lane uses an isolated device worktree on a device thread or an isolated fresh cloud machine on a cloud thread, pinned to the PR head. Read-only checks may share a stable checkout. Drive through `control-ui` or `control-cli` bundled with this port.
 
 - [ ] `git fetch origin <head-branch> && git checkout <head SHA>`.
 - [ ] <Start the backend and the surface. Wait for ready.>

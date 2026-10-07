@@ -22,6 +22,9 @@ Ask the question you actually have. [`/how`](../../.agents/skills/how/SKILL.md) 
 
 The two compose naturally. `do why first then how` is a perfectly good prompt when you suspect the history explains the mess.
 
+A read-only question routes to the Investigation playbook. It returns an evidence-backed
+answer, not a fix or a PR. Ask for implementation separately when the answer earns a change.
+
 ## Actually understand it with `/teach`
 
 ```text
@@ -39,6 +42,10 @@ The two compose naturally. `do why first then how` is a perfectly good prompt wh
 [`/recall`](../../.agents/skills/recall/SKILL.md) mines your own recent chats plus the shared record (issues, prior fixes, errors still firing) and hands back a brief on where things stand and what's next. Use it when you're returning to a topic cold. If you want to resume one specific chat, that's the Session pickup playbook below, not `/recall`.
 
 ## Take over prior work with Session pickup
+
+Run recall before adding information to a resumed topic. Correct stale claims with the
+current branch, logs, or issue state. Use teach on the agent's own tradeoffs when a
+recommendation is clear but its reasoning is not.
 
 When another agent (or you, last week) left a branch mid-flight:
 

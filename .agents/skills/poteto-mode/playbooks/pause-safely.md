@@ -10,7 +10,7 @@ only. "Going to bed, keep going" is not a pause request.
    automation when a stop requires it; leave unrelated jobs intact.
 3. Make a scoped WIP commit when authorized and report a broken tree honestly. A local
    commit is not durable against VM replacement: push only with authorization, or save
-   a patch plus required untracked files to the selected persistent volume. Verify the
+   a patch plus required untracked files to an explicitly authorized durable handoff destination. Keep session scratch under `~/.capy/work`; do not copy it to Drive by default. Verify the
    saved artifacts. Never put credentials or unrelated project data into a public branch.
 4. Save intent, actual repository/base/head, task/machine IDs, scope owners, verification,
    blockers, next steps, key paths and gotchas to the selected run record. Point to an

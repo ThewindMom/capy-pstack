@@ -12,6 +12,9 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
+import signal
+import errno
 
 ROOT=Path(__file__).resolve().parents[1]
 def load(name, path):
@@ -30,6 +33,40 @@ class TerminalProbeTests(unittest.TestCase):
     def test_ctrl_c_reaches_process_and_records_exit(self):
         out=pty_probe.run(CMD,{'steps':[{'expect':'ready>'},{'signal':'INT'},{'expect':'interrupted'}],'exit_code':130})
         self.assertEqual(out['exit_code'],130)
+    def test_term_reaches_owned_process(self):
+        out=pty_probe.run(CMD,{'steps':[{'expect':'ready>'},{'signal':'TERM'}],'exit_code':-signal.SIGTERM})
+        self.assertEqual(out['status'],'pass');self.assertEqual(out['exit_code'],-signal.SIGTERM)
+
+    def test_descriptors_close_on_success_eof_timeout_and_permission_failure(self):
+        real_openpty=pty_probe.pty.openpty
+        real_popen=pty_probe.subprocess.Popen
+        for mode in ('success','eof','timeout','permission'):
+            descriptors=[];children=[]
+            def openpty():
+                pair=real_openpty();descriptors.extend(pair);return pair
+            def popen(*args,**kwargs):
+                child=real_popen(*args,**kwargs);children.append(child);return child
+            scenario={'timeout':0.5,'steps':[{'expect':'ready>'},{'send':'quit\n'}]}
+            if mode=='eof':scenario['steps'].append({'expect':'never'})
+            if mode in ('timeout','permission'):scenario['steps']=[{'expect':'ready>'},{'expect':'never'}]
+            try:
+                with self.subTest(mode=mode),patch.object(pty_probe.pty,'openpty',openpty),patch.object(pty_probe.subprocess,'Popen',popen):
+                    if mode=='permission':
+                        with patch.object(pty_probe.os,'killpg',side_effect=PermissionError(errno.EPERM,'denied')):
+                            with self.assertRaises(PermissionError):pty_probe.run(CMD,scenario)
+                        self.assertIsNone(children[0].poll())
+                    elif mode=='success':
+                        self.assertEqual(pty_probe.run(CMD,scenario)['status'],'pass')
+                    else:
+                        with self.assertRaises(pty_probe.ProbeError):pty_probe.run(CMD,scenario)
+                    for fd in descriptors:
+                        with self.assertRaises(OSError) as error:os.fstat(fd)
+                        self.assertEqual(error.exception.errno,errno.EBADF)
+                    if mode!='permission':self.assertIsNotNone(children[0].poll())
+            finally:
+                for child in children:
+                    if child.poll() is None:child.kill()
+                    child.wait(timeout=2)
     def test_timeout_cleans_owned_child_and_retains_failure_output(self):
         with tempfile.TemporaryDirectory() as d:
             pidfile=Path(d)/'pid'

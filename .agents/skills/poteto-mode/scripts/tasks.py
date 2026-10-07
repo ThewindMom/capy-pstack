@@ -63,6 +63,16 @@ def prepare(plan: dict) -> dict:
     require(len(tasks) <= 256, "Split plans larger than 256 tasks into explicit runs")
     root = plan.get("pstack_root", ".agents")
     require(text(root), "pstack_root must identify the installed bundle")
+    runner = plan.get("runner")
+    require(runner in ("device", "cloud"), "runner must be device or cloud")
+    require_local = plan.get("require_local", False)
+    require(type(require_local) is bool, "require_local must be boolean")
+    require(not require_local or runner == "device", "Local execution needs a device runner")
+    coordination = plan.get("shared_coordination")
+    if coordination is not None:
+        require(isinstance(coordination, dict) and text(coordination.get("git_writer"))
+                and coordination.get("concurrent_commits") is False,
+                "shared_coordination needs one git_writer and concurrent_commits false")
     by_id = {}
     for original in tasks:
         require(isinstance(original, dict), "Task must be an object")
@@ -89,15 +99,29 @@ def prepare(plan: dict) -> dict:
         require(bool(text(base_from)) != bool(text(base_ref)), f"Set exactly one of base_ref or base_from: {task_id}")
         if base_from:
             require(base_from in deps, f"base_from must be an explicit dependency: {task_id}")
-        machine = task.get("machine", "fresh" if task["write"] or base_from else "shared")
-        require(machine in ("shared", "fresh"), f"Unknown machine placement: {task_id}")
-        require(not task["write"] or machine == "fresh", f"Writer must use a fresh machine: {task_id}")
-        require(not base_from or machine == "fresh", f"Dependent checkout needs a fresh machine: {task_id}")
+        machine = task.get("machine", ("device" if runner == "device" else "fresh")
+                           if task["write"] or base_from else "shared")
+        require(machine in ("shared", "fresh", "device"), f"Unknown machine placement: {task_id}")
+        require(machine != "device" or runner == "device", f"Device placement needs a device runner: {task_id}")
+        require(not require_local or machine != "fresh", f"Fresh is a cloud machine, not local execution: {task_id}")
+        require(not (task["write"] and machine == "shared") or coordination is not None,
+                f"Shared writer needs explicit shared_coordination: {task_id}")
+        require(not base_from or machine != "shared", f"Dependent checkout needs an isolated machine: {task_id}")
         task["machine"] = machine
         model = task.get("model", "inherit-parent")
         require(model in ("inherit-parent", "auto") or model in models, f"Unconfirmed model: {model!r}")
         task["model"] = model
         by_id[task_id] = task
+    if coordination is not None:
+        owner = coordination["git_writer"]
+        require(owner == "parent" or (owner in by_id and by_id[owner]["write"]
+                and by_id[owner]["machine"] == "shared"), "git_writer must be parent or one shared writer task")
+        shared_writers = [t for t in by_id.values() if t["write"] and t["machine"] == "shared"]
+        for left, right in combinations(shared_writers, 2):
+            if left["repository"] == right["repository"]:
+                require(left["base_ref"] == right["base_ref"], "Shared writers must use the same checkout base_ref")
+                require(not any(overlaps(a, b) for a in left["scope_paths"] for b in right["scope_paths"]),
+                        f"Conflicting shared writers: {left['id']} and {right['id']}")
     for task in by_id.values():
         for dep in task["depends_on"]:
             require(dep in by_id and dep != task["id"], f"Unknown or self dependency: {dep}")
@@ -128,7 +152,6 @@ def prepare(plan: dict) -> dict:
             ancestor = by_id[ancestor_id]
             if (task["write"] and ancestor["write"] and task["repository"] == ancestor["repository"]
                     and any(overlaps(a, b) for a in task["scope_paths"] for b in ancestor["scope_paths"])):
-                # Ordering alone is insufficient: the descendant must inherit the earlier branch.
                 chain = set()
                 cursor = task.get("base_from")
                 while cursor:
@@ -155,8 +178,12 @@ def prepare(plan: dict) -> dict:
                          "Report native task ID, machine ID, status, base/head SHAs, branch, changed paths, "
                          "one evidence artifact and result per acceptance criterion, and remaining risks. "
                          "Idle is not done. Keep an existing live owner; do not launch a duplicate on timeout.")
+        if task["machine"] == "shared" and task["write"]:
+            task["brief"] += (f" Shared checkout coordination assigns git writes only to {coordination['git_writer']}. "
+                              "No concurrent commits. Preserve other owners' changes and write only your disjoint scope.")
         prepared.append(task)
-    return {"version": 1, "max_parallel": cap, "waves": waves, "tasks": prepared,
+    return {"version": 1, "max_parallel": cap, "runner": runner, "require_local": require_local,
+            "shared_coordination": coordination, "waves": waves, "tasks": prepared,
             "model_policy_resolved": False,
             "dispatch": "Scope validation only. Resolve roles/settings through models.py before native task start; this is not an API request."}
 
@@ -223,10 +250,14 @@ def with_profile(plan: dict, profile: dict, observed: dict | None = None) -> dic
             selected = model_policy.requested(local, role)[0]
             selected.update({key: item[key] for key in ("model", "reasoning_effort", "fast") if key in item})
             local.setdefault("roles", {})[role] = selected
-        settings = model_policy.resolve(local, role, observed)[0]
-        result.append(dict(item, **{key:value for key,value in settings.items() if key not in item},
-                           expected_settings=settings))
-        result[-1].update(settings)
+        order = model_policy.work_order(local, role, observed)
+        settings = order["choices"][0]
+        task = {key: value for key, value in item.items() if key not in ("model", "reasoning_effort", "fast")}
+        task.update(settings)
+        task.update(expected_settings=settings,
+                    adaptations=[receipt for receipt in order["adaptations"] if receipt["seat"] == 0],
+                    inherited_seats=[0] if 0 in order["inherited_seats"] else [])
+        result.append(task)
     merged["tasks"] = result
     return merged
 

@@ -1,25 +1,24 @@
 # capy-pstack
 
-**pstack's engineering discipline, built for Capy's cloud agents.**
+**pstack's engineering discipline, built for Capy's native agents on local or cloud runners.**
 
 Start with the problem, investigate before changing code, compare designs when the choice matters, and verify the actual result. Then use Capy's isolated task machines, durable threads, and event-driven PR follow-up to carry the work through.
 
-This repository contains the full, self-contained Capy port of [Lauren Tan's pstack for Cursor](https://github.com/cursor/plugins/tree/b42effe0aa50f59c693d7e2924714e015e00bf7c/pstack), based on version **0.15.3**. The skills and workflows are ordinary files you can read, edit, and install without the original repository.
+This repository contains the full, self-contained Capy port of [Lauren Tan's pstack for Cursor](https://github.com/cursor/plugins/tree/df581122cde17e6e27686b5a448bde23e4ad4318/pstack), based on version **0.15.15**. The skills and workflows are ordinary files you can read, edit, and install without the original repository.
 
 [Features](#what-pstack-brings) · [Why Capy](#how-this-port-plays-to-capys-strengths) · [Differences and limits](#what-does-not-carry-over-from-cursor) · [Get started](#get-started) · [Full catalog](docs/skill-catalog.md)
 
-## Updated for pstack 0.15.3
+## Updated for pstack 0.15.15
 
-This release ports [upstream PR #414](https://github.com/cursor/plugins/pull/414) and
-[its upgrade-help correction #416](https://github.com/cursor/plugins/pull/416). It updates
-all 34 changed source files: three-model defaults, code-ready verification rounds,
-merge-prep CI at the final head, constrained build-evidence reuse, complete swarm receipts,
-stuck-child tracking, change-only audit reports, append-only decision logs, and the smaller
-prose changes. See the [0.15.3 update record](docs/updates/0.15.3.md) for the mapping and limits.
+This release accounts for all 59 upstream file changes since 0.15.3. It adds measurement
+validation, structural correction, help routing, fresh-agent rounds with consolidated
+context, and the two-model Opus/Grok defaults. Native placement separates shared same-runner
+work, isolated device worktrees, and cloud machines. See the
+[0.15.15 update record](docs/updates/0.15.15.md) for the mapping and evidence boundary.
 
-**Model availability is separate from the source upgrade.** The public Capy catalog checked
-on September 23, 2026 does not yet list Opus 5.5 or Grok 4.7. This port preserves them as
-required model identities, not guessed native route IDs. Setup requires a current account
+**Model availability is separate from the source upgrade.** Advertised models and controls
+can change even during a session. An Opus review attempt in this maintenance run failed
+because its Capy API billing route had no organization credits. Setup requires a current account
 observation binding each identity to its exact available Capy route. If the account cannot
 supply one, the affected role stays blocked; no older model or inherited panel is silently
 substituted. An explicitly approved custom profile remains available. The
@@ -40,7 +39,7 @@ The original Cursor plugin uses Cursor's tools, subagents, model choices, and ed
 
 ## What pstack brings
 
-The suite includes **47 ported pstack skills, including 23 principles, and 23 complete playbooks**. Five bundled support skills bring the main catalog to **52**. The separate Benny automation pack contains its own setup, triage, and reproduction workflows.
+The suite includes **51 ported pstack skills, including 24 principles, and 23 complete playbooks**. Five bundled support skills bring the main catalog to **56**. The separate Benny automation pack contains its own setup, triage, and reproduction workflows.
 
 | Work you need to do | What the workflow adds |
 | --- | --- |
@@ -63,7 +62,13 @@ The goal is not to rebuild a local IDE inside a cloud VM. It is to make pstack's
 
 ### Isolated work, with explicit ownership
 
-[Capy tasks](https://docs.capy.ai/tasks) have separate conversations and can use shared or fresh machines. The port uses shared machines for read-only exploration and fresh machines for writers. Its [task validator](.agents/skills/poteto-mode/scripts/tasks.py) checks declared scopes and dependencies before work starts, then checks reported stack bases with the results.
+[Capy subagents](https://docs.capy.ai/tasks) have separate conversations. `shared` placement
+uses this thread's runner and checkout. On a device-attached thread, `device` placement
+creates a sibling worktree on the same computer. `fresh` placement creates an isolated
+cloud machine. The port prefers shared readers and isolated local writers on device
+threads. Coordinated writers may share a checkout only with disjoint scopes and one git
+owner. The [task validator](.agents/skills/poteto-mode/scripts/tasks.py) checks scopes,
+placement, dependencies, and reported stack bases; it does not launch agents.
 
 Independent production changes need disjoint scopes. Dependent changes start from the accepted predecessor branch. Competing arena candidates are alternatives to evaluate, not changes to merge blindly together. Self-contained task briefs and explicit [file transfers](https://docs.capy.ai/machines#moving-files-between-machines) make inputs and evidence part of the handoff instead of assuming another machine has them.
 
@@ -71,7 +76,11 @@ Independent production changes need disjoint scopes. Dependent changes start fro
 
 [Capy threads](https://docs.capy.ai/threads) live on its servers. Its [PR lifecycle](https://docs.capy.ai/pull-requests) delivers CI results, review feedback, and merge events to the owning thread. The port's babysit, shipping, and autonomous-run playbooks use those events instead of treating a detached polling process as the coordinator.
 
-pstack adds the judgment between events: inspect the failure, send fixes to the existing owner, verify the changed head, and obtain an independent shipping verdict. PR ownership follows the latest pushing thread, so a handoff must preserve the intended event owner. Bot feedback depends on the organization's allowlist; not every bot comment wakes a thread.
+pstack adds the judgment between events. Inspect the failure, preserve the live owner,
+verify the changed head, and obtain an independent shipping verdict. A completed role may
+move to a fresh agent with a consolidated brief and reconciled branch ownership. PR
+ownership follows the latest pushing thread, so preserve the intended event owner.
+Bot comments do not automatically wake this session; read them explicitly when relevant.
 
 An event can resume work; it cannot approve a merge. Installing pstack grants no publication, merge, deployment, or recurring-run authority. Archived threads also do not wake automatically.
 
@@ -93,7 +102,17 @@ Capy's [skill discovery](https://docs.capy.ai/skills) exposes names and descript
 
 Capy supports a model choice per task. [setup-pstack](.agents/skills/setup-pstack/SKILL.md) and the [model validator](.agents/skills/poteto-mode/scripts/models.py) preserve pstack's distinct implementation, investigation, judgment, and review roles while accepting only account-observed choices.
 
-The default policy is **upstream-faithful**. It follows pstack 0.15.3: Grok 4.7 for implementation and exploration, Opus 5.5 for difficult judgment and explanation, GPT-5.6 Sol for reflection tooling, and three-model Opus 5.5/Sol/Grok 4.7 design/review panels. Comment Sicko retains its unspecified upstream model. Reasoning effort and priority are separate settings, checked against current account observations before launch. Unsupported settings block rather than silently downgrading. A single-model or custom budget/provider choice is explicit and labelled; billing aliases to the same weights do not add diversity. The arena cross-judge is exactly one independent task selected after all accepted candidates finish.
+The default policy is **capy-native**, based on pstack 0.15.15. Grok 4.7 handles
+implementation, exploration, and reflection tooling. Opus 5.5 handles judgment,
+explanation, and reflection synthesis. Design and review panels have two model families,
+Opus and Grok. The default large budget requests `xhigh`. Comment Sicko inherits the parent.
+
+The native policy retains model identity and reasoning effort. It explicitly records an
+adaptation when the account lacks requested fast priority. The **upstream-faithful** policy
+instead blocks unsupported priority. Neither policy substitutes a missing model or drops
+reasoning requirements. Existing profiles are preserved, including strict faithful pins.
+Custom model choices remain explicit. Billing aliases to the same weights do not add
+diversity. Arena selects one later independent cross-judge, not a second panel.
 
 See the [model policy](.agents/skills/poteto-mode/references/model-policy.md), the [upstream preset](.agents/pstack.model-presets.json), and [requirement-to-evidence map](docs/parity-requirements.md). Saved profiles use version 2. Existing version 1 profiles are preserved and must be migrated explicitly; they are not silently converted into a different spending policy.
 
@@ -133,7 +152,8 @@ Use poteto-mode on the application repository.
 Migrate the export API without changing its observable behavior.
 First use how to map the callers and architect to compare the API shapes.
 Use shared-machine readers for the audit. Split implementation by disjoint
-packages on fresh machines; stack changes that depend on a shared contract.
+packages on isolated device worktrees here, or fresh machines on a cloud runner.
+Stack changes that depend on a shared contract.
 Give each task its base, writable paths, required inputs, and acceptance tests.
 Review actual diffs and evidence before accepting results.
 Open PRs and address CI and review feedback. Do not merge them.
@@ -176,17 +196,28 @@ python3 tools/pstack.py doctor --target /path/to/application
 
 This copies the full skills, roles, automation sources, licenses, model example, and catalog. A small `.capy/rules/pstack-capy.mdc` rule handles explicit pstack requests. Existing `AGENTS.md`, user model profiles, and unrelated skills are preserved. Collisions or changed managed files stop the update. Commit and push the installed files only with authorization so new task machines can receive them.
 
-### Share through a volume
+### Install into Capy Drive
 
-Choose the actual mounted Personal, Organization, Project, or Project + personal volume. **Automation volumes retain state; they do not provide discoverable skills or instructions.**
+Choose the actual mounted Personal, Organization, Project, or Project + personal Drive
+root from the current Capy session. Project scope makes the bundle available to threads
+in this project; Personal scope shares it across your projects in this organization.
+Automation scope does not provide discoverable skills or instructions.
 
 ```bash
-python3 tools/pstack.py install --volume --target /actual/skill-volume --dry-run
-python3 tools/pstack.py install --volume --target /actual/skill-volume
-python3 tools/pstack.py doctor --volume --target /actual/skill-volume
+python3 tools/pstack.py install --volume --target /actual/drive-root --dry-run
+python3 tools/pstack.py install --volume --target /actual/drive-root
+python3 tools/pstack.py doctor --volume --target /actual/drive-root
 ```
 
-The same files live at `skills/`, `roles/`, and `automations/` in that root. Existing volume instructions remain untouched. Keep one intentional version of each skill in the applicable scope.
+The historical `--volume` flag selects the flat Drive layout. The files live at `skills/`,
+`roles/`, and `automations/` in that root. Existing instructions, platform index files and
+user model profiles remain untouched. Installation does not enable the dormant automations.
+
+Capy discovers `skills/<name>/SKILL.md` in the selected scope. No Cursor manifest, MCP
+server, plugin activation command, or synthetic registration is needed. Drive saves the
+installed files beyond this machine; a new thread or fresh subagent should discover them.
+Verify the actual discovered paths and bundle hashes on that fresh machine before claiming
+integration. Keep repository and Drive copies at the same version to avoid duplicate-name drift.
 
 ## A self-contained distribution
 
@@ -194,7 +225,7 @@ All skill bodies, playbooks, role prompts, Benny sources, references, scripts, s
 
 | Find it here | Contents |
 | --- | --- |
-| [.agents/skills](.agents/skills/) | 52 full skills, with [23 playbooks](.agents/skills/poteto-mode/playbooks/) under poteto-mode |
+| [.agents/skills](.agents/skills/) | 56 full skills, with [23 playbooks](.agents/skills/poteto-mode/playbooks/) under poteto-mode |
 | [.agents/roles](.agents/roles/) | Poteto and Comment Sicko role prompts |
 | [.agents/automations/benny](.agents/automations/benny/) | Dormant setup, triage, reproduction, templates, and references |
 | [scripts](.agents/skills/poteto-mode/scripts/) | Task and model validators, PR watcher, orchestration ledger, and audit tools |
@@ -207,7 +238,11 @@ Self-contained does not mean service-free. Agent execution needs Capy, your appl
 
 The recorded [standalone-distribution CI run](https://github.com/ThewindMom/capy-pstack/actions/runs/35707180929) passed **58 Python tests, 52 Bun tests, and the TypeScript check**. It used a plain checkout without submodules, checked the catalog and local links, and built both installation layouts. Tests also cover archive-only installation without Git or upstream access. [Current CI runs](https://github.com/ThewindMom/capy-pstack/actions) show subsequent results.
 
-**These are packaging, tool, and workflow-contract tests, not a live Capy certification.** At this documentation update, authenticated Capy task launches, wakeups, machine handoffs, model selection, and browser verification have not been exercised by this project's smoke test. Record those results with the [live smoke checklist](docs/live-smoke.md) before claiming live coverage.
+**These are packaging, tool, and workflow-contract tests, not a live Capy certification.**
+The 0.15.15 maintenance run observed real native subagent starts on one shared Mac runner.
+That confirms same-runner spawning, not isolated device worktrees, cloud transfers,
+cross-provider dispatch, PR wakeups, or automation execution. The
+[live smoke checklist](docs/live-smoke.md) separates observed behavior from remaining gates.
 
 Run the checks from the repository root:
 
@@ -215,6 +250,7 @@ Run the checks from the repository root:
 python3 -m unittest discover -s tests -v
 python3 tools/catalog.py --check
 python3 .agents/skills/poteto-mode/scripts/tasks.py prepare examples/plan.json --structure-only
+python3 .agents/skills/poteto-mode/scripts/tasks.py prepare examples/same-runner-plan.json --structure-only
 python3 .agents/skills/poteto-mode/scripts/models.py validate \
   .agents/pstack.models.example.json
 ```
@@ -241,7 +277,10 @@ Uninstall removes only intact owned files; add `--volume` for that layout. The i
 
 ## Sources and license
 
-This README describes the port based on pstack **0.15.3**, not a promise of automatic parity with future upstream versions. Capy documentation was checked on **September 22, 2026**. Platform behavior, available models, and integrations can change; follow the actual account's capabilities.
+This README describes the port based on pstack **0.15.15**, not a promise of automatic
+parity with future upstream versions. Native placement and model controls were checked
+against the actual Capy session on **October 7, 2026**. Platform behavior and account access
+can change; observe capabilities before dispatch.
 
 The linked local skills are the implementation contract. Capy's official references describe the platform: [welcome](https://docs.capy.ai/welcome), [tasks](https://docs.capy.ai/tasks), [machines](https://docs.capy.ai/machines), [threads](https://docs.capy.ai/threads), [PRs](https://docs.capy.ai/pull-requests), [environment](https://docs.capy.ai/environment), [skills](https://docs.capy.ai/skills), [volumes](https://docs.capy.ai/volumes), and [automations](https://docs.capy.ai/automations).
 
@@ -266,3 +305,14 @@ Use `models.py resolve` with current `--observed` capabilities before native tas
 `tasks.py prepare --structure-only` only validates a dependency/scope graph. Omit that flag
 and supply `--observed` for role/settings resolution. No JSON checker authenticates a native
 task result; the [live checks](docs/live-smoke.md) still require actual Capy evidence.
+
+For same-runner work, the [local plan example](examples/same-runner-plan.json) declares
+shared placement, disjoint files, a parent git owner, and no concurrent commits. It is a
+validation input, not a launcher. Start its workers through native Capy subagent tools and
+inspect the returned placement. For isolated local work, set `runner` to `device` and use
+`device` placement instead. `require_local` rejects cloud placement.
+
+Every plan must explicitly name its observed `runner` as `device` or `cloud`; a missing
+runner is rejected rather than defaulting a local request to cloud. The general
+`examples/plan.json` deliberately declares a cloud runner. Use the same-runner example
+for this computer.

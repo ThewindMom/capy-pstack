@@ -80,14 +80,31 @@ That's the whole prompt. [`/bro`](../../.agents/skills/bro/SKILL.md) restates th
 
 ## The pitfalls
 
+Use these focused prompts when the question needs a different kind of evidence:
+
+```text
+Restate the report first. Separate observed behavior from the proposed cause.
+Prototype both layouts and show the rendered result before choosing one.
+Use benchmark-checklist before reporting the speedup. Confirm the work and error counts.
+Use correct to prevent the repeated mistake. Prove the check rejects the earlier bad change.
+Use poteto-help to recommend a prompt. Do not start the implementation yet.
+```
+
 - **Enumerating skills in the prompt.** "use /how then /architect then /arena" reorders steps the playbook already sequences. State the goal and constraints. Name a skill only to override a default.
 - **A vague finish condition.** "make it better" gives authorized Capy event/schedule wakeups nothing to check. Give a command or artifact that can pass or fail.
-- **Parallel agents in one worktree.** They overwrite each other and the diff becomes archaeology. Say "own worktree per attempt" and the isolation is free.
+- **Uncoordinated agents in one worktree.** Use device worktrees for local isolation or fresh
+  machines for cloud isolation. Shared writers need explicit disjoint scopes and one git owner.
 - **Using `/arena` for coverage.** `/arena` repeats one design or code brief, then picks a base and grafts the best parts. `/swarm` partitions slices or declared race arms and aggregates one report.
 - **Accepting every review comment.** Bots and humans both file real catches and noise in one list. `/interrogate` sorts findings into act-on and dismissed buckets with reasons, and you can override either way.
 - **Treating `auto` as a model slug.** `auto` and `inherit-parent` mean "omit the model field so the subagent inherits the parent chat model." [Setup](01-setup.md) covers the roles.
 - **Reporting success off a green build.** A build proves it compiles. Ask for the real command, flow, stored value, or profile, and expect the evidence in the reply.
 - **Writing a `SKILL.md` freehand.** Route it through the [Authoring or modifying a skill playbook](../../.agents/skills/poteto-mode/playbooks/authoring-a-skill.md) so validation and review happen.
+- **Debating an observable fact.** Build a small prototype and inspect it instead of asking
+  the user to guess the runtime behavior.
+- **Trusting a number without checking the work.** A fast rejection or an unconsumed generator
+  can look like a speedup. Confirm correct output and work inside the timed interval.
+- **Adding another rule after the same correction.** Use correct to enforce the constraint
+  through architecture, types, lint, or tests before adding more prose.
 
 That's the guide. If you skipped ahead, go back to [setup](01-setup.md) and run one real task. The habits stick from use, not from reading.
 

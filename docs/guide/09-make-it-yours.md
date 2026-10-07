@@ -8,7 +8,10 @@ poteto-mode is one person's style. The machinery underneath, playbooks, routing,
 /automate-me
 ```
 
-You don't describe your style, because [`/automate-me`](../../.agents/skills/automate-me/SKILL.md) reads it out of your history. It mines your recent transcripts in the active workspace for repeated preferences, in how you like replies, delegation, verification, code, prose, and process, then asks you which patterns are really you. It drafts `.agents/skills/<your-name>-mode/SKILL.md` through the bundled `create-skill` flow, runs the draft through [`/unslop`](../../.agents/skills/unslop/SKILL.md), and opens a PR from a fresh task machine so you review it like any other change.
+[`/automate-me`](../../.agents/skills/automate-me/SKILL.md) reads available history for
+repeated preferences about replies, delegation, verification, code, and process. It asks
+which patterns are yours, drafts `.agents/skills/<your-name>-mode/SKILL.md` through the
+bundled create-skill workflow, and applies unslop. Publication remains a separate request.
 
 Run it again whenever your habits drift:
 
@@ -29,6 +32,10 @@ Right after a task that taught you something, run:
 [`/reflect`](../../.agents/skills/reflect/SKILL.md) sends the transcript to three parallel reviewers, then a synthesizer sorts the proposals into `Accepted`, `Rejected`, and `Backlog` and waits for your approval before any skill changes. Approve a proposal only if it would change a future decision. One weird session is an anecdote, not a rule.
 
 ## Author a focused skill
+
+Start with one repeated workflow, not a general personality description. State its trigger,
+observable result, and blocked case. Ask for an update and evaluation together so the edit
+has behavioral evidence rather than only a valid frontmatter header.
 
 When you already know the workflow you want to capture:
 
@@ -63,5 +70,16 @@ The [Eval playbook](../../.agents/skills/poteto-mode/playbooks/eval.md) is built
 Read every output yourself before accepting the verdict. If you disagree with the judge, suspect the rubric before you suspect your judgment.
 
 **Pitfall:** don't edit a skill mid-task because it's misbehaving. Fix it in its own PR and keep the task moving. A skill edit that ships tangled into feature work is invisible to review and impossible to evaluate.
+
+## Prevent repeated mistakes with correct
+
+[Correct](../../.agents/skills/correct/SKILL.md) groups repeated repository mistakes and
+tries architecture first, types and lint next, behavioral tests after that, and prose last.
+Each new check must fail on a real prior mistake. More instructions are a last resort
+because nothing fails when an agent skips them.
+
+Use [make-bot-ui](../../.agents/skills/make-bot-ui/SKILL.md) when a browser action should
+trigger an authorized Capy automation. A server-side relay holds the secret webhook URL;
+browser code must not receive it. Admission is not proof that the requested work completed.
 
 Next: [Recipes and pitfalls](10-recipes-and-pitfalls.md).

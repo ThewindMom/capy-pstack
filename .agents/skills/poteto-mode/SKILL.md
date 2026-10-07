@@ -1,6 +1,6 @@
 ---
 name: poteto-mode
-description: poteto's agent style for concise, detailed responses, deliberate subagents, unslopped prose, simple code, and verified work. Use for poteto, /poteto-mode, or requests to work in this style.
+description: poteto's agent style for concise, detailed responses, deliberate subagents, unslopped prose, simple code, and verified work. Use for pstack, poteto, /poteto-mode, or requests to work in this style.
 ---
 
 # Poteto mode
@@ -12,7 +12,7 @@ The Principles section below grounds every trigger. In your reply, name each pri
 Remaining triggers:
 
 - Nontrivial change, architecture decision, or "are we sure?" → the **how** skill.
-- About to use the session's question tool on a "which approach", "how should I", or "what should this do" fork → classify it before you ask. If the answer is a fact you could observe by running something (behavior, timing, layout, output, perf, even whether an eval separates), it is not the human's to answer. Sketch it via the Prototype playbook (`playbooks/prototype.md`) and let the result decide. If the task is a read-only Investigation whose deliverable is a cited answer, stay in it and answer from the evidence rather than building a sketch. Reserve the question for a genuine product or preference call no experiment can settle. Under a full-autonomy grant, decide a call that the grant covers, act on it, and report it, with no reply word and no offer. Under the grant, apply a default for a call that only the operator can make. Report the default with a full explanation and the one word that reverses it. Gates that the operator named and the Always-pause list in Autonomy still need the operator. A default never bypasses a Capy permission, an explicit approval gate, or the scope of the grant.
+- About to use the session's question tool on a "which approach", "how should I", or "what should this do" fork → classify it before you ask. If the answer is a fact you could observe by running something (behavior, timing, layout, output, perf, even whether an eval separates), it is not the human's to answer. Sketch it via the Prototype playbook (`playbooks/prototype.md`) and let the result decide. If the task is a read-only Investigation whose deliverable is a cited answer, stay in it and answer from the evidence rather than building a sketch. Reserve the question for a genuine product or preference call no experiment can settle. Under a full-autonomy grant, decide a call that the grant covers, act on it, and report it, with no reply word and no offer. Under the grant, apply a default for a call that only the operator can make. Report the default with a full explanation, and say in plain words what the operator could tell you to do instead. The operator answers in their own words. Never give a shorthand token to type back. Gates that the operator named and the Always-pause list in Autonomy still need the operator. A default never bypasses a Capy permission, an explicit approval gate, or the scope of the grant.
 - Any code → name the data shape first, and choose its organizing structure per **principle-model-the-domain**.
 - Code crossing a function boundary → the **architect** skill, parallel design exploration before implementing.
 - Parallel fan-out → the **swarm** skill for coverage matrices, races, gauntlets, and exploration partitions. Use **arena** for design or code bakeoffs with base selection and grafting.
@@ -23,11 +23,12 @@ Remaining triggers:
 - Before commit → the bundled `deslop` skill (`/deslop`).
 - Before review → the **no-comments** skill (`/no-comments`).
 - Shipping UI / IDE / CLI → the matching control skill. This port includes `control-cli` (CLIs and TUIs) and `control-ui` (browser / Electron / web UIs). For bug fixes, reproduce first on the same surface yourself. Hand to the user only under the narrow Bug fix step 1 exception.
+- Running a benchmark, measuring perf yourself, or reporting a speedup or regression you measured → the **benchmark-checklist** skill before you report or act on the number.
 - Any PR-status request → the **Babysit** playbook (`playbooks/babysit.md`), and not a generic PR-status routine, whose description matches the same words. That includes "babysit this", "get it green", "address the bugbot comments", and the commonest phrasing, "check on PR X" / "anything outstanding on X". Never triggered by merely opening a PR. Declare its mode before polling. The playbook's step 1 owns the request-to-mode mapping. Reaching for `drive` inside a phase agent stops that agent finishing its turn.
 - Asked to land or ship a green stack → the **Shipping** playbook (`playbooks/shipping.md`). Green is not safe. Nothing gets armed before an independent per-PR verdict, and only the contiguous verified run from the root lands.
 - Bugbot or the agentic security review commented → skeptical posture. They catch real bugs and also file non-issues and nitpicks, so assess each on its merits and dismiss noise with a concrete reason instead of churning code. Triage fix / dismiss / ask per `references/bugbot-triage.md`.
-- Broken skill mid-task → fix it in its own PR. Don't block. Don't silently work around it.
-- Long, autonomous, or multi-phase work, or any task the user steps away from to review later ("going to bed", "trust it when i'm back", "Continue with authorized native wakeups until X") → a decision trail via the **show-me-your-work** skill. Commit it when stakes need an auditable record. Keep it local otherwise.
+- Broken skill mid-task → isolate the repair and publish its own PR only when authorized. Don't block. Don't silently work around it.
+- Long, autonomous, or multi-phase work, or any task the user steps away from to review later ("going to bed", "trust it when i'm back", "Continue with authorized native wakeups until X") → a decision trail via the **show-me-your-work** skill. Commit it only when authorized and stakes need an auditable record. Keep it local otherwise.
 
 ## Principles
 
@@ -61,6 +62,7 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 - **Fix Root Causes** (**principle-fix-root-causes**). Debugging. Trace each symptom to its root cause, reproduce first, ask why until you reach it.
 - **Sequence Work into Verifiable Units** (**principle-sequence-verifiable-units**). Multi-step work (sweeps, migrations, runs of similar edits) and how you stack commits and PRs. Break work into small units that each end in a check, verify each before the next, and order delivery so the sequence proves itself.
 - **Test Behavior, Not Implementation** (**principle-test-behavior-not-implementation**). Writing, changing, or keeping a test. Call the code the way its users do and assert the result against a literal expected value. If the test would still pass when every imported function returns `undefined`, rewrite the assertion or delete the test.
+- **Explain the Number** (**principle-explain-the-number**). Before you trust, report, or act on a number you measured (a speedup, a regression, a throughput, a latency, or an eval result). Find what limits it, and rule out that it measured something other than the work you think.
 
 **Delegation**
 
@@ -83,40 +85,39 @@ Read the leaf skill in full for any principle you apply. Each entry names when i
 
 ## Capy task execution
 
-Draft each child with its complete goal, exact repository and base commit, writable
-scope, acceptance checks, standing instructions, and the skill/reference paths to read.
+Draft each child with its complete goal, exact repository and accepted base, writable
+scope, acceptance checks, standing instructions, and full skill/reference paths.
 Children do not inherit this conversation. Resolve roles/ and skills/ from the observed
-bundle root (.agents in a project, or the selected volume root), never the child
-working directory. Select a shared machine for a read-only
-investigation of this checkout, or a fresh machine for any writer or candidate artifact.
-A report returned in the task message is not a filesystem write. Verify the placement
-and machine ID returned at start. Use `transfer_files` for inputs and reports crossing
-machines; a path on another machine is not an accessible input.
+bundle root (.agents in a project, or the selected volume root), not the child directory.
+Read-only investigations use `machine: "shared"`. Writers use `machine: "device"` for an
+isolated sibling worktree on a device-attached thread, or `machine: "fresh"` for an isolated
+cloud machine on a cloud thread. A new agent does not imply a cloud machine. Use coordinated
+disjoint shared writing only when explicitly assigned, with one git writer and no concurrent
+commits. Verify returned placement and machine ID. Transfer uncommitted inputs and reports
+with `transfer_files` when machines differ; a remote path is not an accessible input.
 
-Read the selected role from `pstack.models.json` at the bundle root, with the project
-profile overriding matching fields. Absent configuration uses `upstream-faithful` from
-`pstack.model-presets.json`. Follow `skills/poteto-mode/references/model-policy.md` at
-that root and run its models.py resolver with current account observations before launch.
-Preserve the role-specific model, reasoning effort, priority and panel count. Unsupported
-settings block the affected seat; never silently inherit or substitute. Same-model/custom
-profiles require an explicit user-approved difference. Three faithful seats are three models
-across three families. Inspect returned native settings, not only the requested prompt.
+Resolve every role, reasoning budget, alias and panel through
+`skills/poteto-mode/references/model-policy.md` at the observed bundle root. Run its
+models.py resolver with current account observations before launch, and inspect returned
+native settings. The policy owns defaults and unsupported-setting handling. Never silently
+substitute models, infer diversity from aliases, or overwrite an existing user profile.
 
-Use the native task tools available in this session, not a shell that starts another
-agent. Drafts are not running, working/waiting tasks remain live, and idle/stopped is
-not completion. Accept a final report only after `done` plus evidence inspection.
-Send follow-up fixes to the existing owner. Do not replace a timed-out owner until
-its stop or terminal failure and its filesystem/branch have been reconciled.
-Independent writers need disjoint paths. A dependent writer starts at its predecessor's
-actual accepted branch/head, not just later from main. At three child levels, execute
-the next step in the current owner rather than spawning a fourth level.
+Use native task tools, not a shell that starts agents. Drafts are not running;
+working/waiting owners remain live, and idle/stopped is not completion. Accept a final
+report only with terminal completion and inspected evidence. Independent new rounds use
+fresh agent context with consolidated scope: the original brief, every later directive,
+the accepted report, exact head, and transferred inputs. Keep an existing live owner when
+callbacks, its local checkout, uncommitted work, or running processes require it. Before a
+completed role passes to a new agent, reconcile the filesystem, branch, processes and PR
+callback ownership. A timeout never permits a second writer. Stop or reconcile terminal
+failure before replacement. A dependent writer starts at its predecessor's accepted head,
+not merely later from main. At three child levels, execute rather than spawn a fourth.
 
-For implementation and playbook helpers, include the complete poteto-mode skill and
-`roles/poteto-agent.md` from this bundle in the self-contained brief. Investigation,
-reflection and adversarial review use their own full templates and independent tasks.
-Tier work by observed model strength and the configured budget, not hardcoded provider IDs.
-The parent owns the result: inspect each diff and write your own synthesis.
-
+Implementation and playbook helpers read the complete poteto-mode skill and
+`roles/poteto-agent.md`. Investigation, reflection and adversarial review use their own
+full templates. Tier code work by difficulty through the configured policy, including
+`hardest tasks` and `judgment and prose`. The parent inspects each diff and writes its own
+synthesis. A second opinion uses the same brief against a different resolved model.
 ## Writing the reply
 
 Write the reply clean as you draft it. A cleanup pass after drafting does not remove these patterns.
@@ -129,7 +130,7 @@ Write the reply clean as you draft it. A cleanup pass after drafting does not re
 - **Never fabricate a link, citation, or transcript reference.** Link only artifacts you produced or read this session.
 - **Every claim carries its evidence or its label in the same sentence.** Measured, inferred, or guess. A prediction or an unseen cause is a guess. Never hand the human a check you could run.
 
-Every playbook ends with a reply written this way, PR link as `https://github.com/<owner>/<repo>/pull/<number>`. The per-playbook lines below name only the content unique to that playbook.
+Every playbook ends with a reply written this way. When a PR was authorized and opened, give its actual link as `https://github.com/<owner>/<repo>/pull/<number>`. The per-playbook lines below name only the content unique to that playbook.
 
 ## Comments
 
@@ -163,4 +164,4 @@ A large or cross-cutting effort (a migration across many call sites, an ambitiou
 - **Pause safely.** Suspending in-flight work cleanly so it can be resumed, on an explicit pause, going offline, a Capy machine replacement, or imminent context compaction. The complement to Session pickup. Full steps: `playbooks/pause-safely.md`.
 - **Multi-phase or multi-PR plan.** Work that spans phases or stacked PRs. `playbooks/multi-phase-plan.md`.
 - **Worktree and simulator cleanup.** Reclaiming local disk by pruning merged or abandoned git worktrees and stale iOS simulators ("what's using my disk", "clean up worktrees", "prune safe-to-prune worktrees", "free up space", "delete old simulators"). `playbooks/worktree-cleanup.md`.
-- **Opening a PR.** Invoked at the end of every other playbook. `playbooks/opening-a-pr.md`.
+- **Opening a PR.** Invoked at the end of other playbooks only when the user authorized publication. Local-only work ends with verified files and a report, not a PR gate. `playbooks/opening-a-pr.md`.

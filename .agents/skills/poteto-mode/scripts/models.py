@@ -35,7 +35,6 @@ def catalog() -> dict:
 
 
 def identity(model: str, observed: dict | None = None) -> str:
-    # An observed route can name new weights before the public Capy catalog lists them.
     if observed is not None:
         for required, binding in observed.get('bindings', {}).items():
             if binding['model'] == model:
@@ -62,15 +61,23 @@ def choice(value: object) -> dict:
     return dict(value)
 
 
+def policy_preset(profile: dict) -> str:
+    return profile.get('preset', 'upstream-faithful' if profile else 'capy-native')
+
+
+def policy_budget(profile: dict) -> str:
+    return profile.get('budget', 'large' if policy_preset(profile) == 'capy-native' else 'unlimited')
+
+
 def validate(profile: object) -> dict:
     require(isinstance(profile, dict), 'Profile must be an object')
     require(not set(profile) - {'version', 'preset', 'budget', 'max_parallel', 'roles', 'panels',
                                 'approved_difference'}, 'Unknown profile field; migrate v1 confirmed_models to --observed')
     require(type(profile.get('version', 2)) is int and profile.get('version', 2) == 2,
             'Profile version must be 2; v1 inheritance is not silently upgraded')
-    preset = profile.get('preset', 'upstream-faithful')
-    require(preset in ('upstream-faithful', 'single-model', 'custom'), 'Unknown preset')
-    require(profile.get('budget', 'unlimited') in ('unlimited', 'large', 'medium', 'small'), 'Unknown budget')
+    preset = policy_preset(profile)
+    require(preset in ('capy-native', 'upstream-faithful', 'single-model', 'custom'), 'Unknown preset')
+    require(policy_budget(profile) in ('unlimited', 'large', 'medium', 'small'), 'Unknown budget')
     cap = profile.get('max_parallel', 3)
     require(type(cap) is int and 1 <= cap <= 64, 'max_parallel must be 1..64')
     roles, panels = profile.get('roles', {}), profile.get('panels', {})
@@ -84,7 +91,7 @@ def validate(profile: object) -> dict:
         for value in values:
             choice(value)
     require('approved_difference' not in profile or nonempty(profile['approved_difference']), 'Empty approval reference')
-    if preset != 'upstream-faithful':
+    if preset in ('single-model', 'custom'):
         require(nonempty(profile.get('approved_difference')),
                 'single-model/custom requires the actual user approval reference; do not manufacture it')
     return copy.deepcopy(profile)
@@ -93,6 +100,7 @@ def validate(profile: object) -> dict:
 def merge_profiles(base: object, override: object) -> dict:
     base, override = validate(base), validate(override)
     merged = dict(base, **override)
+    merged['preset'] = override.get('preset', policy_preset(base) if base else policy_preset(override))
     for key in ('roles', 'panels'):
         merged[key] = dict(base.get(key, {}), **override.get(key, {}))
     return validate(merged)
@@ -105,22 +113,23 @@ def requested(profile: object, role: str) -> list[dict]:
     group = 'roles' if role in ROLE_NAMES else 'panels'
     defaults = config[group][role]
     defaults = [defaults] if group == 'roles' else defaults
-    preset = profile.get('preset', 'upstream-faithful')
+    preset = policy_preset(profile)
     values = [{'model': 'inherit-parent'}] * len(defaults) if preset == 'single-model' else defaults
     if role in profile.get(group, {}):
         override = profile[group][role]
         values = [override] if group == 'roles' else override
     values = [choice(v) for v in values]
-    if preset == 'upstream-faithful':
-        require(len(values) == len(defaults), f'{role}: faithful seat count changed. Pre-0.15.3 overrides pin the old panel; remove only the selected override to use new defaults, or choose an approved custom profile')
+    if preset in ('capy-native', 'upstream-faithful'):
+        require(len(values) == len(defaults), f'{role}: faithful seat count changed. Existing overrides pin the old panel; remove only the selected override to use new defaults, or choose an approved custom profile')
         for selected, original in zip(values, defaults):
+            if preset == 'capy-native' and selected['model'] in ALIASES:
+                continue
             require(identity(selected['model']) == identity(original['model']),
                     f'{role}: faithful identity changed. Existing overrides are preserved; remove only the selected old pin to use new defaults, or choose an approved custom profile')
-            # A subscription route to the same weights is fine; dropped effort/priority is not.
             require({k:v for k,v in selected.items() if k != 'model'} ==
                     {k:v for k,v in original.items() if k != 'model'},
                     f'{role}: faithful settings changed; use the budget field or approved custom profile')
-    budget = profile.get('budget', 'unlimited')
+    budget = policy_budget(profile)
     if budget != 'unlimited':
         target = {'large':'xhigh', 'medium':'high', 'small':'medium'}[budget]
         for selected in values:
@@ -164,11 +173,14 @@ def observations(value: object) -> dict:
 
 
 def resolve(profile: object, role: str, observed: object = None) -> list[dict]:
+    profile = validate(profile)
+    preset = policy_preset(profile)
     values = requested(profile, role)
     observed = observations(observed)
     result = []
     for selected in values:
-        if selected['model'] in ALIASES:
+        inherited = selected['model'] in ALIASES
+        if inherited:
             require('parent' in observed, 'Inheritance requires the observed parent settings')
             selected = choice(observed['parent'])
         else:
@@ -186,9 +198,14 @@ def resolve(profile: object, role: str, observed: object = None) -> list[dict]:
             require(selected['reasoning_effort'] in capabilities.get('reasoning_efforts', []),
                     f'Unsupported reasoning effort for {model}: {selected["reasoning_effort"]}; no silent downgrade')
         if selected.get('fast'):
-            require(capabilities.get('fast') is True, f'Priority/fast unavailable for {model}; no silent downgrade')
+            if capabilities.get('fast') is not True and preset == 'capy-native' and not inherited:
+                selected = dict(selected)
+                del selected['fast']
+            else:
+                require(capabilities.get('fast') is True, f'Priority/fast unavailable for {model}; no silent downgrade')
         result.append(dict(selected))
-    if validate(profile).get('preset', 'upstream-faithful') == 'upstream-faithful' and role in PANEL_NAMES:
+    if (preset in ('capy-native', 'upstream-faithful') and role in PANEL_NAMES
+            and not any(x['model'] in ALIASES for x in values)):
         defaults = catalog()['panels'][role]
         expected = {identity(x['model']) for x in defaults}
         actual = {identity(x['model'], observed) for x in result}
@@ -200,9 +217,16 @@ def resolve(profile: object, role: str, observed: object = None) -> list[dict]:
 def work_order(profile: object, role: str, observed: object) -> dict:
     profile = validate(profile)
     values = resolve(profile, role, observed)
+    requests = requested(profile, role)
+    adaptations = [{'seat': seat, 'field': 'fast', 'requested': True, 'applied': None,
+                    'reason': 'capy-native omits unsupported priority; model identity and reasoning effort are unchanged'}
+                   for seat, (request, applied) in enumerate(zip(requests, values))
+                   if request.get('fast') is True and 'fast' not in applied]
     cap = profile.get('max_parallel', 3)
-    return {'role': role, 'preset': profile.get('preset', 'upstream-faithful'),
-            'budget': profile.get('budget', 'unlimited'), 'choices': values,
+    return {'role': role, 'preset': policy_preset(profile),
+            'budget': policy_budget(profile), 'choices': values,
+            'adaptations': adaptations,
+            'inherited_seats': [i for i, request in enumerate(requests) if request['model'] in ALIASES],
             'distinct_models': len({identity(x['model'], observed) for x in values}),
             'model_identities': [identity(x['model'], observed) for x in values],
             'upstream_version': catalog()['upstream_version'],
@@ -241,11 +265,15 @@ def select_judge(profile: object, observed: object, candidates: object, records:
     require(isinstance(candidates, dict) and candidates.get('role') == 'arena runners', 'Expected arena candidate order')
     require(candidates.get('choices') == resolve(profile, 'arena runners', observed), 'Candidate order differs from active policy')
     check_run(candidates, records)
-    pool = resolve(profile, 'arena cross-judge pool', observed)
+    pool_order = work_order(profile, 'arena cross-judge pool', observed)
+    pool = pool_order['choices']
     obs = observations(observed)
     require('parent' in obs, 'Observe the parent model before choosing a cross-judge')
     selected = next((x for x in pool if family(x['model'], obs) != family(obs['parent']['model'], obs)), pool[0])
+    seat = pool.index(selected)
     return {'role': 'arena judge', 'choices': [selected], 'pool_not_fanout': False,
+            'adaptations': [dict(a, seat=0) for a in pool_order['adaptations'] if a['seat'] == seat],
+            'inherited_seats': [0] if seat in pool_order['inherited_seats'] else [],
             'after_task_ids': [r['native_task_id'] for r in records],
             'different_parent_family': family(selected['model'], obs) != family(obs['parent']['model'], obs),
             'native_execution_verified': False,

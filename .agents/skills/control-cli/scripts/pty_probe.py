@@ -127,20 +127,28 @@ def run(command: list[str], scenario: dict) -> dict:
         exc.transcript = buffer.decode(errors='replace')
         raise
     finally:
-        if status is None:
-            try:
-                os.killpg(pid, signal.SIGTERM)
-            except ProcessLookupError:
-                pass
-            try:
-                proc.wait(timeout=0.5)
-            except subprocess.TimeoutExpired:
+        try:
+            if proc.poll() is None:
                 try:
-                    os.killpg(pid, signal.SIGKILL)
+                    os.killpg(pid, signal.SIGTERM)
                 except ProcessLookupError:
                     pass
-                proc.wait(timeout=2)
-        os.close(fd)
+                except PermissionError:
+                    if proc.poll() is None:
+                        raise
+                try:
+                    proc.wait(timeout=0.5)
+                except subprocess.TimeoutExpired:
+                    try:
+                        os.killpg(pid, signal.SIGKILL)
+                    except ProcessLookupError:
+                        pass
+                    except PermissionError:
+                        if proc.poll() is None:
+                            raise
+                    proc.wait(timeout=2)
+        finally:
+            os.close(fd)
 
 
 def main() -> int:

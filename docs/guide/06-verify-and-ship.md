@@ -56,7 +56,11 @@ Apps change and feature maps rot. When yours drifts, run:
 /poteto-mode open the pr. small ordered commits, evidence in the description.
 ```
 
-The [Opening a PR playbook](../../.agents/skills/poteto-mode/playbooks/opening-a-pr.md) works from a worktree, rebases the work into small ordered commits, cleans the diff, unslops the prose, and returns the PR link. Five narrow PRs beat one fat one, and stacked follow-ups beat a growing branch.
+The [Opening a PR playbook](../../.agents/skills/poteto-mode/playbooks/opening-a-pr.md) cleans
+the diff, verifies it, and publishes only when requested. Otherwise it leaves the changes
+uncommitted for you. Native PR creation records ownership and delivers callbacks. Use the
+installed gh-stack workflow for a dependent multi-PR stack. Amendment and rebasing still
+need their own authorization; updating a skill does not grant it.
 
 ## Drive the PR to merge-ready with Babysit
 
@@ -66,7 +70,11 @@ An open PR starts collecting blockers immediately. Checks fail, reviewers commen
 /poteto-mode babysit this pr. get it green.
 ```
 
-Babysit watches the PR with a bundled watcher and takes blockers in order: conflicts, then review threads, then CI. Every known fix batches into one push, so the checks restart once instead of after every fix. The comment triage is skeptical, because humans and bots file real catches and noise in the same list. A real finding gets a fix, and noise gets dismissed with the disproof posted on the thread. When all you want is status, ask smaller and Babysit answers without starting the loop:
+Babysit uses native PR events and takes blockers in order, conflicts, review threads, then
+CI. A bundled status-only watcher can provide a snapshot, not durable continuation. Bot
+comments need an explicit read because they do not automatically wake this thread. Every
+known fix batches into one push. The lead checks findings against the actual diff before
+fixing or dismissing them. When all you want is status, ask for a single pass:
 
 ```text
 /poteto-mode check on pr 123. anything outstanding?
@@ -83,5 +91,16 @@ Green is not the same as safe. When you're ready to land, say so:
 ```
 
 The [Shipping playbook](../../.agents/skills/poteto-mode/playbooks/shipping.md) verifies each PR independently before it arms anything. One fresh agent per PR proves the behavior live, and the agent that judges a change is never the one that wrote it. Then Shipping lands only the contiguous verified run from the bottom, one PR at a time through GitHub by default or Origin when its CLI is available, and reports the first PR that breaks the chain. A verified PR sitting above an unverified one waits, because merging it would pull the gap in underneath.
+
+## Review the proof before trusting the result
+
+Open the screenshot, inspect the recording, read the output, and check the exact tested
+head. A confident agent summary is not an artifact. Repeat the user flow through the
+project's verification skill, and maintain that skill as the application changes.
+
+Before reporting a measured speedup or regression, run
+[benchmark-checklist](../../.agents/skills/benchmark-checklist/SKILL.md). Ask what limits the
+number and whether the experiment measured the same work in both versions. Regular
+verification maintenance requires an explicitly authorized automation.
 
 Next: [Run work while you sleep](07-overnight.md).

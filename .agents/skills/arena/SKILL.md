@@ -24,12 +24,12 @@ The N candidates will receive the same prompt, so the prompt is the contract.
 
 1. State the artifact each candidate is producing.
 2. Derive the rubric. State what success looks like for *this* task, then turn it into 3-6 concrete gradeable criteria. The rubric is the picker's tool in Phase D. Candidates only see the task.
-3. Pick the runners. Use `arena runners` from `pstack.models.json` at the selected bundle root when present. Otherwise resolve the three upstream-faithful `arena runners` seats through models.py with current observations. Spawn more when the arena covers multiple design directions. Same model N times when the work is generation-bound rather than judgment-sensitive.
-4. Assign output paths. Each candidate writes to its own location (a fresh candidate machine with its own branch and a named artifact directory), per the **separate-before-serializing-shared-state** principle skill.
+3. Pick the runners. Use `arena runners` from `pstack.models.json` at the selected bundle root when present. Resolve the configured `arena runners` seats through the model policy with current observations. Spawn more when the arena covers multiple design directions. Same model N times when the work is generation-bound rather than judgment-sensitive.
+4. Assign output paths. Each candidate writes to its own location (an isolated candidate checkout according to the placement contract below, with its own branch and named artifact directory), per the **separate-before-serializing-shared-state** principle skill.
 
 ## Phase B: Fan out
 
-Draft N native Capy candidate tasks and launch within the configured concurrency cap, on fresh machines, each with the task, the path to the shared grounding, its own output path, and instructions to produce both the artifact and a short rationale.
+Draft N native Capy candidate tasks and launch within the configured concurrency cap, with placement selected by the contract below, each with the task, the path to the shared grounding, its own output path, and instructions to produce both the artifact and a short rationale.
 
 Each rationale names the alternatives the candidate considered and what it rejected.
 
@@ -37,7 +37,7 @@ Only a terminal failed or reconciled-stopped candidate may be a dropout. Proceed
 
 ## Phase C: Cross-judge
 
-After all Phase B candidates complete, choose one model from the `arena cross-judge pool` in `pstack.models.json` at the selected bundle root when present. Otherwise use the upstream-faithful `arena cross-judge pool` and models.py select-judge after all accepted candidate results exist. Prefer a different model family from the parent's. Draft one read-only native Capy judge task on that model, with the transferred candidate artifacts and exact rubric. It sees the rubric and the candidates by path label, scores each criterion, and recommends a base with rationale. It runs in parallel with the parent's reading in Phase D, not with the candidates themselves. Don't spawn the judge while candidates are still writing.
+After all Phase B candidates complete, choose one model from the `arena cross-judge pool` in `pstack.models.json` at the selected bundle root when present. Resolve the `arena cross-judge pool` through the model policy and models.py select-judge after all accepted candidate results exist. Prefer a different model family from the parent's. Draft one read-only native Capy judge task on that model, with the transferred candidate artifacts and exact rubric. It sees the rubric and the candidates by path label, scores each criterion, and recommends a base with rationale. It runs in parallel with the parent's reading in Phase D, not with the candidates themselves. Don't spawn the judge while candidates are still writing.
 
 ## Phase D: Pick a base
 
@@ -71,30 +71,36 @@ One synthesized artifact. One short synthesis note alongside, naming the base, t
 
 ## Capy task execution
 
-Draft each child with its complete goal, exact repository and base commit, writable
-scope, acceptance checks, standing instructions, and the skill/reference paths to read.
+Draft each child with its complete goal, exact repository and accepted base, writable
+scope, acceptance checks, standing instructions, and full skill/reference paths.
 Children do not inherit this conversation. Resolve roles/ and skills/ from the observed
-bundle root (.agents in a project, or the selected volume root), never the child
-working directory. Select a shared machine for a read-only
-investigation of this checkout, or a fresh machine for any writer or candidate artifact.
-A report returned in the task message is not a filesystem write. Verify the placement
-and machine ID returned at start. Use `transfer_files` for inputs and reports crossing
-machines; a path on another machine is not an accessible input.
+bundle root (.agents in a project, or the selected volume root), not the child directory.
+Read-only investigations use `machine: "shared"`. Writers use `machine: "device"` for an
+isolated sibling worktree on a device-attached thread, or `machine: "fresh"` for an isolated
+cloud machine on a cloud thread. A new agent does not imply a cloud machine. Use coordinated
+disjoint shared writing only when explicitly assigned, with one git writer and no concurrent
+commits. Verify returned placement and machine ID. Transfer uncommitted inputs and reports
+with `transfer_files` when machines differ; a remote path is not an accessible input.
 
-Read the selected role from `pstack.models.json` at the bundle root, with the project
-profile overriding matching fields. Absent configuration uses `upstream-faithful` from
-`pstack.model-presets.json`. Follow `skills/poteto-mode/references/model-policy.md` at
-that root and run its models.py resolver with current account observations before launch.
-Preserve the role-specific model, reasoning effort, priority and panel count. Unsupported
-settings block the affected seat; never silently inherit or substitute. Same-model/custom
-profiles require an explicit user-approved difference. Three faithful seats are three models
-across three families. Inspect returned native settings, not only the requested prompt.
+Resolve every role, reasoning budget, alias and panel through
+`skills/poteto-mode/references/model-policy.md` at the observed bundle root. Run its
+models.py resolver with current account observations before launch, and inspect returned
+native settings. The policy owns defaults and unsupported-setting handling. Never silently
+substitute models, infer diversity from aliases, or overwrite an existing user profile.
 
-Use the native task tools available in this session, not a shell that starts another
-agent. Drafts are not running, working/waiting tasks remain live, and idle/stopped is
-not completion. Accept a final report only after `done` plus evidence inspection.
-Send follow-up fixes to the existing owner. Do not replace a timed-out owner until
-its stop or terminal failure and its filesystem/branch have been reconciled.
-Independent writers need disjoint paths. A dependent writer starts at its predecessor's
-actual accepted branch/head, not just later from main. At three child levels, execute
-the next step in the current owner rather than spawning a fourth level.
+Use native task tools, not a shell that starts agents. Drafts are not running;
+working/waiting owners remain live, and idle/stopped is not completion. Accept a final
+report only with terminal completion and inspected evidence. Independent new rounds use
+fresh agent context with consolidated scope: the original brief, every later directive,
+the accepted report, exact head, and transferred inputs. Keep an existing live owner when
+callbacks, its local checkout, uncommitted work, or running processes require it. Before a
+completed role passes to a new agent, reconcile the filesystem, branch, processes and PR
+callback ownership. A timeout never permits a second writer. Stop or reconcile terminal
+failure before replacement. A dependent writer starts at its predecessor's accepted head,
+not merely later from main. At three child levels, execute rather than spawn a fourth.
+
+Implementation and playbook helpers read the complete poteto-mode skill and
+`roles/poteto-agent.md`. Investigation, reflection and adversarial review use their own
+full templates. Tier code work by difficulty through the configured policy, including
+`hardest tasks` and `judgment and prose`. The parent inspects each diff and writes its own
+synthesis. A second opinion uses the same brief against a different resolved model.

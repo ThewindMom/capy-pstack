@@ -1,6 +1,6 @@
 # Steer with principle names
 
-pstack ships 23 principles as individual skills. `/poteto-mode` reads their index at the start of every multi-step task, applies the ones the task triggers, and names each applied principle in its reply along with the decision it changed.
+pstack ships 24 principles as individual skills. `/poteto-mode` reads their index at the start of every multi-step task, applies the ones the task triggers, and names each applied principle in its reply along with the decision it changed.
 
 You don't invoke principles. You use their names to steer. Each name points at a complete rule the agent has already read, so one phrase redirects the work more precisely than a paragraph of instructions.
 
@@ -26,7 +26,7 @@ separate before serializing shared state. give each attempt its own worktree, no
 
 Each phrase lands because the rule behind it is specific. The agent still has to say, in its reply, which decision the rule changed. A principle citation with no decision behind it is the tell that it name-dropped instead of applying.
 
-## The 23, briefly
+## The 24, briefly
 
 The core principles decide how much to build and when to rethink the design:
 
@@ -51,6 +51,10 @@ The architecture principles decide where state, validation, and compatibility li
 - [Separate Before Serializing Shared State](../../.agents/skills/principle-separate-before-serializing-shared-state/SKILL.md) removes the sharing before adding coordination.
 
 The verification principles define what counts as proof:
+
+- [Explain the Number](../../.agents/skills/principle-explain-the-number/SKILL.md) checks what
+  limits a measurement and whether the experiment measured the intended work. Run
+  [benchmark-checklist](../../.agents/skills/benchmark-checklist/SKILL.md) before acting on it.
 
 - [Prove It Works](../../.agents/skills/principle-prove-it-works/SKILL.md) verifies the real artifact, not a proxy.
 - [Fix Root Causes](../../.agents/skills/principle-fix-root-causes/SKILL.md) reproduces and traces to the cause before changing code.

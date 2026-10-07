@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "max_parallel": 2,
+  "runner": "device",
+  "require_local": true,
+  "pstack_root": ".agents",
+  "shared_coordination": {
+    "git_writer": "parent",
+    "concurrent_commits": false
+  },
+  "tasks": [
+    {
+      "id": "api",
+      "repository": "owner/application",
+      "role": "implementation",
+      "model_role": "feature",
+      "goal": "Update the export API without changing existing output.",
+      "write": true,
+      "machine": "shared",
+      "scope_paths": ["src/export", "tests/export"],
+      "base_ref": "main",
+      "acceptance": ["Existing export fixtures remain byte-identical."]
+    },
+    {
+      "id": "docs",
+      "repository": "owner/application",
+      "role": "implementation",
+      "model_role": "judgment and prose",
+      "goal": "Document existing export behavior without touching API files.",
+      "write": true,
+      "machine": "shared",
+      "scope_paths": ["docs/export.md"],
+      "base_ref": "main",
+      "acceptance": ["The documented behavior matches the existing fixture output."]
+    }
+  ]
+}

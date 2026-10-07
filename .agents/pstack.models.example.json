@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "preset": "upstream-faithful",
-  "budget": "unlimited",
-  "max_parallel": 3,
+  "preset": "capy-native",
+  "budget": "large",
+  "max_parallel": 2,
   "roles": {},
   "panels": {}
 }

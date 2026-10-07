@@ -26,23 +26,23 @@ class ObservedBindingTests(unittest.TestCase):
     def test_observed_opaque_routes_keep_identity_and_judge_family(self):
         obs = observed()
         for required, route in ((EXPECTED[0]['model'], 'fixture/native-opus-55'),
-                                (EXPECTED[2]['model'], 'fixture/native-grok-47')):
+                                (EXPECTED[1]['model'], 'fixture/native-grok-47')):
             obs['models'][route] = obs['models'].pop(required)
             obs['bindings'][required]['model'] = route
         obs['parent'] = dict(EXPECTED[0], model='fixture/native-opus-55')
         order = m.work_order({'max_parallel': 2}, 'arena runners', obs)
         self.assertEqual(order['choices'], [dict(EXPECTED[0], model='fixture/native-opus-55'),
-                                           EXPECTED[1], dict(EXPECTED[2], model='fixture/native-grok-47')])
+                                           dict(EXPECTED[1], model='fixture/native-grok-47')])
         self.assertEqual(order['model_identities'], [x['model'] for x in EXPECTED])
-        self.assertEqual(order['distinct_models'], 3)
-        self.assertEqual(order['families'], ['anthropic', 'openai', 'xai'])
-        self.assertEqual(order['upstream_version'], '0.15.3')
-        self.assertEqual(order['waves'], [[0, 1], [2]])
+        self.assertEqual(order['distinct_models'], 2)
+        self.assertEqual(order['families'], ['anthropic', 'xai'])
+        self.assertEqual(order['upstream_version'], '0.15.15')
+        self.assertEqual(order['waves'], [[0, 1]])
         records = [{'seat': i, 'native_task_id': f'fixture-{i}', 'status': 'done',
                     'accepted': True, 'artifact': f'fixture-{i}.txt', 'settings': settings}
                    for i, settings in enumerate(order['choices'])]
         judge = m.select_judge({'max_parallel': 2}, obs, order, records)
-        self.assertEqual(judge['choices'], [EXPECTED[1]])
+        self.assertEqual(judge['choices'], [dict(EXPECTED[1], model='fixture/native-grok-47')])
         self.assertTrue(judge['different_parent_family'])
         self.assertFalse(order['native_execution_verified'])
 
@@ -59,7 +59,7 @@ class ObservedBindingTests(unittest.TestCase):
     def test_known_old_or_different_weights_cannot_be_relabelled(self):
         for route in ('anthropic/claude-opus-5', 'anthropic/claude-fable-5-1',
                       'xai/grok-4.6', 'supergrok/grok-4.6', 'openai/gpt-5.6-sol',
-                      'codex/gpt-5.6-sol', EXPECTED[2]['model']):
+                      'codex/gpt-5.6-sol', EXPECTED[1]['model']):
             obs = observed()
             obs['models'][route] = {'reasoning_efforts': ['max', 'xhigh'], 'fast': True}
             obs['bindings'][EXPECTED[0]['model']]['model'] = route
@@ -84,9 +84,9 @@ class ObservedBindingTests(unittest.TestCase):
         for capabilities in ({'reasoning_efforts': ['high'], 'fast': True},
                              {'reasoning_efforts': ['xhigh'], 'fast': False}):
             obs = observed()
-            obs['models'][EXPECTED[2]['model']] = capabilities
+            obs['models'][EXPECTED[1]['model']] = capabilities
             with self.subTest(capabilities=capabilities), self.assertRaises(m.ModelError):
-                m.resolve({}, 'feature', obs)
+                m.resolve({'preset': 'upstream-faithful'}, 'feature', obs)
 
     def test_old_pins_are_not_mutated_or_silently_migrated(self):
         profiles = [
@@ -140,7 +140,6 @@ class AppendOnlyLogTests(unittest.TestCase):
     def test_false_empty_stat_never_truncates_prior_evidence(self):
         self.append()
         before = self.log.read_bytes()
-        # Inject only the false stat result; all actual appends still use a real file.
         wrapper = r'''function [() {
   if [[ "$#" == 4 && "$1" == '!' && "$2" == '-s' ]]; then return 0; fi
   builtin [ "$@"
@@ -171,7 +170,7 @@ bash "$@"
 class UpdateInventoryTests(unittest.TestCase):
     def test_each_changed_source_has_a_native_destination_and_matching_provenance(self):
         update = json.loads((ROOT / 'provenance/updates/0.15.3.json').read_text())
-        source = json.loads((ROOT / 'provenance/source.json').read_text())
+        source = json.loads((ROOT / 'provenance/updates/0.15.15.json').read_text())['previous_source']
         files = {entry['source']: entry for entry in source['files']}
         self.assertEqual(update['source_subtree'], 'f66b1f3ed67364a915305457ee9099edc44f9333')
         self.assertEqual(update['to_revision'], source['revision'])

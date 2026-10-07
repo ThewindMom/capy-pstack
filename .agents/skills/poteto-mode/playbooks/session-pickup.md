@@ -2,7 +2,7 @@
 
 **Own the resume point. Read the prior trail rather than repeating it.**
 
-1. Locate the prior Capy thread/task messages, PR, pushed branch and selected volume's
+1. Locate the prior Capy thread/task messages, PR, pushed branch and saved
    run record. Read the overview and last messages, then the actual decision points.
    Use a read-only shared-machine task for a long authorized history and retain real
    thread/task references. Do not search unrelated projects or invent a transcript path.

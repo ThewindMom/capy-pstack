@@ -15,7 +15,7 @@ interaction and profiling requirements are retained. See `LICENSE` and `referenc
 Identify the command, base/head revision, input fixture, expected stdout/stderr/exit code,
 terminal size and environment. Use the smallest reproducible workspace. Explore the current
 checkout on a shared read-only task. A test that writes fixtures, generated output or code
-needs its own fresh machine or the existing implementation owner, not a second shared writer.
+needs an isolated device worktree on a device thread, a fresh cloud machine on a cloud thread, or the existing implementation owner, not a second shared writer.
 Discover available tools before choosing them. No workstation paths or presumed macOS tools.
 Do not send credentials or destructive commands into a controlled session.
 

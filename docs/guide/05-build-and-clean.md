@@ -22,6 +22,10 @@ A refactoring prompt pins behavior before structure moves:
 /poteto-mode move parsing into one module, zero behavior change. record the current output first and prove it's unchanged after.
 ```
 
+Run [benchmark-checklist](../../.agents/skills/benchmark-checklist/SKILL.md) before trusting a
+measurement. The Perf issue playbook fixes a measured cause. Hillclimb repeats experiments
+against a metric. Runtime and trace forensics return a diagnosis when a fix is not requested.
+
 A perf prompt states the measurement, not a vibe:
 
 ```text

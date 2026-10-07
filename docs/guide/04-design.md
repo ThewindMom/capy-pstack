@@ -12,6 +12,11 @@ One attempt at a hard design locks in the first shape the model thought of. `/ar
 
 [`/architect`](../../.agents/skills/architect/SKILL.md) grounds itself first, running `/how` over the code the design touches and `/why` when it moves ownership or layers. Then it runs `/arena` to produce competing design sketches, with the caller's usage written first in each, followed by types, signatures, and a module map.
 
+Prototype an uncertain interaction instead of debating an observable fact. Write the
+consumer-facing README or example before settling the internal API. Once the competing
+designs expose the constraints, write the implementation plan against the chosen design.
+A detailed plan written before that decision can lock in the wrong structure.
+
 By default it proceeds straight from the synthesized design into implementation. If you want to see the design first, say so:
 
 ```text
@@ -45,6 +50,9 @@ The panel comes from your [`/setup-pstack`](../../.agents/skills/setup-pstack/SK
 ```text
 /arena this, 5 candidates. the cache key format is expensive to change later.
 ```
+
+The 0.15.15 default panel has two model families, Opus and Grok. The later cross-judge is one
+independent task, not another panel. Candidate count and machine placement are separate choices.
 
 ## Cover slices and races with `/swarm`
 

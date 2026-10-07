@@ -51,7 +51,14 @@ continue
 keep going until done
 ```
 
-Short works because the mode is sticky and the playbook holds the structure. Your words carry the intent, and the skill carries the rigor.
+Short works when this thread already has the goal and constraints. Capy discovers a normal
+skill, not Cursor's sticky editor mode. On a new thread, ask for poteto-mode again and give
+it the relevant context.
+
+Name the expected result, the observed result, a reproducible input, and constraints that
+affect the solution. Include paths or evidence when you have them. Leave out invented causes
+and tool-by-tool instructions. For a noisy report, ask the agent to restate the problem and
+separate observations from guesses before it investigates.
 
 ## Switch tasks with "new task"
 
@@ -71,7 +78,11 @@ If you run several agents against one repository, they will fight over the worki
 /poteto-mode new task. branch off <base> in a fresh worktree, then port the parser change there.
 ```
 
-Each task in its own branch and worktree means no agent stomps another's files. The [Opening a PR playbook](../../.agents/skills/poteto-mode/playbooks/opening-a-pr.md) already works from a worktree for code changes, so mostly you only say this when a specific base or location matters.
+On this computer, `device` placement gives each writer a sibling worktree. `shared` placement
+uses the current runner and working tree. Use it for readers, or explicitly coordinated
+writers with disjoint files and one git owner. `fresh` placement creates a cloud machine.
+Say "keep the agents on this device" when local execution is required. The agent must
+not silently switch to cloud if local placement fails.
 
 Worktrees accumulate. When disk gets tight, ask:
 

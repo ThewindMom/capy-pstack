@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "source_revision": "b42effe0aa50f59c693d7e2924714e015e00bf7c",
-  "upstream_version": "0.15.3",
+  "source_revision": "df581122cde17e6e27686b5a448bde23e4ad4318",
+  "upstream_version": "0.15.15",
   "capy_catalog_checked": "2026-09-23",
-  "source": "https://github.com/cursor/plugins/blob/b42effe0aa50f59c693d7e2924714e015e00bf7c/pstack/skills/setup-pstack/SKILL.md",
+  "source": "https://github.com/cursor/plugins/blob/df581122cde17e6e27686b5a448bde23e4ad4318/pstack/skills/setup-pstack/SKILL.md",
   "capy_catalog": "https://docs.capy.ai/models-and-pricing",
   "roles": {
     "feature": {
@@ -48,35 +48,36 @@
     },
     "judgment and prose": {
       "model": "anthropic/claude-opus-5-5",
-      "reasoning_effort": "max"
+      "reasoning_effort": "xhigh"
     },
     "hardest tasks": {
       "model": "anthropic/claude-opus-5-5",
-      "reasoning_effort": "max"
+      "reasoning_effort": "xhigh"
     },
     "how explainer": {
       "model": "anthropic/claude-opus-5-5",
-      "reasoning_effort": "max"
+      "reasoning_effort": "xhigh"
     },
     "why synthesizer": {
       "model": "anthropic/claude-opus-5-5",
-      "reasoning_effort": "max"
+      "reasoning_effort": "xhigh"
     },
     "reflect judgment": {
       "model": "anthropic/claude-opus-5-5",
-      "reasoning_effort": "max"
+      "reasoning_effort": "xhigh"
     },
     "reflect divergent": {
       "model": "anthropic/claude-opus-5-5",
-      "reasoning_effort": "max"
+      "reasoning_effort": "xhigh"
     },
     "reflect synthesizer": {
       "model": "anthropic/claude-opus-5-5",
-      "reasoning_effort": "max"
+      "reasoning_effort": "xhigh"
     },
     "reflect tooling": {
-      "model": "openai/gpt-5.6-sol",
-      "reasoning_effort": "max"
+      "model": "xai/grok-4.7",
+      "reasoning_effort": "xhigh",
+      "fast": true
     },
     "comment review": {
       "model": "inherit-parent"
@@ -86,11 +87,7 @@
     "arena runners": [
       {
         "model": "anthropic/claude-opus-5-5",
-        "reasoning_effort": "max"
-      },
-      {
-        "model": "openai/gpt-5.6-sol",
-        "reasoning_effort": "max"
+        "reasoning_effort": "xhigh"
       },
       {
         "model": "xai/grok-4.7",
@@ -101,11 +98,7 @@
     "arena cross-judge pool": [
       {
         "model": "anthropic/claude-opus-5-5",
-        "reasoning_effort": "max"
-      },
-      {
-        "model": "openai/gpt-5.6-sol",
-        "reasoning_effort": "max"
+        "reasoning_effort": "xhigh"
       },
       {
         "model": "xai/grok-4.7",
@@ -116,11 +109,7 @@
     "architect runners": [
       {
         "model": "anthropic/claude-opus-5-5",
-        "reasoning_effort": "max"
-      },
-      {
-        "model": "openai/gpt-5.6-sol",
-        "reasoning_effort": "max"
+        "reasoning_effort": "xhigh"
       },
       {
         "model": "xai/grok-4.7",
@@ -131,11 +120,7 @@
     "interrogate reviewers": [
       {
         "model": "anthropic/claude-opus-5-5",
-        "reasoning_effort": "max"
-      },
-      {
-        "model": "openai/gpt-5.6-sol",
-        "reasoning_effort": "max"
+        "reasoning_effort": "xhigh"
       },
       {
         "model": "xai/grok-4.7",
@@ -155,11 +140,11 @@
     "openai/gpt-5.6-sol": "openai/gpt-5.6-sol"
   },
   "notes": [
-    "Opus 5.5 and Grok 4.7 identify upstream-required weights, NOT verified Capy route IDs. The public Capy catalog checked on 2026-09-23 does not list them.",
-    "Resolve each required identity through an explicit current account observation binding. Never guess a route, silently substitute an older model, or claim availability from this preset.",
-    "Effort and fast are requested policy, not a claim about live account support.",
-    "Comment Sicko has no explicit upstream model; only that role inherits by default.",
-    "Three distinct panel models represent three provider families. Reflection keeps three lenses and a later synthesizer.",
+    "Opus 5.5 and Grok 4.7 are upstream-required weights. Resolve their native routes from current account identity observations, not from this preset.",
+    "capy-native preserves model identities and efforts but labels omission of unavailable fast priority. upstream-faithful rejects unavailable fast.",
+    "No model substitution or effort approximation is allowed. Observations are inputs, not authentication.",
+    "Comment Sicko has no explicit upstream model and inherits by default. Other aliases are explicit user choices.",
+    "Two distinct panel models represent two provider families. Reflection keeps three lenses and a later synthesizer.",
     "Documented billing aliases for older models remain valid only for those same weights. No route is selected automatically."
   ],
   "requires_observed_binding": [

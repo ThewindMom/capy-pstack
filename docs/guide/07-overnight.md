@@ -6,10 +6,14 @@ This is the payoff for everything before it. An agent you can trust to verify it
 
 ## The overnight contract
 
+Before leaving a run alone, prove that it chooses the right next action, executes that
+action correctly, checks the result, and stops or escalates at the right boundary. A failure
+in any one of those checks needs correction before a larger autonomous run.
+
 A good handoff has the goal, the finish condition, permissions, and an escape hatch. It doesn't need to be long:
 
 ```text
-/poteto-mode im going to bed. migrate every caller to the new parser in a fresh worktree off <base>.
+/poteto-mode im going to bed. migrate every caller to the new parser in a sibling worktree on this computer off <base>, using device placement.
 done means zero old callers, all parser fixtures pass, old api deleted.
 keep a decision log. don't ask me before committing.
 Continue with authorized native wakeups until done. if you're truly stuck after a few hours, stop and write up why.
@@ -17,9 +21,11 @@ Continue with authorized native wakeups until done. if you're truly stuck after 
 
 Walk through what each line buys you:
 
-- "im going to bed" is a session override. The agent stops asking and keeps going.
+- "im going to bed" requests autonomous work within the granted scope. It does not grant
+  publication, merge, deployment, or recurring-job permission.
 - "done means..." turns the goal into checks every iteration can run.
-- "fresh worktree off `<base>`" keeps the run from colliding with anything else you have open.
+- "sibling worktree on this computer" keeps the run local and isolated. Device placement
+  creates that worktree; fresh placement would create a cloud machine.
 - "don't ask me before committing" pre-answers the permission the agent would otherwise block on.
 - Capy supplies task and PR event notifications; authorized schedules cover periodic audits. There is no terminal sleeper or editor loop to install. The [Autonomous run playbook](../../.agents/skills/poteto-mode/playbooks/autonomous-run.md) uses it to re-check the finish condition on events or a heartbeat.
 - The escape hatch lets it stop at a genuine dead end and write up why, which beats eight hours of creative goal reinterpretation.
@@ -77,5 +83,19 @@ The contract above drives one task to one finish condition. Some nights hold mor
 ```
 
 **Pitfall:** a duration is not a finish condition. "work on this for 4 hours" gives the agent nothing to check, and you'll wake up to four hours of motion instead of a result. Give authorized Capy event/schedule wakeups a predicate that can pass or fail.
+
+## Pause and restart deliberately
+
+Ask for Pause safely before going offline or suspending a run. It records live owners,
+uncommitted work, branches, and acceptance evidence. Session pickup rechecks those facts
+before continuing. A saved note does not mean the old writer released its branch.
+
+Several Capy projects can run independent programs, each with its own repository scope,
+runner, and owner. New agent context does not require a new cloud machine. On a local
+device, use shared readers or isolated device worktrees as the state requires.
+
+Use an automation only for an explicitly authorized recurring or event-triggered program.
+A one-off wait or a PR callback is not a reason to create a standing job. The bundled Benny
+sources remain dormant until configured and tested in an authorized channel.
 
 Next: [Steer with principle names](08-principles.md).

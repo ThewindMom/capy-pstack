@@ -42,6 +42,8 @@ def cli(script, *args, cwd=None, env=None):
 def broken_links(root):
     failures = []
     for file in root.rglob('*.md'):
+        if 'node_modules' in file.relative_to(root).parts:
+            continue
         for href in re.findall(r'\]\(([^\s)]+)\)', file.read_text()):
             path = href.partition('#')[0]
             if not path or ':' in path or path.startswith('/') or path == 'url':
@@ -55,9 +57,11 @@ class DistributionTests(unittest.TestCase):
     def test_complete_catalog(self):
         info = json.loads((ROOT / 'pstack.json').read_text())
         names = {p.parent.name for p in (BUNDLE / 'skills').glob('*/SKILL.md')}
-        self.assertEqual(len(names), 52)
+        self.assertEqual(len(names), 56)
+        self.assertEqual(info['version'], '1.3.0')
+        self.assertEqual(info['upstream_version'], '0.15.15')
         self.assertTrue(EXPECTED <= names)
-        self.assertEqual(len([n for n in names if n.startswith('principle-')]), 23)
+        self.assertEqual(len([n for n in names if n.startswith('principle-')]), 24)
         self.assertEqual(sorted(names), info['skills'])
         self.assertFalse(info['runtime_dependency_on_upstream'])
 
@@ -69,9 +73,11 @@ class DistributionTests(unittest.TestCase):
 
     def test_every_source_file_has_a_real_destination(self):
         origin = json.loads((ROOT / 'provenance/source.json').read_text())
-        self.assertEqual(origin['subtree'], 'f66b1f3ed67364a915305457ee9099edc44f9333')
-        self.assertEqual(len(origin['files']), 158)
-        self.assertEqual(len({f['source'] for f in origin['files']}), 158)
+        self.assertEqual(origin['revision'], 'df581122cde17e6e27686b5a448bde23e4ad4318')
+        self.assertEqual(origin['subtree'], '9d9cb20f79203a97c925de402c66183d0fa26c42')
+        self.assertEqual(origin['version'], '0.15.15')
+        self.assertEqual(len(origin['files']), 164)
+        self.assertEqual(len({f['source'] for f in origin['files']}), 164)
         for item in origin['files']:
             with self.subTest(source=item['source']):
                 self.assertTrue((ROOT / item['destination']).is_file())
@@ -102,7 +108,8 @@ class DistributionTests(unittest.TestCase):
     def test_no_executable_cursor_platform_contracts(self):
         forbidden = ('.cursor/', 'subagent_type', 'run_in_background', 'cloud_base_branch',
                      'cursor-team-kit', 'agent-transcripts/', 'Readonly/Ask mode',
-                     'built-in `automate`', '/add-plugin', '/setup-pstack rule')
+                     'built-in `automate`', '/add-plugin', '/setup-pstack rule',
+                     'pstack-models.mdc', 'Task tool')
         for file in BUNDLE.rglob('*.md'):
             text = file.read_text()
             for token in forbidden:
@@ -115,7 +122,7 @@ class DistributionTests(unittest.TestCase):
     def test_catalog_checks_every_hash_and_mode(self):
         output = cli(ROOT / 'tools/catalog.py', '--check')
         self.assertEqual(output.returncode, 0, output.stderr)
-        self.assertEqual(port.doctor(ROOT)['skills'], 52)
+        self.assertEqual(port.doctor(ROOT)['skills'], 56)
         self.assertEqual(port.doctor(ROOT)['playbooks'], 23)
         self.assertFalse(port.doctor(ROOT)['upstream_required'])
 
@@ -128,7 +135,7 @@ class DistributionTests(unittest.TestCase):
         arena = (BUNDLE / 'skills/arena/SKILL.md').read_text()
         self.assertIn('after all', arena.lower())
         self.assertIn('not with the candidates', arena)
-        self.assertIn('Do not replace a timed-out owner', arena)
+        self.assertIn('A timeout never permits a second writer', arena)
         shipping = (BUNDLE / 'skills/poteto-mode/playbooks/shipping.md').read_text()
         self.assertIn('contiguous verified run', shipping)
         self.assertIn('patch-id', shipping)
@@ -147,7 +154,7 @@ class InstallationTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
-        self.root = Path(self.tmp.name)
+        self.root = Path(self.tmp.name).resolve()
         self.target = self.root / 'project'
         self.want = {'.agents/skills/demo/SKILL.md': (b'full demo workflow\n', 0o644),
                      '.agents/skills/demo/scripts/check.sh': (b'#!/bin/sh\nexit 0\n', 0o755)}
@@ -260,7 +267,7 @@ class InstallationTests(unittest.TestCase):
         with patch.object(socket,'socket',side_effect=AssertionError('network forbidden')):
             port.apply(self.target,port.payload(False))
             result=port.doctor(self.target)
-        self.assertEqual(result['skills'],52);self.assertEqual(result['playbooks'],23)
+        self.assertEqual(result['skills'],56);self.assertEqual(result['playbooks'],23)
         self.assertEqual(broken_links(self.target/'.agents'),[])
         self.assertFalse((self.target/'_upstream').exists());self.assertFalse((self.target/'.git').exists())
         for name,item in port.catalog(BUNDLE)['files'].items():
@@ -268,18 +275,38 @@ class InstallationTests(unittest.TestCase):
 
     def test_full_offline_volume_install(self):
         port.apply(self.target,port.payload(True),volume=True)
-        self.assertEqual(port.doctor(self.target,True)['skills'],52)
+        self.assertEqual(port.doctor(self.target,True)['skills'],56)
         self.assertFalse((self.target/'.agents').exists());self.assertFalse((self.target/'.capy').exists())
         self.assertEqual(broken_links(self.target),[])
 
+    def test_drive_install_preserves_platform_index_instructions_and_user_policy(self):
+        self.target.mkdir()
+        preserved={'AGENTS.md':b'Existing project instructions.\n',
+                   '.capy-volume-index':b'Platform-owned index.\n',
+                   'pstack.models.json':b'{"version":2,"preset":"capy-native","budget":"small"}\n'}
+        for name,data in preserved.items():(self.target/name).write_bytes(data)
+        port.apply(self.target,port.payload(True),volume=True)
+        self.assertEqual(port.doctor(self.target,True)['skills'],56)
+        for name,data in preserved.items():
+            with self.subTest(file=name):self.assertEqual((self.target/name).read_bytes(),data)
+        self.assertTrue((self.target/'skills/poteto-mode/SKILL.md').is_file())
+
     def test_plain_archive_cli_needs_no_git_or_upstream(self):
         plain=self.root/'archive'
-        shutil.copytree(ROOT,plain,ignore=shutil.ignore_patterns('.git','_upstream','node_modules','__pycache__','.native-port','dist'))
+        tracked=subprocess.run(['git','-C',str(ROOT),'ls-files','-z'],capture_output=True,check=True).stdout.decode().split('\0')
+        distribution={'.agents/'+name for name in json.loads((BUNDLE/'catalog.json').read_text())['files']}
+        for name in sorted(set(filter(None,tracked)) | distribution):
+            source=ROOT/name
+            self.assertFalse(source.is_symlink(),name)
+            target=plain/name;target.parent.mkdir(parents=True,exist_ok=True)
+            shutil.copy2(source,target)
+        self.assertFalse((plain/'.git').exists())
+        self.assertFalse((plain/'.claude').exists())
         output=cli(plain/'tools/pstack.py','install','--target',self.target,cwd=self.root,env=dict(os.environ,PATH=''))
         self.assertEqual(output.returncode,0,output.stderr)
         check=cli(plain/'tools/pstack.py','doctor','--target',self.target,env=dict(os.environ,PATH=''))
         self.assertEqual(check.returncode,0,check.stderr)
-        self.assertEqual(json.loads(check.stdout)['skills'],52)
+        self.assertEqual(json.loads(check.stdout)['skills'],56)
 
     def test_tampered_bundle_rejected_before_write(self):
         source=self.root/'source';shutil.copytree(BUNDLE,source/'.agents')
@@ -290,6 +317,11 @@ class InstallationTests(unittest.TestCase):
 
 class TaskTests(unittest.TestCase):
     def setUp(self):self.plan=json.loads((ROOT/'examples/plan.json').read_text())
+
+    def test_runner_must_be_explicit_before_placement(self):
+        self.plan.pop('runner')
+        with self.assertRaisesRegex(tasks.PlanError,'runner must be device or cloud'):
+            tasks.prepare(self.plan)
     def test_disjoint_concurrency_and_review_dependency(self):
         out=tasks.prepare(self.plan)
         self.assertEqual(out['waves'],[['api','docs'],['review-api']])
@@ -303,6 +335,65 @@ class TaskTests(unittest.TestCase):
     def test_shared_writer_rejected(self):
         self.plan['tasks'][0]['machine']='shared'
         with self.assertRaises(tasks.PlanError):tasks.prepare(self.plan)
+
+    def test_device_defaults_and_explicit_cloud_placement(self):
+        self.plan['runner']='device'
+        out=tasks.prepare(self.plan)
+        self.assertEqual([t['machine'] for t in out['tasks']],['device','device','device'])
+        self.plan['tasks'][0]['machine']='fresh'
+        self.assertEqual(tasks.prepare(self.plan)['tasks'][0]['machine'],'fresh')
+        self.plan['require_local']=True
+        with self.assertRaisesRegex(tasks.PlanError,'cloud machine'):tasks.prepare(self.plan)
+
+    def test_device_reader_stays_shared_and_cloud_rejects_device(self):
+        self.plan['tasks']=[dict(self.plan['tasks'][0],write=False,role='research')]
+        self.plan.update(runner='device',require_local=True)
+        self.assertEqual(tasks.prepare(self.plan)['tasks'][0]['machine'],'shared')
+        self.plan['tasks'][0]['machine']='device';self.plan['runner']='cloud';self.plan['require_local']=False
+        with self.assertRaisesRegex(tasks.PlanError,'device runner'):tasks.prepare(self.plan)
+
+    def coordinated(self):
+        self.plan.update(runner='device',require_local=True,
+                         shared_coordination={'git_writer':'parent','concurrent_commits':False})
+        self.plan['tasks']=self.plan['tasks'][:2]
+        for task in self.plan['tasks']:task['machine']='shared'
+        return self.plan
+
+    def test_explicit_disjoint_shared_writers(self):
+        out=tasks.prepare(self.coordinated())
+        self.assertEqual(out['waves'],[['api','docs']])
+        self.assertEqual([t['machine'] for t in out['tasks']],['shared','shared'])
+        self.assertTrue(all('git writes only to parent' in t['brief'] and 'No concurrent commits' in t['brief'] for t in out['tasks']))
+        self.plan['shared_coordination']['git_writer']='api'
+        self.assertIn('git writes only to api',tasks.prepare(self.plan)['tasks'][0]['brief'])
+
+    def test_shared_coordination_rejects_conflicting_writers_and_bases(self):
+        self.coordinated()
+        self.plan['tasks'][1]['scope_paths']=['src/export/file.py']
+        with self.assertRaisesRegex(tasks.PlanError,'Conflicting shared writers'):tasks.prepare(self.plan)
+        self.plan['tasks'][1].update(depends_on=['api'])
+        with self.assertRaisesRegex(tasks.PlanError,'Conflicting shared writers'):tasks.prepare(self.plan)
+        self.plan['tasks'][1].update(scope_paths=['docs'],base_ref='other')
+        with self.assertRaisesRegex(tasks.PlanError,'same checkout'):tasks.prepare(self.plan)
+
+    def test_shared_coordination_rejects_missing_or_multiple_git_owners(self):
+        self.coordinated()
+        for coordination in ({'git_writer':'parent','concurrent_commits':True},
+                             {'git_writer':['api','docs'],'concurrent_commits':False},
+                             {'git_writer':'missing','concurrent_commits':False},
+                             {'git_writer':'parent'}):
+            self.plan['shared_coordination']=coordination
+            with self.subTest(coordination=coordination),self.assertRaises(tasks.PlanError):tasks.prepare(self.plan)
+
+    def test_local_requirement_cannot_fall_back_to_cloud(self):
+        self.plan['require_local']=True
+        with self.assertRaisesRegex(tasks.PlanError,'device runner'):tasks.prepare(self.plan)
+
+    def test_shared_checkout_cannot_inherit_another_branch(self):
+        self.coordinated()
+        self.plan['tasks'][1].update(depends_on=['api'],base_from='api')
+        self.plan['tasks'][1].pop('base_ref')
+        with self.assertRaisesRegex(tasks.PlanError,'isolated machine'):tasks.prepare(self.plan)
 
     def test_overlap_not_fixed_by_parallelism_one(self):
         self.plan['max_parallel']=1;self.plan['tasks'][1]['scope_paths']=['src/export/file.py']
@@ -373,8 +464,57 @@ class TaskTests(unittest.TestCase):
         self.assertEqual(output.returncode,0,output.stderr)
         self.assertEqual(json.loads(output.stdout)['waves'],[['api','docs'],['review-api']])
 
+    def test_native_model_adaptation_and_inherited_seat_survive_task_cli(self):
+        observation={'source':'synthetic CLI integration fixture, not live model evidence',
+                     'models':{'xai/grok-4.7':{'reasoning_efforts':['xhigh'],'fast':False},
+                               'anthropic/claude-opus-5-5':{'reasoning_efforts':['xhigh','max'],'fast':True}},
+                     'parent':{'model':'anthropic/claude-opus-5-5','reasoning_effort':'max','fast':True},
+                     'bindings':{'xai/grok-4.7':{'model':'xai/grok-4.7','source':'synthetic identity binding'}}}
+        profile={'preset':'capy-native','budget':'large'}
+        self.plan['tasks']=self.plan['tasks'][:1]
+        self.plan['tasks'][0]['model_role']='feature'
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d).resolve();plan=root/'plan.json';config=root/'models.json';obs=root/'observed.json'
+            obs.write_text(json.dumps(observation))
+            for explicit in (False,True):
+                if explicit:self.plan['tasks'][0].update(model='xai/grok-4.7',reasoning_effort='xhigh',fast=True)
+                plan.write_text(json.dumps(self.plan));config.write_text(json.dumps(profile))
+                output=cli(SCRIPTS/'tasks.py','prepare',plan,'--models',config,'--observed',obs)
+                self.assertEqual(output.returncode,0,output.stderr)
+                prepared=json.loads(output.stdout);task=prepared['tasks'][0]
+                self.assertTrue(prepared['model_policy_resolved'])
+                self.assertEqual(task['expected_settings'],{'model':'xai/grok-4.7','reasoning_effort':'xhigh'})
+                self.assertEqual(task['model'],'xai/grok-4.7');self.assertEqual(task['reasoning_effort'],'xhigh')
+                self.assertNotIn('fast',task)
+                self.assertEqual(task['adaptations'],[{'seat':0,'field':'fast','requested':True,'applied':None,
+                    'reason':'capy-native omits unsupported priority; model identity and reasoning effort are unchanged'}])
+                self.assertEqual(task['inherited_seats'],[])
+            for key in ('model','reasoning_effort','fast'):self.plan['tasks'][0].pop(key,None)
+            plan.write_text(json.dumps(self.plan))
+            for alias in ('inherit-parent','auto'):
+                profile['roles']={'feature':alias};config.write_text(json.dumps(profile))
+                output=cli(SCRIPTS/'tasks.py','prepare',plan,'--models',config,'--observed',obs)
+                self.assertEqual(output.returncode,0,output.stderr)
+                task=json.loads(output.stdout)['tasks'][0]
+                self.assertEqual(task['expected_settings'],{'model':'anthropic/claude-opus-5-5','reasoning_effort':'max','fast':True})
+                self.assertEqual(task['model'],'anthropic/claude-opus-5-5')
+                self.assertEqual(task['reasoning_effort'],'max');self.assertIs(task['fast'],True)
+                self.assertEqual(task['inherited_seats'],[0]);self.assertEqual(task['adaptations'],[])
+
 
 class BundledCliTests(unittest.TestCase):
+    def test_plan_checker_requires_native_hourly_program_audits(self):
+        text=(BUNDLE/'skills/poteto-mode/playbooks/multi-phase-plan.md').read_text()
+        template=text.split('````markdown\n',1)[1].split('````',1)[0].replace('30-minute','hourly')
+        with tempfile.TemporaryDirectory() as d:
+            plan=Path(d)/'plan.md';plan.write_text(template)
+            out=subprocess.run(['node',str(SCRIPTS/'check-plan.mjs'),str(plan)],capture_output=True,text=True)
+            self.assertEqual(out.returncode,0,out.stderr)
+            plan.write_text(template.replace('hourly','30-minute'))
+            bad=subprocess.run(['node',str(SCRIPTS/'check-plan.mjs'),str(plan)],capture_output=True,text=True)
+            self.assertNotEqual(bad.returncode,0,bad.stdout)
+            self.assertIn('Program checklist lacks',bad.stderr)
+
     def test_plan_checker_accepts_native_template_and_rejects_missing_lane(self):
         text=(BUNDLE/'skills/poteto-mode/playbooks/multi-phase-plan.md').read_text()
         template=text.split('````markdown\n',1)[1].split('````',1)[0]
@@ -386,6 +526,11 @@ class BundledCliTests(unittest.TestCase):
             bad=subprocess.run(['node',str(SCRIPTS/'check-plan.mjs'),str(plan)],capture_output=True,text=True)
             self.assertNotEqual(bad.returncode,0)
             self.assertIn('expected 1 to 10',bad.stderr)
+            for title in ('Ten lanes at the PR head','Ten lanes on `<swarm workers model>` at the PR head'):
+                plan.write_text(template.replace('Ten lanes on `swarm workers` at the PR head',title))
+                bad=subprocess.run(['node',str(SCRIPTS/'check-plan.mjs'),str(plan)],capture_output=True,text=True)
+                self.assertNotEqual(bad.returncode,0,bad.stdout)
+                self.assertIn('with the model filled in',bad.stderr)
 
     def test_worktree_audit_handles_spaces_without_deleting(self):
         with tempfile.TemporaryDirectory() as d:
