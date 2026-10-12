@@ -4,11 +4,24 @@
 
 Start with the problem, investigate before changing code, compare designs when the choice matters, and verify the actual result. Then use Capy's isolated task machines, durable threads, and event-driven PR follow-up to carry the work through.
 
-This repository contains the full, self-contained Capy port of [Lauren Tan's pstack for Cursor](https://github.com/cursor/plugins/tree/df581122cde17e6e27686b5a448bde23e4ad4318/pstack), based on version **0.15.15**. The skills and workflows are ordinary files you can read, edit, and install without the original repository.
+This repository contains the full, self-contained Capy port of [Lauren Tan's pstack for Cursor](https://github.com/cursor/plugins/tree/997ffc7fe26bdaa6478a14e7f5b8d5f9ed747102/pstack), based on version **0.15.21**. The skills and workflows are ordinary files you can read, edit, and install without the original repository.
 
 [Features](#what-pstack-brings) · [Why Capy](#how-this-port-plays-to-capys-strengths) · [Differences and limits](#what-does-not-carry-over-from-cursor) · [Get started](#get-started) · [Full catalog](docs/skill-catalog.md)
 
-## Updated for pstack 0.15.15
+## Updated for pstack 0.15.21
+
+This release accounts for all 62 upstream file changes since 0.15.15. It adds `/ketchup`
+for read-only catch-up, clarifies that the receiving chat owns the playbook, and updates
+plan validation, PR check handling, worktree auditing, and workflow wording. Native Capy
+placement, model policy, callback ownership, and publication gates remain intact. See the
+[0.15.21 update record](docs/updates/0.15.21.md) for source mapping and verification limits.
+
+Bundle-only installations now include an accepted upstream inventory and a read-only
+audit helper. Maintenance compares against the actual installed bundle, even when remote
+capy-pstack main is older. Content changes count as drift without a version bump. See the
+[maintenance reference](.agents/skills/poteto-mode/references/upstream-maintenance.md).
+
+## Previous update to pstack 0.15.15
 
 This release accounts for all 59 upstream file changes since 0.15.3. It adds measurement
 validation, structural correction, help routing, fresh-agent rounds with consolidated
@@ -17,8 +30,8 @@ work, isolated device worktrees, and cloud machines. See the
 [0.15.15 update record](docs/updates/0.15.15.md) for the mapping and evidence boundary.
 
 **Model availability is separate from the source upgrade.** Advertised models and controls
-can change even during a session. An Opus review attempt in this maintenance run failed
-because its Capy API billing route had no organization credits. Setup requires a current account
+can change even during a session. An Opus review attempt during the earlier 0.15.15 update
+failed because its Capy API billing route had no organization credits. Setup requires a current account
 observation binding each identity to its exact available Capy route. If the account cannot
 supply one, the affected role stays blocked; no older model or inherited panel is silently
 substituted. An explicitly approved custom profile remains available. The
@@ -39,7 +52,7 @@ The original Cursor plugin uses Cursor's tools, subagents, model choices, and ed
 
 ## What pstack brings
 
-The suite includes **51 ported pstack skills, including 24 principles, and 23 complete playbooks**. Five bundled support skills bring the main catalog to **56**. The separate Benny automation pack contains its own setup, triage, and reproduction workflows.
+The suite includes **52 ported pstack skills, including 24 principles, and 23 complete playbooks**. Five bundled support skills bring the main catalog to **57**. The separate Benny automation pack contains its own setup, triage, and reproduction workflows.
 
 | Work you need to do | What the workflow adds |
 | --- | --- |
@@ -221,11 +234,11 @@ integration. Keep repository and Drive copies at the same version to avoid dupli
 
 ## A self-contained distribution
 
-All skill bodies, playbooks, role prompts, Benny sources, references, scripts, script tests, and guide illustrations are committed here. There is no upstream loader, `_upstream` checkout, or Git submodule. Deleting Cursor's pstack repository would not remove this copy or prevent installation.
+All skill bodies, playbooks, role prompts, Benny sources, references, scripts, script tests, and guide illustrations are included here. There is no upstream loader, `_upstream` checkout, or Git submodule. Deleting Cursor's pstack repository would not remove this copy or prevent installation.
 
 | Find it here | Contents |
 | --- | --- |
-| [.agents/skills](.agents/skills/) | 56 full skills, with [23 playbooks](.agents/skills/poteto-mode/playbooks/) under poteto-mode |
+| [.agents/skills](.agents/skills/) | 57 full skills, with [23 playbooks](.agents/skills/poteto-mode/playbooks/) under poteto-mode |
 | [.agents/roles](.agents/roles/) | Poteto and Comment Sicko role prompts |
 | [.agents/automations/benny](.agents/automations/benny/) | Dormant setup, triage, reproduction, templates, and references |
 | [scripts](.agents/skills/poteto-mode/scripts/) | Task and model validators, PR watcher, orchestration ledger, and audit tools |
@@ -260,7 +273,7 @@ For changes to the optional Bun tools:
 ```bash
 cd .agents/skills/poteto-mode/scripts
 bun install --frozen-lockfile
-bun test orch watch-pr
+bun run test
 bun run typecheck
 ```
 
@@ -277,7 +290,7 @@ Uninstall removes only intact owned files; add `--volume` for that layout. The i
 
 ## Sources and license
 
-This README describes the port based on pstack **0.15.15**, not a promise of automatic
+This README describes the port based on pstack **0.15.21**, not a promise of automatic
 parity with future upstream versions. Native placement and model controls were checked
 against the actual Capy session on **October 7, 2026**. Platform behavior and account access
 can change; observe capabilities before dispatch.

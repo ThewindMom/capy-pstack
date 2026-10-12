@@ -5,6 +5,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import stat
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -21,8 +22,11 @@ def inventory(root: Path) -> dict:
         if p.is_symlink():
             raise ValueError(f'Bundle symlink: {rel}')
         if p.is_file():
+            mode = stat.S_IMODE(p.stat().st_mode)
+            if mode not in (0o644, 0o755):
+                raise ValueError(f'Bundle mode must be 644 or 755: {rel} is {mode:o}')
             records[rel.as_posix()] = {'sha256': hashlib.sha256(p.read_bytes()).hexdigest(),
-                                     'mode': '755' if p.stat().st_mode & 0o111 else '644'}
+                                     'mode': f'{mode:o}'}
     return {'version': 1, 'files': records}
 
 

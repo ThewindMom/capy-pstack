@@ -2,7 +2,7 @@
 
 ## Complete source, native execution
 
-All 164 files in the pstack 0.15.15 source subtree are accounted for in
+All 167 files in the pstack 0.15.21 source subtree are accounted for in
 [the provenance inventory](../provenance/source.json). Skills moved to `.agents/skills`,
 agent prompts to `.agents/roles`, and the dormant Benny pack to `.agents/automations`.
 References, examples, illustrations, licenses, scripts and script tests are local files.

@@ -1,6 +1,6 @@
 # Requirement-to-evidence map
 
-Target: pstack 0.15.15 at source revision df581122cde17e6e27686b5a448bde23e4ad4318.
+Target: pstack 0.15.21 at source revision 997ffc7fe26bdaa6478a14e7f5b8d5f9ed747102.
 This map covers the model/default and support-skill gaps addressed in this revision, not a
 certificate for every future upstream release or every possible agent execution.
 
@@ -57,9 +57,22 @@ locally and enabled in CI. The actual run result is the source of truth, not thi
 | No implicit publication or amendment | Authoring and opening-a-PR workflows | Maintenance left changes uncommitted. PR ownership/callback lifecycle remains unrun. |
 | Complete source snapshot and new skill destinations | Source inventory tool and 0.15.15 provenance | All 164 blobs verified and the full source subtree reconstructed. Source audit tests reject changed bytes, modes, missing mappings and symlinks. |
 
-See [the current update record](updates/0.15.15.md) and
+See [the historical 0.15.15 update record](updates/0.15.15.md) and
 [current live gates](live-smoke.md). Historical update inventories remain immutable records
 of their source releases; they are not claims that current defaults still match old ones.
+
+## Additional 0.15.21 requirements
+
+| Requirement | Native implementation | Evidence boundary |
+| --- | --- | --- |
+| Catch up without performing pending work | Ketchup reads thread history and current native state | Three fresh native tasks exercised synthetic catch-up, cross-project non-trigger, and unavailable-history fixtures. Real PR-state retrieval remains a separate gate. |
+| Receiving chat owns the playbook | Poteto-mode and delegate role | The parent owns its todo list and children; delegates do not create a duplicate coordinator. |
+| Updated plan, PR-check and worktree semantics | Portable scripts and their tests | Helper checks do not certify native PR callbacks or permission to prune worktrees. |
+| Complete diff against the installed version | Accepted source inventory and upstream audit helper | 167 source paths and 62 changed paths are recorded with dispositions; audit tests include same-version drift and missing-source failure. |
+| No silent loss of customizations | Managed installer preflight and global model-policy preservation | Offline installer tests cover collisions and rollback. A recurring job must inspect its live owner and the actual installed hashes. |
+
+See [the current update record](updates/0.15.21.md). A maintenance automation is a separate
+explicitly authorized instance, not a side effect of installing the bundle.
 
 ## Support-skill provenance
 

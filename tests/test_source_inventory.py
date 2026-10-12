@@ -53,6 +53,11 @@ class SourceInventoryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'explicit destination'):
             self.load()
 
+    def test_portable_plugin_metadata_maps_to_native_distribution(self):
+        (self.source / 'plugin.json').write_text('{"version":"fixture"}\n')
+        files = {item['source']: item for item in self.load()['files']}
+        self.assertEqual(files['plugin.json']['destination'], 'pstack.json')
+
     def test_source_symlink_is_rejected(self):
         (self.source / 'linked').symlink_to('skills/new/SKILL.md')
         with self.assertRaisesRegex(ValueError, 'Source symlink'):

@@ -44,6 +44,8 @@ def inventory(source: Path, previous: dict, *, version: str, revision: str, subt
             continue
         rel = path.relative_to(source).as_posix()
         destination = destinations.get(rel)
+        if destination is None and rel == 'plugin.json':
+            destination = 'pstack.json'
         if destination is None and rel.startswith('skills/'):
             destination = '.agents/' + rel
         if destination is None:

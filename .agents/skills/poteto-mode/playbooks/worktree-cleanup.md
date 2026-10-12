@@ -4,7 +4,12 @@
 that does not make unpushed user work disposable.
 
 1. Snapshot `df -h /` on the machine being inspected. Run `scripts/worktree-audit.sh`
-   from this skill's directory. It reports real Git worktrees read-only and never deletes.
+   from this skill's directory, with the repo path. Pass `-b <pr-base-ref>` when PRs target
+   a branch other than the remote default, as in `scripts/worktree-audit.sh -b origin/integration /repo`.
+   It reports real Git worktrees and checks whether
+   each HEAD is an ancestor of that base. It refreshes remote base refs but never deletes
+   worktrees. A failed fetch warns that the merge classification may be stale. Without
+   an available base, merge state is unknown. Verify freshness before trusting a row.
    List native tasks/machines separately and map their IDs to branches and artifact paths.
 2. Treat every audit row as a candidate, not permission. A working/waiting task, held
    scope, retained user thread, unpushed commit or untracked evidence blocks cleanup.

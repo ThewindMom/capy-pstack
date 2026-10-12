@@ -1,7 +1,7 @@
 {
   "name": "capy-pstack",
-  "version": "1.3.0",
-  "upstream_version": "0.15.15",
+  "version": "1.4.0",
+  "upstream_version": "0.15.21",
   "skills": [
     "architect",
     "arena",
@@ -19,6 +19,7 @@
     "figure-it-out",
     "how",
     "interrogate",
+    "ketchup",
     "maintain-verification-skill",
     "make-bot-ui",
     "no-comments",

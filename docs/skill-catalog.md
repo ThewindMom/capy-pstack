@@ -16,6 +16,7 @@
 - [figure-it-out](../.agents/skills/figure-it-out/SKILL.md)
 - [how](../.agents/skills/how/SKILL.md)
 - [interrogate](../.agents/skills/interrogate/SKILL.md)
+- [ketchup](../.agents/skills/ketchup/SKILL.md)
 - [maintain-verification-skill](../.agents/skills/maintain-verification-skill/SKILL.md)
 - [make-bot-ui](../.agents/skills/make-bot-ui/SKILL.md)
 - [no-comments](../.agents/skills/no-comments/SKILL.md)
