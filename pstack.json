@@ -1,7 +1,7 @@
 {
   "name": "capy-pstack",
-  "version": "1.4.0",
-  "upstream_version": "0.15.21",
+  "version": "1.5.0",
+  "upstream_version": "0.15.23",
   "skills": [
     "architect",
     "arena",
@@ -18,6 +18,7 @@
     "deslop",
     "figure-it-out",
     "how",
+    "in-your-own-words",
     "interrogate",
     "ketchup",
     "maintain-verification-skill",
@@ -52,6 +53,7 @@
     "recall",
     "reflect",
     "setup-pstack",
+    "sharpen",
     "show-me-your-work",
     "swarm",
     "tdd",

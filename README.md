@@ -4,9 +4,17 @@
 
 Start with the problem, investigate before changing code, compare designs when the choice matters, and verify the actual result. Then use Capy's isolated task machines, durable threads, and event-driven PR follow-up to carry the work through.
 
-This repository contains the full, self-contained Capy port of [Lauren Tan's pstack for Cursor](https://github.com/cursor/plugins/tree/997ffc7fe26bdaa6478a14e7f5b8d5f9ed747102/pstack), based on version **0.15.21**. The skills and workflows are ordinary files you can read, edit, and install without the original repository.
+This repository contains the full, self-contained Capy port of [Lauren Tan's pstack for Cursor](https://github.com/cursor/plugins/tree/79afd75d5bd51383fbb526b72f36db03180b8301/pstack), based on version **0.15.23**. The skills and workflows are ordinary files you can read, edit, and install without the original repository.
 
 [Features](#what-pstack-brings) · [Why Capy](#how-this-port-plays-to-capys-strengths) · [Differences and limits](#what-does-not-carry-over-from-cursor) · [Get started](#get-started) · [Full catalog](docs/skill-catalog.md)
+
+## Updated for pstack 0.15.23
+
+This release accounts for all 45 upstream changes since 0.15.21. It adds
+`/in-your-own-words` and `/sharpen`, tightens Ketchup visuals, and updates independent
+verification and portable helper behavior. Job-sized effort and speed remain subordinate
+to explicit Personal Drive and project policy. Cursor activation and model-slug fallback
+rules are not imported. See the [0.15.23 update record](docs/updates/0.15.23.md).
 
 ## Updated for pstack 0.15.21
 
@@ -52,7 +60,7 @@ The original Cursor plugin uses Cursor's tools, subagents, model choices, and ed
 
 ## What pstack brings
 
-The suite includes **52 ported pstack skills, including 24 principles, and 23 complete playbooks**. Five bundled support skills bring the main catalog to **57**. The separate Benny automation pack contains its own setup, triage, and reproduction workflows.
+The suite includes **54 ported pstack skills, including 24 principles, and 23 complete playbooks**. Five bundled support skills bring the main catalog to **59**. The separate Benny automation pack contains its own setup, triage, and reproduction workflows.
 
 | Work you need to do | What the workflow adds |
 | --- | --- |
@@ -238,7 +246,7 @@ All skill bodies, playbooks, role prompts, Benny sources, references, scripts, s
 
 | Find it here | Contents |
 | --- | --- |
-| [.agents/skills](.agents/skills/) | 57 full skills, with [23 playbooks](.agents/skills/poteto-mode/playbooks/) under poteto-mode |
+| [.agents/skills](.agents/skills/) | 59 full skills, with [23 playbooks](.agents/skills/poteto-mode/playbooks/) under poteto-mode |
 | [.agents/roles](.agents/roles/) | Poteto and Comment Sicko role prompts |
 | [.agents/automations/benny](.agents/automations/benny/) | Dormant setup, triage, reproduction, templates, and references |
 | [scripts](.agents/skills/poteto-mode/scripts/) | Task and model validators, PR watcher, orchestration ledger, and audit tools |
@@ -290,7 +298,7 @@ Uninstall removes only intact owned files; add `--volume` for that layout. The i
 
 ## Sources and license
 
-This README describes the port based on pstack **0.15.21**, not a promise of automatic
+This README describes the port based on pstack **0.15.23**, not a promise of automatic
 parity with future upstream versions. Native placement and model controls were checked
 against the actual Capy session on **October 7, 2026**. Platform behavior and account access
 can change; observe capabilities before dispatch.

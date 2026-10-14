@@ -24,6 +24,8 @@ Use the caller's files or diff. Otherwise use the current diff against the base 
 
 ## Capy task execution
 
+Before dispatch, size reasoning and speed through the [poteto-mode subagent policy](../poteto-mode/SKILL.md#capy-task-execution). Preserve explicit user settings and resolve against current account observations.
+
 Draft each child with its complete goal, exact repository and accepted base, writable
 scope, acceptance checks, standing instructions, and full skill/reference paths.
 Children do not inherit this conversation. Resolve roles/ and skills/ from the observed

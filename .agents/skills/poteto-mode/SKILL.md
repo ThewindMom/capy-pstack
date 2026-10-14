@@ -104,6 +104,18 @@ models.py resolver with current account observations before launch, and inspect 
 native settings. The policy owns defaults and unsupported-setting handling. Never silently
 substitute models, infer diversity from aliases, or overwrite an existing user profile.
 
+Before each spawn, match reasoning and speed to the job through the model policy. Start
+with the resolved role and budget. For unpinned settings, raise effort one supported step
+for subtle work, lower it one step for judgment or at least two for routine work, and use
+standard speed unless CI or trunk is red or a person is blocked on the result. Verification
+keeps the resolved swarm-worker effort and speed. Explicit Personal Drive, selected-bundle,
+and project settings take precedence over this heuristic. Effort derived from an explicit
+budget is pinned too, even when a role omits `reasoning_effort`. Do not lower or raise it
+through this heuristic. Inherited seats keep the parent's
+settings. Preserve each panel's model family. Resolve the proposed settings with current
+observations before dispatch. An unavailable control or rejected model blocks that role,
+not permission to guess a nearby route or reset user preferences.
+
 Use native task tools, not a shell that starts agents. Drafts are not running;
 working/waiting owners remain live, and idle/stopped is not completion. Accept a final
 report only with terminal completion and inspected evidence. Independent new rounds use

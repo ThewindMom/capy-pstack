@@ -79,3 +79,5 @@ Read top to bottom, follow the evidence pointers, spot-check. GitHub renders a c
 ## Composing this skill
 
 Other skills route their audit trail here instead of inventing one. Reference it by name and let it own the format. Don't restate the columns.
+
+Before dispatch, size reasoning and speed through the [poteto-mode subagent policy](../poteto-mode/SKILL.md#capy-task-execution). Preserve explicit user settings and resolve against current account observations.

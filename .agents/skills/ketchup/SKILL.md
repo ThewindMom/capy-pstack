@@ -1,6 +1,6 @@
 ---
 name: ketchup
-description: "Catch the user up on this Capy thread since their last message, in plain words. Give each action item an executive summary with enough context to decide. Use for /ketchup."
+description: "Catch the user up on changes in this Capy thread since their last message, with plain sentences and small visuals that help them decide. Use for /ketchup."
 ---
 
 # Ketchup
@@ -19,12 +19,18 @@ An action item is a decision or step only the user can take, such as a product c
 
 ## Write the reply
 
-Open with one sentence that says how many action items there are, or that there are none. If nothing happened and nothing waits on the user, say so and stop.
+Open with one sentence that says how many things need the user, or that nothing does. If nothing happened and nothing waits on the user, say so and stop.
 
-Then say what happened, most important first. Give each result and what it means for them. Skip steps that changed nothing. Name in one line any work left that you can do yourself.
+Show what happened in one visual of at most four boxes. Give each requested outcome a box that says what came of it and whether it is done, still running, failed, or not checked. Write each box in plain spoken words. Name bugs found and fixed on the way. Each box must stay true alone. Never mark work done that still needs the user. Below the visual, give at most three short lines that change what the user knows or must do. Name work left that you can do yourself in one line.
 
-Then give each action item a short executive summary. Cover the decision to make, why it matters now, the options and what each costs, your recommendation, and what happens if they do not answer. If you do not know a part, say so instead of guessing. Link to the detail when there is one, and write the summary so they can decide without opening it.
+Give each action item two lines, or one for an unasked irreversible step. State the decision, your recommendation and why, then what happens without an answer. Ask only for the call the user owns. Include prerequisites and irreversible consequences in the recommendation. Say "unknown" for what you could not check, and link to existing detail.
 
-Show each action item as a before and after, side by side. For a choice, put the current state beside each option, or the options alone when there is no current state. Use a screenshot or video you already captured when the change is visible. Otherwise use another real artifact, such as a table of numbers, a diff, or a diagram. If no visual exists yet and you can make one from data you already have, make that. If you cannot, say plainly that none exists. Never invent a number. Never draw or generate a picture of a screen you did not capture. Link only artifacts that exist.
+Show each action item as a before and after, side by side. For a choice, put the current state beside every option considered, or the options alone when no current state exists. Put what each option gains and costs in the visual, not duplicate prose. Skip this visual only for access requests or unasked irreversible steps.
 
-Prefer a table, a Mermaid diagram, or a chart to dense prose.
+## Visuals
+
+A visual is a screenshot, video, Mermaid diagram, chart, or generated image. A Markdown table is not a visual. Use available native tools or a local renderer instead of assuming an upstream `/visualize` command exists.
+
+Keep each visual readable at a glance, with at most six boxes and eight words per box, excluding "No screenshot yet." Group small items. Write labels as plain words, not status tags. Keep longer facts in the prose.
+
+Use already captured screenshots or videos for visible changes. If none exists, mark its box "No screenshot yet" and say what changed in one line below it. Do not start an app to capture one during this read-only turn. For other results, make diagrams from observed states or charts from actual numbers. Never invent a number or generate a picture of an uncaptured screen. Link only existing artifacts. Attach any produced image or file in the user-facing message. If you cannot produce the visual, state the gap plainly.

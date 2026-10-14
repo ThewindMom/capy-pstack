@@ -79,6 +79,17 @@ them under an approved custom profile. Rerunning setup does not reset them autom
 
 ## Resolve before drafting/starting
 
+Load the actual Personal Drive `pstack.models.json` as the global base. Merge only explicit
+selected-bundle and project overrides on top. An example profile is never an override.
+Preserve explicit budgets, effort pins, speed settings, and model identities. The job-sizing
+heuristic in poteto-mode applies only to unpinned settings. Adjust effort only when neither
+explicit effort nor an explicit budget pins the resolved effort.
+An omitted role effort does not unpin effort derived from a user-selected budget. Use that
+resolved effort unchanged.
+Put permitted proposed choices in a scratch profile and resolve that profile before
+dispatch. Never write the proposal over the user's
+policy. Verification uses the resolved swarm-worker settings without heuristic adjustment.
+
 Run from the actual bundle root, using absolute paths from other working directories:
 
 ```bash

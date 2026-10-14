@@ -15,8 +15,11 @@ that does not make unpushed user work disposable.
    scope, retained user thread, unpushed commit or untracked evidence blocks cleanup.
    Inspect actual native state; a shell cannot infer it from a transcript directory.
 3. For uncertain candidates, assign read-only investigations on the relevant machine.
-   Preserve needed diffs and artifacts with transfer_files and the selected durable
-   volume, and verify the destination. Do not delete any other machine through local paths.
+   Match each subagent's reasoning effort and speed to the job through the central
+   poteto-mode model policy. Explicit settings always win. An unavailable control
+   blocks that role. Do not guess a fallback. Preserve needed diffs and artifacts with
+   transfer_files and the selected durable volume, and verify the destination. Do not
+   delete any other machine through local paths.
 4. Show WIP and untracked files before destructive cleanup. Obtain the necessary
    authorization for the exact confirmed paths. Never assume untracked means throwaway.
 5. Remove only the confirmed clean unused worktrees through `git worktree remove` without

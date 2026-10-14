@@ -5,7 +5,10 @@
 1. Locate the prior Capy thread/task messages, PR, pushed branch and saved
    run record. Read the overview and last messages, then the actual decision points.
    Use a read-only shared-machine task for a long authorized history and retain real
-   thread/task references. Do not search unrelated projects or invent a transcript path.
+   thread/task references. Match that task's reasoning effort and speed to the job
+   through the central poteto-mode model policy. Explicit settings always win. An
+   unavailable control blocks that role. Do not guess a fallback. Do not search unrelated
+   projects or invent a transcript path.
 2. Reconstruct the actual repository, branch, base/head, machine identity, task owners,
    open PRs, pending gates and decisions. The prior trail is evidence of intent; current
    native task state and actual commits decide what still exists after machine replacement.

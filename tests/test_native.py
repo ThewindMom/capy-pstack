@@ -57,9 +57,9 @@ class DistributionTests(unittest.TestCase):
     def test_complete_catalog(self):
         info = json.loads((ROOT / 'pstack.json').read_text())
         names = {p.parent.name for p in (BUNDLE / 'skills').glob('*/SKILL.md')}
-        self.assertEqual(len(names), 57)
-        self.assertEqual(info['version'], '1.4.0')
-        self.assertEqual(info['upstream_version'], '0.15.21')
+        self.assertEqual(len(names), 59)
+        self.assertEqual(info['version'], '1.5.0')
+        self.assertEqual(info['upstream_version'], '0.15.23')
         self.assertTrue(EXPECTED <= names)
         self.assertEqual(len([n for n in names if n.startswith('principle-')]), 24)
         self.assertEqual(sorted(names), info['skills'])
@@ -73,11 +73,11 @@ class DistributionTests(unittest.TestCase):
 
     def test_every_source_file_has_a_real_destination(self):
         origin = json.loads((ROOT / 'provenance/source.json').read_text())
-        self.assertEqual(origin['revision'], '997ffc7fe26bdaa6478a14e7f5b8d5f9ed747102')
-        self.assertEqual(origin['subtree'], '8824c764d99583f7cc8059c915296e444c53f060')
-        self.assertEqual(origin['version'], '0.15.21')
-        self.assertEqual(len(origin['files']), 167)
-        self.assertEqual(len({f['source'] for f in origin['files']}), 167)
+        self.assertEqual(origin['revision'], '79afd75d5bd51383fbb526b72f36db03180b8301')
+        self.assertEqual(origin['subtree'], '0b5c4ee63df6c559dc030bc257975c2044bbe27e')
+        self.assertEqual(origin['version'], '0.15.23')
+        self.assertEqual(len(origin['files']), 169)
+        self.assertEqual(len({f['source'] for f in origin['files']}), 169)
         for item in origin['files']:
             with self.subTest(source=item['source']):
                 self.assertTrue((ROOT / item['destination']).is_file())
@@ -122,7 +122,7 @@ class DistributionTests(unittest.TestCase):
     def test_catalog_checks_every_hash_and_mode(self):
         output = cli(ROOT / 'tools/catalog.py', '--check')
         self.assertEqual(output.returncode, 0, output.stderr)
-        self.assertEqual(port.doctor(ROOT)['skills'], 57)
+        self.assertEqual(port.doctor(ROOT)['skills'], 59)
         self.assertEqual(port.doctor(ROOT)['playbooks'], 23)
         self.assertFalse(port.doctor(ROOT)['upstream_required'])
 
@@ -267,7 +267,7 @@ class InstallationTests(unittest.TestCase):
         with patch.object(socket,'socket',side_effect=AssertionError('network forbidden')):
             port.apply(self.target,port.payload(False))
             result=port.doctor(self.target)
-        self.assertEqual(result['skills'],57);self.assertEqual(result['playbooks'],23)
+        self.assertEqual(result['skills'],59);self.assertEqual(result['playbooks'],23)
         self.assertEqual(broken_links(self.target/'.agents'),[])
         self.assertFalse((self.target/'_upstream').exists());self.assertFalse((self.target/'.git').exists())
         for name,item in port.catalog(BUNDLE)['files'].items():
@@ -275,7 +275,7 @@ class InstallationTests(unittest.TestCase):
 
     def test_full_offline_volume_install(self):
         port.apply(self.target,port.payload(True),volume=True)
-        self.assertEqual(port.doctor(self.target,True)['skills'],57)
+        self.assertEqual(port.doctor(self.target,True)['skills'],59)
         self.assertFalse((self.target/'.agents').exists());self.assertFalse((self.target/'.capy').exists())
         self.assertEqual(broken_links(self.target),[])
 
@@ -286,7 +286,7 @@ class InstallationTests(unittest.TestCase):
                    'pstack.models.json':b'{"version":2,"preset":"capy-native","budget":"small"}\n'}
         for name,data in preserved.items():(self.target/name).write_bytes(data)
         port.apply(self.target,port.payload(True),volume=True)
-        self.assertEqual(port.doctor(self.target,True)['skills'],57)
+        self.assertEqual(port.doctor(self.target,True)['skills'],59)
         for name,data in preserved.items():
             with self.subTest(file=name):self.assertEqual((self.target/name).read_bytes(),data)
         self.assertTrue((self.target/'skills/poteto-mode/SKILL.md').is_file())
@@ -306,7 +306,7 @@ class InstallationTests(unittest.TestCase):
         self.assertEqual(output.returncode,0,output.stderr)
         check=cli(plain/'tools/pstack.py','doctor','--target',self.target,env=dict(os.environ,PATH=''))
         self.assertEqual(check.returncode,0,check.stderr)
-        self.assertEqual(json.loads(check.stdout)['skills'],57)
+        self.assertEqual(json.loads(check.stdout)['skills'],59)
 
     def test_tampered_bundle_rejected_before_write(self):
         source=self.root/'source';shutil.copytree(BUNDLE,source/'.agents')

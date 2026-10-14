@@ -10,7 +10,7 @@ BUNDLE = ROOT / '.agents'
 
 class Update01521Tests(unittest.TestCase):
     def test_complete_source_inventory_and_dispositions(self):
-        source = json.loads((ROOT / 'provenance/source.json').read_text())
+        source = json.loads((ROOT / 'provenance/updates/0.15.23.json').read_text())['previous_source']
         update = json.loads((ROOT / 'provenance/updates/0.15.21.json').read_text())
         self.assertEqual(source['revision'], '997ffc7fe26bdaa6478a14e7f5b8d5f9ed747102')
         self.assertEqual(source['subtree'], '8824c764d99583f7cc8059c915296e444c53f060')

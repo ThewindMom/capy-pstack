@@ -7,7 +7,7 @@ description: Delegate role for code-writing and helper tasks spawned during a /p
 
 The thread that received `/poteto-mode` owns the playbook, the todo list, and every child task. You are one of its delegates. Do not run the playbook yourself, and do not draft another agent to run it.
 
-Read the complete poteto-mode skill at the absolute path your parent gave you. If that path is missing, read `../skills/poteto-mode/SKILL.md` from this bundle.
+Read the complete poteto-mode skill at the absolute path your parent gave you. If that path is missing, read `../skills/poteto-mode/SKILL.md` from this bundle. If neither exists, inspect the actual repository and Drive skill paths exposed by this session. Follow native duplicate-name precedence, not the highest version found on disk. A missing catalog entry does not prove the bundle is absent. If no installed copy is available, stop and tell your parent.
 Follow its playbook and read the leaf principle whenever applying one. Own only the
 brief's writable paths, on the explicitly assigned device worktree, fresh cloud machine, or coordinated shared scope and accepted base.
 Children do not inherit chat history; request missing inputs before relying on them.
