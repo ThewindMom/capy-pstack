@@ -1,12 +1,12 @@
 {
   "upstream_repository": "cursor/plugins",
-  "revision": "79afd75d5bd51383fbb526b72f36db03180b8301",
-  "subtree": "0b5c4ee63df6c559dc030bc257975c2044bbe27e",
-  "version": "0.15.23",
+  "revision": "99743e9c151c8537cbbf1f98bb38f34ef3368453",
+  "subtree": "0d5fd349cbc77d054eed60f0e8cdfbea86321ff9",
+  "version": "0.15.25",
   "files": [
     {
       "source": ".cursor-plugin/plugin.json",
-      "source_sha256": "161ec748cb37ddb5ca4ab466045e3f7d54c8d8bb971d1a290f42874dbdafb249",
+      "source_sha256": "b75609951c8a558e74f1eb20e15493933754eb2695fd2059d7f435f913889bb3",
       "destination": "pstack.json"
     },
     {
@@ -21,7 +21,7 @@
     },
     {
       "source": "README.md",
-      "source_sha256": "193fa128aab7818b5244883befe6d79e69b4143e3a51a3d1e30efe99d31b40c3",
+      "source_sha256": "98b107ff8b5e0468dfefbd4c9892a09b7b372958c4131bc7e2d7b4d4182aaa75",
       "destination": "README.md"
     },
     {
@@ -136,7 +136,7 @@
     },
     {
       "source": "docs/guide/08-principles.md",
-      "source_sha256": "73c3db659d356d4aa6d7674d30d0db46fab2bdd60152fca717c2d1772a042bdc",
+      "source_sha256": "cffa270108189345351aab16835e95540ba3c765bb5f1b8c1de843a96a212421",
       "destination": "docs/guide/08-principles.md"
     },
     {
@@ -186,7 +186,7 @@
     },
     {
       "source": "plugin.json",
-      "source_sha256": "6894bce77cfc25fb516f7c7b54248bba5d350752070ba06c6cb95ae8fa03cf0b",
+      "source_sha256": "68f0ddbdda23d1e663b48c881f1b896305a3dcdc320ff83c65dd24cd9ac6850f",
       "destination": "pstack.json"
     },
     {
@@ -236,7 +236,7 @@
     },
     {
       "source": "skills/correct/SKILL.md",
-      "source_sha256": "bf482bacc972b3f124a4af8bf9364b4b3e280cb5845e44c326ea4f4565e5c904",
+      "source_sha256": "e347045d00c967a0b831ef883cc6ac79d21329aa10b5968637df95de7febf0ba",
       "destination": ".agents/skills/correct/SKILL.md"
     },
     {
@@ -296,7 +296,7 @@
     },
     {
       "source": "skills/interrogate/references/lead-judgment.md",
-      "source_sha256": "6e5bdf5670eb34017692e9b6c546f36ac7552e6bb9f3f2f3429164fcc46a9361",
+      "source_sha256": "355f5195a76bc75a655125292369f2a8231a2b61fabe5188d8f1386060922b87",
       "destination": ".agents/skills/interrogate/references/lead-judgment.md"
     },
     {
@@ -311,7 +311,7 @@
     },
     {
       "source": "skills/ketchup/SKILL.md",
-      "source_sha256": "d9704b154081af306b6583b2752498d454f9d761e9989ff1f037efd414f86bb4",
+      "source_sha256": "47b3fb0d5626a40fcb3bd016e68f1cb3d2d313351183e8f6c05d4c7abd76e665",
       "destination": ".agents/skills/ketchup/SKILL.md"
     },
     {
@@ -346,7 +346,7 @@
     },
     {
       "source": "skills/poteto-mode/SKILL.md",
-      "source_sha256": "f234661471847cafc4ae9bcb4a9208eb32ed8154ac25b91b2b064ec71bd62167",
+      "source_sha256": "c5e6b605f46e5d9fbab31afa7a99d3d50680f2180d1fdfae3a924901bc52d99a",
       "destination": ".agents/skills/poteto-mode/SKILL.md"
     },
     {
@@ -576,7 +576,7 @@
     },
     {
       "source": "skills/principle-attack-the-premise/SKILL.md",
-      "source_sha256": "c87bd7536f772f8a403ad8155535ee17a1bbec9a353156693eb3bb1520c87ae3",
+      "source_sha256": "6a932884daad4aa189e9b5d1665226bbc75621d4d2a398fd4003bebd382f4599",
       "destination": ".agents/skills/principle-attack-the-premise/SKILL.md"
     },
     {
@@ -611,7 +611,7 @@
     },
     {
       "source": "skills/principle-fix-root-causes/SKILL.md",
-      "source_sha256": "2131069d285d82fb799458494f2e4ac8759c9c6a60f9e300828c17874f514c6e",
+      "source_sha256": "8df3c8c3fe57eb0055a5c8efab8ab144557fdf301da70b1cdc77a3a3ef3f3052",
       "destination": ".agents/skills/principle-fix-root-causes/SKILL.md"
     },
     {
@@ -631,12 +631,12 @@
     },
     {
       "source": "skills/principle-make-operations-idempotent/SKILL.md",
-      "source_sha256": "540738217c3da7bf513b9886924ad6a2bc77e58be867f5bd2e1831c74bf2ce70",
+      "source_sha256": "7aa9327cf1f1aa057e95d47a0a78bd88a8f9d556b608866fee939d455a53a019",
       "destination": ".agents/skills/principle-make-operations-idempotent/SKILL.md"
     },
     {
       "source": "skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md",
-      "source_sha256": "09978915a4a11990cf0a9a02d9c08cc59e0b7a04c5c24b83aa560fbe4146f75b",
+      "source_sha256": "580ad9bb1a0994ecb924321ba49efc38a2f85c64e22c76fb133f57a78272a2e6",
       "destination": ".agents/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md"
     },
     {
@@ -686,12 +686,12 @@
     },
     {
       "source": "skills/principle-test-behavior-not-implementation/SKILL.md",
-      "source_sha256": "b2b73ba42920f9c3174ecdf808ec6e4591b3a9266ada9a05814f386004266d3a",
+      "source_sha256": "f7223698623b6a26fea49c751e466b38e6691b1f32ce841d3983e7ffbe2b74a6",
       "destination": ".agents/skills/principle-test-behavior-not-implementation/SKILL.md"
     },
     {
       "source": "skills/principle-type-system-discipline/SKILL.md",
-      "source_sha256": "2e492cef34bb25a20b9115df61f9ef3a9837e3fda144ffda8079e5f45a1b72e8",
+      "source_sha256": "5cdaf79785e3c12b2592b9469ee8c272143eb86ab7a18d8382197cea5fd30106",
       "destination": ".agents/skills/principle-type-system-discipline/SKILL.md"
     },
     {
@@ -751,7 +751,7 @@
     },
     {
       "source": "skills/swarm/SKILL.md",
-      "source_sha256": "c8fe1b28282e7a051a4041a146a11f076e0fd95252bb010106a58209805303d5",
+      "source_sha256": "031657cb81e490f9aed5c75d6ff2a4fda35ccafbaf72be604e59481cc4080cdc",
       "destination": ".agents/skills/swarm/SKILL.md"
     },
     {

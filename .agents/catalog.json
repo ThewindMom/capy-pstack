@@ -146,7 +146,7 @@
       "mode": "755"
     },
     "skills/correct/SKILL.md": {
-      "sha256": "660b8e0d4cf9e3fba6688df166a65b020bd80bf16229dc0044ba80d136b0acaf",
+      "sha256": "a543598a7a83bc4bbb87bab9c2a39c8c42147dd4b8e11ef90249e62ec17305db",
       "mode": "644"
     },
     "skills/create-skill/SKILL.md": {
@@ -206,7 +206,7 @@
       "mode": "644"
     },
     "skills/interrogate/references/lead-judgment.md": {
-      "sha256": "6e5bdf5670eb34017692e9b6c546f36ac7552e6bb9f3f2f3429164fcc46a9361",
+      "sha256": "355f5195a76bc75a655125292369f2a8231a2b61fabe5188d8f1386060922b87",
       "mode": "644"
     },
     "skills/interrogate/references/reviewer-prompt.md": {
@@ -218,7 +218,7 @@
       "mode": "644"
     },
     "skills/ketchup/SKILL.md": {
-      "sha256": "78f9f4c8118ae1730c02d6280dd6515fdc7b3cd570acb2f092b6046aad732624",
+      "sha256": "682579932bc05924cd73ebaf6a24341a2c004eef5cd1f16f77fa30fddab47d07",
       "mode": "644"
     },
     "skills/maintain-verification-skill/SKILL.md": {
@@ -246,7 +246,7 @@
       "mode": "644"
     },
     "skills/poteto-mode/SKILL.md": {
-      "sha256": "cd7106dc2a062088595e8e55062b89692f41be96be23fe3e6571d39061b81a88",
+      "sha256": "be9ff9134e4278fa8328d353bf3efdd183b7a36e031c56cf24c39dd5a2b85ff7",
       "mode": "644"
     },
     "skills/poteto-mode/playbooks/authoring-a-skill.md": {
@@ -354,7 +354,7 @@
       "mode": "644"
     },
     "skills/poteto-mode/references/upstream-source.json": {
-      "sha256": "9c451355686905e574c598b76dda4d4005f1045de236b2891e16f1ee2252a7db",
+      "sha256": "7b8289f203990b887300336f6e0460e0134563f4c0f71019f55ae8a4dbcd8cd7",
       "mode": "644"
     },
     "skills/poteto-mode/scripts/bootstrap.ts": {
@@ -454,7 +454,7 @@
       "mode": "755"
     },
     "skills/principle-attack-the-premise/SKILL.md": {
-      "sha256": "58c2998cbe0318b648d2f78c080003c5d3685a0ede2a98e56bc29e2fdfa7417a",
+      "sha256": "43ca6835f1678ab55016ab101e5b47413e9fdfaaedfb77e42dac702b510df9f4",
       "mode": "644"
     },
     "skills/principle-boundary-discipline/SKILL.md": {
@@ -482,7 +482,7 @@
       "mode": "644"
     },
     "skills/principle-fix-root-causes/SKILL.md": {
-      "sha256": "c09cb27bb113d767b216406945eb5e188f75252fbb15aa2d4a2081a0ecb86b0a",
+      "sha256": "19c5d4acb2fa10db499494a29570c20aba1912c76bb23932787d7dc667a962ee",
       "mode": "644"
     },
     "skills/principle-foundational-thinking/SKILL.md": {
@@ -498,11 +498,11 @@
       "mode": "644"
     },
     "skills/principle-make-operations-idempotent/SKILL.md": {
-      "sha256": "6ff9aed07af7c3e57c4ef247f1a236b6ffdd1b294732cfedb9845413395d659c",
+      "sha256": "74d80172141c4b4bad93220b092e4aac563c3a5b9b4b678dcb4e3ec415e3b69d",
       "mode": "644"
     },
     "skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md": {
-      "sha256": "388e9cbc9e52bd72d9044d7e37126bd3355c4e8f1188447e2a6850fe4fc549d7",
+      "sha256": "25c0840e4f9fef35fd1ede4292b95a4b79c61bbaab31131e1de2afa1a7319bfa",
       "mode": "644"
     },
     "skills/principle-minimize-reader-load/SKILL.md": {
@@ -542,11 +542,11 @@
       "mode": "644"
     },
     "skills/principle-test-behavior-not-implementation/SKILL.md": {
-      "sha256": "400fe0200c35557ce366a5977b6dd29bbb102121713e9c6d5dfb69413fedb011",
+      "sha256": "0d1092aefb21dbf94a1a0af5534e1679b944c5b6d2b38103fd57d1ed571514a2",
       "mode": "644"
     },
     "skills/principle-type-system-discipline/SKILL.md": {
-      "sha256": "64e759d3194cda2277e58298ea4cc097ebb4e8a503818e6f5bfc4ccc5c15e784",
+      "sha256": "a2682ce671a196a18bc766f3312cc77814dcbe7f93d24dbd08d1fabf6369bc13",
       "mode": "644"
     },
     "skills/recall/SKILL.md": {
@@ -594,7 +594,7 @@
       "mode": "755"
     },
     "skills/swarm/SKILL.md": {
-      "sha256": "245969db1f353b55ff3ee6161675f0249239ba1e9bc3d6bd2020a7f1fe59404a",
+      "sha256": "7682645bdf2c8f87733f7dd7ab9f8682fd63298150d5414115d449a445d397ce",
       "mode": "644"
     },
     "skills/tdd/SKILL.md": {

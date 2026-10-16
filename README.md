@@ -4,9 +4,17 @@
 
 Start with the problem, investigate before changing code, compare designs when the choice matters, and verify the actual result. Then use Capy's isolated task machines, durable threads, and event-driven PR follow-up to carry the work through.
 
-This repository contains the full, self-contained Capy port of [Lauren Tan's pstack for Cursor](https://github.com/cursor/plugins/tree/79afd75d5bd51383fbb526b72f36db03180b8301/pstack), based on version **0.15.23**. The skills and workflows are ordinary files you can read, edit, and install without the original repository.
+This repository contains the full, self-contained Capy port of [Lauren Tan's pstack for Cursor](https://github.com/cursor/plugins/tree/99743e9c151c8537cbbf1f98bb38f34ef3368453/pstack), based on version **0.15.25**. The skills and workflows are ordinary files you can read, edit, and install without the original repository.
 
 [Features](#what-pstack-brings) · [Why Capy](#how-this-port-plays-to-capys-strengths) · [Differences and limits](#what-does-not-carry-over-from-cursor) · [Get started](#get-started) · [Full catalog](docs/skill-catalog.md)
+
+## Updated for pstack 0.15.25
+
+This release accounts for all 15 upstream changes since 0.15.23. Ketchup now leads with
+embedded screenshots, videos, and diagrams in under 150 words. Four principles are
+restated as reasoning, and four skills drop marginal sections. Native placement, model
+policy, and read-only catch-up rules are unchanged. See the
+[0.15.25 update record](docs/updates/0.15.25.md).
 
 ## Updated for pstack 0.15.23
 
@@ -298,7 +306,7 @@ Uninstall removes only intact owned files; add `--volume` for that layout. The i
 
 ## Sources and license
 
-This README describes the port based on pstack **0.15.23**, not a promise of automatic
+This README describes the port based on pstack **0.15.25**, not a promise of automatic
 parity with future upstream versions. Native placement and model controls were checked
 against the actual Capy session on **October 7, 2026**. Platform behavior and account access
 can change; observe capabilities before dispatch.

@@ -10,7 +10,7 @@ BUNDLE = ROOT / '.agents'
 
 class Update01523Tests(unittest.TestCase):
     def test_source_inventory_and_reviewed_dispositions(self):
-        source = json.loads((ROOT / 'provenance/source.json').read_text())
+        source = json.loads((ROOT / 'provenance/updates/0.15.25.json').read_text())['previous_source']
         update = json.loads((ROOT / 'provenance/updates/0.15.23.json').read_text())
         self.assertEqual(source['revision'], '79afd75d5bd51383fbb526b72f36db03180b8301')
         self.assertEqual(source['subtree'], '0b5c4ee63df6c559dc030bc257975c2044bbe27e')
@@ -30,8 +30,6 @@ class Update01523Tests(unittest.TestCase):
                 self.assertEqual(item['before_sha256'], before.get(item['source'], {}).get('source_sha256'))
                 self.assertEqual(item['after_sha256'], after.get(item['source'], {}).get('source_sha256'))
                 self.assertTrue((ROOT / item['destination']).is_file())
-        self.assertEqual((BUNDLE / 'skills/poteto-mode/references/upstream-source.json').read_bytes(),
-                         (ROOT / 'provenance/source.json').read_bytes())
 
     def test_new_skill_and_policy_contracts(self):
         restate = (BUNDLE / 'skills/in-your-own-words/SKILL.md').read_text()

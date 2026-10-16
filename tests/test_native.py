@@ -53,13 +53,16 @@ def broken_links(root):
     return failures
 
 
+MIGRATE_CALLERS_BODY = '# Migrate Callers Then Delete Legacy APIs\n\n- Update tests to assert the new contract, and delete tests that only protect pre-refactor implementation details\n\n**When this applies:**\n- No external users depend on backward compatibility\n- The project can absorb coordinated breaking changes\n- The new API is part of a simplification or refactor initiative'
+
+
 class DistributionTests(unittest.TestCase):
     def test_complete_catalog(self):
         info = json.loads((ROOT / 'pstack.json').read_text())
         names = {p.parent.name for p in (BUNDLE / 'skills').glob('*/SKILL.md')}
         self.assertEqual(len(names), 59)
-        self.assertEqual(info['version'], '1.5.0')
-        self.assertEqual(info['upstream_version'], '0.15.23')
+        self.assertEqual(info['version'], '1.5.1')
+        self.assertEqual(info['upstream_version'], '0.15.25')
         self.assertTrue(EXPECTED <= names)
         self.assertEqual(len([n for n in names if n.startswith('principle-')]), 24)
         self.assertEqual(sorted(names), info['skills'])
@@ -73,9 +76,9 @@ class DistributionTests(unittest.TestCase):
 
     def test_every_source_file_has_a_real_destination(self):
         origin = json.loads((ROOT / 'provenance/source.json').read_text())
-        self.assertEqual(origin['revision'], '79afd75d5bd51383fbb526b72f36db03180b8301')
-        self.assertEqual(origin['subtree'], '0b5c4ee63df6c559dc030bc257975c2044bbe27e')
-        self.assertEqual(origin['version'], '0.15.23')
+        self.assertEqual(origin['revision'], '99743e9c151c8537cbbf1f98bb38f34ef3368453')
+        self.assertEqual(origin['subtree'], '0d5fd349cbc77d054eed60f0e8cdfbea86321ff9')
+        self.assertEqual(origin['version'], '0.15.25')
         self.assertEqual(len(origin['files']), 169)
         self.assertEqual(len({f['source'] for f in origin['files']}), 169)
         for item in origin['files']:
@@ -92,6 +95,8 @@ class DistributionTests(unittest.TestCase):
                 self.assertIn('description:', head)
                 if file.parent.name == 'bro':
                     self.assertEqual(body.strip(), 'Restate your last message. Stop using jargon and speak coherently. State it more simply and concisely, like one human talking to another.')
+                elif file.parent.name == 'principle-migrate-callers-then-delete-legacy-apis':
+                    self.assertEqual(body.strip(), MIGRATE_CALLERS_BODY)
                 else:
                     self.assertGreater(len(body.split()), 55)
                 self.assertNotIn('CAPY.md', body)

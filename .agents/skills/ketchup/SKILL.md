@@ -5,7 +5,7 @@ description: "Catch the user up on changes in this Capy thread since their last 
 
 # Ketchup
 
-Catch the user up on this thread since the last message they wrote before `/ketchup`. Agent reports, subagent completions, and wakes that are not a person writing are not their messages. Write in the plain voice of [`/bro`](../bro/SKILL.md), and skip its restating step. Assume they remember that message and nothing after it. Call each PR, branch, or task by a name they would recognize, such as the PR title or the words they used. Do not invent a label during the catch-up.
+Catch the user up on this thread since the last message they wrote before `/ketchup`, and help them understand each change, not only where it stands. Agent reports, subagent completions, and wakes that are not a person writing are not their messages. Write in the plain voice of [`/bro`](../bro/SKILL.md), and skip its restating step. Assume they remember that message and nothing after it. Call each PR, branch, or task by a name they would recognize, such as the PR title or the words they used. Do not invent a label during the catch-up.
 
 This skill covers only the current thread. Rebuilding context across other threads is [`/recall`](../recall/SKILL.md). Resuming one prior chat or branch is the Session pickup playbook.
 
@@ -19,18 +19,20 @@ An action item is a decision or step only the user can take, such as a product c
 
 ## Write the reply
 
+Keep the whole reply well under 150 words, not counting visuals. Draw a picture when it explains a design, a dependency chain, a fix, or options more clearly than sentences. Never draw a status list or boxes with nothing connecting them. Never repeat a fact in text or across visuals. Leave out work that changed nothing for the user. Cut what happened before cutting action items.
+
 Open with one sentence that says how many things need the user, or that nothing does. If nothing happened and nothing waits on the user, say so and stop.
 
-Show what happened in one visual of at most four boxes. Give each requested outcome a box that says what came of it and whether it is done, still running, failed, or not checked. Write each box in plain spoken words. Name bugs found and fixed on the way. Each box must stay true alone. Never mark work done that still needs the user. Below the visual, give at most three short lines that change what the user knows or must do. Name work left that you can do yourself in one line.
+Show what happened, pictures first. Embed screenshots and videos the work produced, then any diagram that explains a change. Sum up in one short bullet per requested outcome, saying what came of it and whether it is done, still running, failed, or not checked. Write each line in plain spoken words. Name bugs found and fixed on the way. Each line must stay true alone. Never mark work done that still needs the user, and leave out anything the action items say. Below the summary, give at most three short lines that change what the user knows or must do. Name work left that you can do yourself in one line.
 
-Give each action item two lines, or one for an unasked irreversible step. State the decision, your recommendation and why, then what happens without an answer. Ask only for the call the user owns. Include prerequisites and irreversible consequences in the recommendation. Say "unknown" for what you could not check, and link to existing detail.
+List action items as plain bullets, never as a diagram or box. Give each two lines, or one for an unasked irreversible step. State the decision, your recommendation and why, then what happens without an answer. Ask only for the call the user owns. Include prerequisites and irreversible consequences in the recommendation. Say "unknown" for what you could not check, and link to existing detail.
 
-Show each action item as a before and after, side by side. For a choice, put the current state beside every option considered, or the options alone when no current state exists. Put what each option gains and costs in the visual, not duplicate prose. Skip this visual only for access requests or unasked irreversible steps.
+Show a choice after the list. If screenshots above already show its options, write each option's gain and cost under its screenshot instead of drawing another visual. Otherwise compare every option considered side by side, with the current state when one exists. Keep gains and costs out of the rest of the text.
 
 ## Visuals
 
 A visual is a screenshot, video, Mermaid diagram, chart, or generated image. A Markdown table is not a visual. Use available native tools or a local renderer instead of assuming an upstream `/visualize` command exists.
 
-Keep each visual readable at a glance, with at most six boxes and eight words per box, excluding "No screenshot yet." Group small items. Write labels as plain words, not status tags. Keep longer facts in the prose.
+Keep each visual readable at a glance, with at most six boxes and eight words per box. Write labels as plain words, not status tags. Keep longer facts in the prose.
 
-Use already captured screenshots or videos for visible changes. If none exists, mark its box "No screenshot yet" and say what changed in one line below it. Do not start an app to capture one during this read-only turn. For other results, make diagrams from observed states or charts from actual numbers. Never invent a number or generate a picture of an uncaptured screen. Link only existing artifacts. Attach any produced image or file in the user-facing message. If you cannot produce the visual, state the gap plainly.
+Embed already captured screenshots or videos inline for visible changes, not only as links. If none exists, mark its summary line "No screenshot yet" and say there what changed on screen. Do not start an app to capture one during this read-only turn. Make diagrams from observed connections or charts from actual numbers. Never invent a number or generate a picture of an uncaptured screen. Link only existing artifacts. Attach any produced image or file in the user-facing message. Place inline images with Markdown referencing the matching attachment's file ID or exact path. If you cannot produce the visual, state the gap plainly.
