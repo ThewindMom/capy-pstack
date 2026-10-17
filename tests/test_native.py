@@ -61,7 +61,7 @@ class DistributionTests(unittest.TestCase):
         info = json.loads((ROOT / 'pstack.json').read_text())
         names = {p.parent.name for p in (BUNDLE / 'skills').glob('*/SKILL.md')}
         self.assertEqual(len(names), 59)
-        self.assertEqual(info['version'], '1.5.1')
+        self.assertEqual(info['version'], '1.5.2')
         self.assertEqual(info['upstream_version'], '0.15.25')
         self.assertTrue(EXPECTED <= names)
         self.assertEqual(len([n for n in names if n.startswith('principle-')]), 24)
@@ -76,11 +76,11 @@ class DistributionTests(unittest.TestCase):
 
     def test_every_source_file_has_a_real_destination(self):
         origin = json.loads((ROOT / 'provenance/source.json').read_text())
-        self.assertEqual(origin['revision'], '99743e9c151c8537cbbf1f98bb38f34ef3368453')
-        self.assertEqual(origin['subtree'], '0d5fd349cbc77d054eed60f0e8cdfbea86321ff9')
+        self.assertEqual(origin['revision'], '182f2ce414e83224915c190d2f63239c1608d0a5')
+        self.assertEqual(origin['subtree'], '54ac5265638c4455ec3d04d496a379b5afc6aac2')
         self.assertEqual(origin['version'], '0.15.25')
-        self.assertEqual(len(origin['files']), 169)
-        self.assertEqual(len({f['source'] for f in origin['files']}), 169)
+        self.assertEqual(len(origin['files']), 170)
+        self.assertEqual(len({f['source'] for f in origin['files']}), 170)
         for item in origin['files']:
             with self.subTest(source=item['source']):
                 self.assertTrue((ROOT / item['destination']).is_file())

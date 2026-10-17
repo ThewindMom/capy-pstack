@@ -72,6 +72,13 @@ The optional `tools/source_inventory.py` audits a provided local source director
 its complete Git subtree hash and records every destination. It neither downloads source
 nor executes the upstream plugin. Normal installation and catalog maintenance stay offline.
 
+## Other editor adapters
+
+Upstream `docs/harness/claude-code.md` maps Cursor names to Claude Code. This port does
+not import it. Native skills already use Capy tasks, placement, and observed-account
+models, so Capy needs no second name-mapping layer. See
+[the 182f2ce4 update record](updates/0.15.25-182f2ce.md).
+
 ## pstack 0.15.15
 
 See [the update record](updates/0.15.15.md). The update includes benchmark-checklist,

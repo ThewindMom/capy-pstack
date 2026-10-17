@@ -1,7 +1,7 @@
 {
   "upstream_repository": "cursor/plugins",
-  "revision": "99743e9c151c8537cbbf1f98bb38f34ef3368453",
-  "subtree": "0d5fd349cbc77d054eed60f0e8cdfbea86321ff9",
+  "revision": "182f2ce414e83224915c190d2f63239c1608d0a5",
+  "subtree": "54ac5265638c4455ec3d04d496a379b5afc6aac2",
   "version": "0.15.25",
   "files": [
     {
@@ -21,7 +21,7 @@
     },
     {
       "source": "README.md",
-      "source_sha256": "98b107ff8b5e0468dfefbd4c9892a09b7b372958c4131bc7e2d7b4d4182aaa75",
+      "source_sha256": "af549c7ebae71851fb17a676ebc50e67ada9e5578119c8f4ff4b7a01a4f66f45",
       "destination": "README.md"
     },
     {
@@ -183,6 +183,11 @@
       "source": "docs/guide/images/verification.jpg",
       "source_sha256": "2a76b52007a1cd2866ba67fd47d7d9ef3e1118bb5a09c4665eee8c3f161bd09a",
       "destination": "docs/guide/images/verification.jpg"
+    },
+    {
+      "source": "docs/harness/claude-code.md",
+      "source_sha256": "cbf1dc0dfb4a4e3c254eb5362bfb1c9db04517a4b4eec1b3315973f5bbd8325a",
+      "destination": "docs/porting.md"
     },
     {
       "source": "plugin.json",

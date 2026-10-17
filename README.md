@@ -4,9 +4,16 @@
 
 Start with the problem, investigate before changing code, compare designs when the choice matters, and verify the actual result. Then use Capy's isolated task machines, durable threads, and event-driven PR follow-up to carry the work through.
 
-This repository contains the full, self-contained Capy port of [Lauren Tan's pstack for Cursor](https://github.com/cursor/plugins/tree/99743e9c151c8537cbbf1f98bb38f34ef3368453/pstack), based on version **0.15.25**. The skills and workflows are ordinary files you can read, edit, and install without the original repository.
+This repository contains the full, self-contained Capy port of [Lauren Tan's pstack for Cursor](https://github.com/cursor/plugins/tree/182f2ce414e83224915c190d2f63239c1608d0a5/pstack), based on version **0.15.25**. The skills and workflows are ordinary files you can read, edit, and install without the original repository.
 
 [Features](#what-pstack-brings) · [Why Capy](#how-this-port-plays-to-capys-strengths) · [Differences and limits](#what-does-not-carry-over-from-cursor) · [Get started](#get-started) · [Full catalog](docs/skill-catalog.md)
+
+## Upstream revision 182f2ce4
+
+Upstream pstack 0.15.25 now also ships as a Claude Code plugin. The two changed source
+files are a Claude Code install note and a Claude Code name adapter. Neither applies to
+Capy, so no skill, role, or script changes. The inventory records both as platform-only.
+See the [update record](docs/updates/0.15.25-182f2ce.md).
 
 ## Updated for pstack 0.15.25
 

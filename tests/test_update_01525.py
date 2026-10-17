@@ -10,7 +10,7 @@ BUNDLE = ROOT / '.agents'
 
 class Update01525Tests(unittest.TestCase):
     def test_source_inventory_and_reviewed_dispositions(self):
-        source = json.loads((ROOT / 'provenance/source.json').read_text())
+        source = json.loads((ROOT / 'provenance/updates/0.15.25-182f2ce.json').read_text())['previous_source']
         update = json.loads((ROOT / 'provenance/updates/0.15.25.json').read_text())
         self.assertEqual(source['revision'], '99743e9c151c8537cbbf1f98bb38f34ef3368453')
         self.assertEqual(source['subtree'], '0d5fd349cbc77d054eed60f0e8cdfbea86321ff9')
@@ -30,8 +30,6 @@ class Update01525Tests(unittest.TestCase):
                 self.assertEqual(item['before_sha256'], before.get(item['source'], {}).get('source_sha256'))
                 self.assertEqual(item['after_sha256'], after.get(item['source'], {}).get('source_sha256'))
                 self.assertTrue((ROOT / item['destination']).is_file())
-        self.assertEqual((BUNDLE / 'skills/poteto-mode/references/upstream-source.json').read_bytes(),
-                         (ROOT / 'provenance/source.json').read_bytes())
 
     def test_restated_principles_and_native_safeguards(self):
         ketchup = (BUNDLE / 'skills/ketchup/SKILL.md').read_text()

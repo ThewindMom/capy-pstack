@@ -354,7 +354,7 @@
       "mode": "644"
     },
     "skills/poteto-mode/references/upstream-source.json": {
-      "sha256": "7b8289f203990b887300336f6e0460e0134563f4c0f71019f55ae8a4dbcd8cd7",
+      "sha256": "a6d4abe78dc4479a60f7ea65004d425e7baaf086eca32fb77afbb35183260164",
       "mode": "644"
     },
     "skills/poteto-mode/scripts/bootstrap.ts": {
