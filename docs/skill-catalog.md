@@ -10,6 +10,7 @@
 - [control-cli](../.agents/skills/control-cli/SKILL.md)
 - [control-ui](../.agents/skills/control-ui/SKILL.md)
 - [correct](../.agents/skills/correct/SKILL.md)
+- [create-formal-verification-skill](../.agents/skills/create-formal-verification-skill/SKILL.md)
 - [create-skill](../.agents/skills/create-skill/SKILL.md)
 - [create-verification-skill](../.agents/skills/create-verification-skill/SKILL.md)
 - [deslop](../.agents/skills/deslop/SKILL.md)

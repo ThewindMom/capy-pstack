@@ -18,7 +18,7 @@ Mechanics first, history second. Each skill's report tells you which sources it 
 ask /arena for a second opinion on this thread and our approach
 ```
 
-Your current design becomes one candidate among several, and the synthesis tells you whether the panel found something better or confirmed what you had. Cheap insurance before a costly commitment.
+Your current design becomes one candidate among several, and the synthesis tells you whether the panel found something better or confirmed what you had. It costs little next to a design that is expensive to reverse.
 
 ## Check independent slices in parallel
 

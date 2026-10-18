@@ -12,7 +12,7 @@ Put what done means in the first prompt, in whatever words fit:
 /poteto-mode add json output to this command. text output stays byte-identical, the json parses, both run against the sample project. show me the evidence.
 ```
 
-Now the agent has three checks it can run, not a mood to satisfy. When the reply comes back, it should carry the exact commands and outputs. If a check couldn't run, a good reply says "inconclusive", and you should treat a confident reply without evidence as a red flag.
+Now the agent has three checks it can run, not a mood to satisfy. When the reply comes back, it should carry the exact commands and outputs. If a check couldn't run, a good reply says "inconclusive". A confident reply without evidence is a warning sign.
 
 Match the check to the change:
 
@@ -22,7 +22,7 @@ Match the check to the change:
 - A perf change compares before and after profiles.
 - A storage change reads back the written value.
 
-For a small diff you don't fully trust, [`/blast-radius`](../../.agents/skills/blast-radius/SKILL.md) finds what it could break elsewhere. It picks the one fact the change is safe because of and proves it by running code instead of writing an essay about it.
+For a small diff you don't fully trust, [`/blast-radius`](../../.agents/skills/blast-radius/SKILL.md) finds what it could break elsewhere. It finds the one fact that makes the change safe and proves that fact by running code, not by arguing for it.
 
 ## Create a project verification skill
 
@@ -42,13 +42,13 @@ Once the verify skill works, a [`/swarm`](../../.agents/skills/swarm/SKILL.md) c
 
 ## Keep the verification skill honest
 
-Apps change and feature maps rot. When yours drifts, run:
+Apps change, and feature maps go out of date. When yours drifts, run:
 
 ```text
 /maintain-verification-skill
 ```
 
-[`/maintain-verification-skill`](../../.agents/skills/maintain-verification-skill/SKILL.md) audits the generated skill: one read-only source reader per feature in parallel, then one live pass that drives every mapped feature. It ends in exactly one of three outcomes. `clean` means full coverage and nothing to ship. `changed` means one PR of proven corrections, confined to the verification skill's own directory. `blocked` names the blocker. It never edits product code. If the live pass catches a product regression, it reports the regression instead of papering over it in docs.
+[`/maintain-verification-skill`](../../.agents/skills/maintain-verification-skill/SKILL.md) audits the generated skill: one read-only source reader per feature in parallel, then one live pass that drives every mapped feature. It ends in exactly one of three outcomes. `clean` means full coverage and nothing to ship. `changed` means one PR of proven corrections, confined to the verification skill's own directory. `blocked` names the blocker. It never edits product code. If the live pass catches a product regression, it reports the regression instead of hiding it with a doc edit.
 
 ## Open the PR
 

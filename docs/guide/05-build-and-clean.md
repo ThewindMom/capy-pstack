@@ -1,6 +1,6 @@
 # Build the change and clean the diff
 
-The build playbooks share one discipline. Say what you observed, let the playbook demand the evidence. This page shows what to put in the prompt for each common build task, then the cleanup habit that keeps diffs reviewable.
+The build playbooks share one discipline. Say what you observed, and let the playbook demand the evidence. This page shows what to put in the prompt for each common build task, then the cleanup habit that keeps diffs reviewable.
 
 ## Prompt each build playbook with what you know
 
@@ -26,7 +26,7 @@ Run [benchmark-checklist](../../.agents/skills/benchmark-checklist/SKILL.md) bef
 measurement. The Perf issue playbook fixes a measured cause. Hillclimb repeats experiments
 against a metric. Runtime and trace forensics return a diagnosis when a fix is not requested.
 
-A perf prompt states the measurement, not a vibe:
+A perf prompt states the measurement, not an impression:
 
 ```text
 /poteto-mode startup takes 1.8s on this fixture. trace it, fix the measured cause, show me before and after.

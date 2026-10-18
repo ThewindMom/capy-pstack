@@ -149,6 +149,10 @@
       "sha256": "a543598a7a83bc4bbb87bab9c2a39c8c42147dd4b8e11ef90249e62ec17305db",
       "mode": "644"
     },
+    "skills/create-formal-verification-skill/SKILL.md": {
+      "sha256": "1db8b643ee47839e8f48a193a050a6edb22a18a8e38c8ab015fd5b0d69693f51",
+      "mode": "644"
+    },
     "skills/create-skill/SKILL.md": {
       "sha256": "d43f57bf9d3ed174a484b2765d02e501f8f6375280174a48f03cef7245b4e4c2",
       "mode": "644"
@@ -218,7 +222,7 @@
       "mode": "644"
     },
     "skills/ketchup/SKILL.md": {
-      "sha256": "682579932bc05924cd73ebaf6a24341a2c004eef5cd1f16f77fa30fddab47d07",
+      "sha256": "9b8962081ec183ce17e06666ddd418b485314e956f5d61bd7d756c98bae78eb4",
       "mode": "644"
     },
     "skills/maintain-verification-skill/SKILL.md": {
@@ -234,7 +238,7 @@
       "mode": "644"
     },
     "skills/poteto-help/SKILL.md": {
-      "sha256": "529468181d20a394c32fa1d44c1ec7fc525e9df9f1e61481cc109ea09ac149dd",
+      "sha256": "b9e31225faec23e0390841cf237e4d3caeeab51c40ac077f2839b054e9e7a985",
       "mode": "644"
     },
     "skills/poteto-help/references/prompting.md": {
@@ -354,7 +358,7 @@
       "mode": "644"
     },
     "skills/poteto-mode/references/upstream-source.json": {
-      "sha256": "a6d4abe78dc4479a60f7ea65004d425e7baaf086eca32fb77afbb35183260164",
+      "sha256": "81d8697bcc51d086f4443f2d033247fe75f58563348d5b3fd9e9983c7a662038",
       "mode": "644"
     },
     "skills/poteto-mode/scripts/bootstrap.ts": {
@@ -610,11 +614,11 @@
       "mode": "644"
     },
     "skills/typescript-best-practices/SKILL.md": {
-      "sha256": "fd61fe218e2d08226a63533d344277ccacd6e92fd07a81ca663817594585221d",
+      "sha256": "be1d56447dcb820efc248d0101b7647f2a78e559349304d49f7c003c8e895d1a",
       "mode": "644"
     },
     "skills/typescript-best-practices/references/patterns.md": {
-      "sha256": "faa1362055374452efccac1b629677c61acfb0bcc6c4e3311836b5715638ee18",
+      "sha256": "12e70c9419a8b3f5d6a1ab80e272c1f00a43ac0b3bbf72d68199033570e5de77",
       "mode": "644"
     },
     "skills/unslop/SKILL.md": {

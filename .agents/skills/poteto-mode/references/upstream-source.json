@@ -1,7 +1,7 @@
 {
   "upstream_repository": "cursor/plugins",
-  "revision": "182f2ce414e83224915c190d2f63239c1608d0a5",
-  "subtree": "54ac5265638c4455ec3d04d496a379b5afc6aac2",
+  "revision": "4382e687a50b8d2c5ce4d141d001186589cff8d5",
+  "subtree": "28b372cc7c490a963c9407d681427a0503745eb8",
   "version": "0.15.25",
   "files": [
     {
@@ -21,7 +21,7 @@
     },
     {
       "source": "README.md",
-      "source_sha256": "af549c7ebae71851fb17a676ebc50e67ada9e5578119c8f4ff4b7a01a4f66f45",
+      "source_sha256": "4de92d6b1fdcc6f7c79913ab24a70a7bd0cabacbdd788112271398a47b907c97",
       "destination": "README.md"
     },
     {
@@ -101,52 +101,52 @@
     },
     {
       "source": "docs/guide/01-setup.md",
-      "source_sha256": "86d0330f245d16254a2069955f993c15d96cf29cd1a73690a0164074b7ac1190",
+      "source_sha256": "aa98b876e635ce34803a8587cd66772de7cdf9e0f9217614a97b0462d6eafbfa",
       "destination": "docs/guide/01-setup.md"
     },
     {
       "source": "docs/guide/02-poteto-mode.md",
-      "source_sha256": "979f61ca3d44cb8e68affda40327d32797e93fa9cc53ced7444c15e2600897e1",
+      "source_sha256": "823262786c149affc1a037798ddd669855dd12c60938da40aed98d54a63cd026",
       "destination": "docs/guide/02-poteto-mode.md"
     },
     {
       "source": "docs/guide/03-understand.md",
-      "source_sha256": "0090afa9b8670adf175466a2a973ff4349e95ed67d2aa8cebdfc55ff4b7382c9",
+      "source_sha256": "1ac97cbad51c15c18b3aade8634d81c8bbe50d2b3135c75c113ddb2a6dcb7af0",
       "destination": "docs/guide/03-understand.md"
     },
     {
       "source": "docs/guide/04-design.md",
-      "source_sha256": "31f2abe6e9b29feafd1a9eece8f4fe21992f86b8c19ab2e9b5c11a20f36587e7",
+      "source_sha256": "cff616278303b533e617c5c4408af6d28895edbb8687d6ce99bb5dd1f6644a6c",
       "destination": "docs/guide/04-design.md"
     },
     {
       "source": "docs/guide/05-build-and-clean.md",
-      "source_sha256": "a93cc7771f7b35c7b54d0120b6f66e8367794ce6791237e889a30e7585c190fa",
+      "source_sha256": "1284e80595ae4f214dfa7c5c5f7758ff90a47b3273aa7b8142e51e574f5c5290",
       "destination": "docs/guide/05-build-and-clean.md"
     },
     {
       "source": "docs/guide/06-verify-and-ship.md",
-      "source_sha256": "3ef0eed5ea084dfbbaf1b1ae9e08d84f2c8a2b536ffb3ef5226710bf105f70e6",
+      "source_sha256": "f9cb57c88e3c1732ed8e22dce8023d7425cbb69ea4e237ddd486cb88273d2b10",
       "destination": "docs/guide/06-verify-and-ship.md"
     },
     {
       "source": "docs/guide/07-overnight.md",
-      "source_sha256": "d7bd33a3d880768688dff4c1c2b5481ca9f0f194f5d97e44b65c9f96624d3ff0",
+      "source_sha256": "03142cbeebd6f90211a5841d02faa90a0810d0993c9ffccf4045b463c472339c",
       "destination": "docs/guide/07-overnight.md"
     },
     {
       "source": "docs/guide/08-principles.md",
-      "source_sha256": "cffa270108189345351aab16835e95540ba3c765bb5f1b8c1de843a96a212421",
+      "source_sha256": "0b26b85292f0c09768abe727c9e92987dbf81f5b439a4871034c2fd1c4cb1723",
       "destination": "docs/guide/08-principles.md"
     },
     {
       "source": "docs/guide/09-make-it-yours.md",
-      "source_sha256": "157e0c20ad3c657857c2fbbea3afd26895b71b8f68475bc56f4c382dcdd0e118",
+      "source_sha256": "003d2f5ed526dd9f95f8fd2ea78dc98a29ee68caa96569d2042a575ca971bdf7",
       "destination": "docs/guide/09-make-it-yours.md"
     },
     {
       "source": "docs/guide/10-recipes-and-pitfalls.md",
-      "source_sha256": "c652474764b08da4a6364d85f5d03cf1fc1cf35e9d7c549348fb66e2d09f7b1f",
+      "source_sha256": "63f33aef9f60dd62200ae1da16c4394ff618c8345d21f735ab54299f3336a682",
       "destination": "docs/guide/10-recipes-and-pitfalls.md"
     },
     {
@@ -186,7 +186,7 @@
     },
     {
       "source": "docs/harness/claude-code.md",
-      "source_sha256": "cbf1dc0dfb4a4e3c254eb5362bfb1c9db04517a4b4eec1b3315973f5bbd8325a",
+      "source_sha256": "c79e2283d3a83c6be3dd1cac33f9c074067c95e610ae6e0a16d9fdee84058927",
       "destination": "docs/porting.md"
     },
     {
@@ -243,6 +243,11 @@
       "source": "skills/correct/SKILL.md",
       "source_sha256": "e347045d00c967a0b831ef883cc6ac79d21329aa10b5968637df95de7febf0ba",
       "destination": ".agents/skills/correct/SKILL.md"
+    },
+    {
+      "source": "skills/create-formal-verification-skill/SKILL.md",
+      "source_sha256": "5f5c08d6f5787ce18ffc9f018113e9cc6e7ddcc7878aa7ae94ef56978978497b",
+      "destination": ".agents/skills/create-formal-verification-skill/SKILL.md"
     },
     {
       "source": "skills/create-verification-skill/SKILL.md",
@@ -316,7 +321,7 @@
     },
     {
       "source": "skills/ketchup/SKILL.md",
-      "source_sha256": "47b3fb0d5626a40fcb3bd016e68f1cb3d2d313351183e8f6c05d4c7abd76e665",
+      "source_sha256": "f2923ffd14f6fc778f75a47aaed1f317fb5fd00b5701ca769d6446c74106dead",
       "destination": ".agents/skills/ketchup/SKILL.md"
     },
     {
@@ -326,7 +331,7 @@
     },
     {
       "source": "skills/make-bot-ui/SKILL.md",
-      "source_sha256": "3624c8ef16cf2e48deb2a4049e72c6962a9431c8d6c6af90e7bd7ea0375224ec",
+      "source_sha256": "ad19d0bc6764287ec08c2521701974e7dac941f72e4d0fe81a24f4614494586f",
       "destination": ".agents/skills/make-bot-ui/SKILL.md"
     },
     {
@@ -336,7 +341,7 @@
     },
     {
       "source": "skills/poteto-help/SKILL.md",
-      "source_sha256": "1b0645c25200a19e5863583e117bad684b1b79ba8434823ebf4f6bbcc61e8a75",
+      "source_sha256": "ef80c5480b4e9403635036282a9f90d9c3e79ca65e5fb74f96583f320c00c029",
       "destination": ".agents/skills/poteto-help/SKILL.md"
     },
     {
@@ -351,7 +356,7 @@
     },
     {
       "source": "skills/poteto-mode/SKILL.md",
-      "source_sha256": "c5e6b605f46e5d9fbab31afa7a99d3d50680f2180d1fdfae3a924901bc52d99a",
+      "source_sha256": "2755f102e7a6d0496b429d1031a22fb353e1f3d523543367caeaae5c4ed6f544",
       "destination": ".agents/skills/poteto-mode/SKILL.md"
     },
     {
@@ -776,12 +781,12 @@
     },
     {
       "source": "skills/typescript-best-practices/SKILL.md",
-      "source_sha256": "28f9e61710e205f6f3c5476f333483cff0e988f6a5b639e2faad536344b40c5e",
+      "source_sha256": "ec1dac086d3708e5940d45d250c30a37dd953b4e3cb2ca0692f5851d7a039e27",
       "destination": ".agents/skills/typescript-best-practices/SKILL.md"
     },
     {
       "source": "skills/typescript-best-practices/references/patterns.md",
-      "source_sha256": "faa1362055374452efccac1b629677c61acfb0bcc6c4e3311836b5715638ee18",
+      "source_sha256": "12e70c9419a8b3f5d6a1ab80e272c1f00a43ac0b3bbf72d68199033570e5de77",
       "destination": ".agents/skills/typescript-best-practices/references/patterns.md"
     },
     {

@@ -1,6 +1,6 @@
 {
   "name": "capy-pstack",
-  "version": "1.5.2",
+  "version": "1.6.0",
   "upstream_version": "0.15.25",
   "skills": [
     "architect",
@@ -13,6 +13,7 @@
     "control-cli",
     "control-ui",
     "correct",
+    "create-formal-verification-skill",
     "create-skill",
     "create-verification-skill",
     "deslop",
