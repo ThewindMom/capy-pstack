@@ -48,7 +48,12 @@ Choose a budget and concurrency cap before large runs. More workers spend more t
 do not remove dependency ordering.
 
 When no project verify-* skill exists, create-verification-skill builds one and proves it
-through the real application before handoff. Configure dependencies in initialize and
+through the real application before handoff. Setup then offers once to generate a formal
+verification skill with create-formal-verification-skill, unless the project has one. It
+checks one key property, such as "a job never runs twice at once", in every case within a
+stated scope. Accept it for concurrency, retries, state machines, or parsers, where tests
+rarely reach the breaking case. [Verify and ship](06-verify-and-ship.md#prove-a-property-with-a-formal-verification-skill)
+covers it. Configure dependencies in initialize and
 update_after_checkout and restartable services in startup. A snapshot accelerates that
 recipe; it never replaces committed source or durable work records. A local validator
 passing does not prove a native Capy task launched with the requested model.

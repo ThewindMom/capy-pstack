@@ -4,9 +4,18 @@
 
 Start with the problem, investigate before changing code, compare designs when the choice matters, and verify the actual result. Then use Capy's isolated task machines, durable threads, and event-driven PR follow-up to carry the work through.
 
-This repository contains the full, self-contained Capy port of [Lauren Tan's pstack for Cursor](https://github.com/cursor/plugins/tree/4382e687a50b8d2c5ce4d141d001186589cff8d5/pstack), based on version **0.15.25**. The skills and workflows are ordinary files you can read, edit, and install without the original repository.
+This repository contains the full, self-contained Capy port of [Lauren Tan's pstack for Cursor](https://github.com/cursor/plugins/tree/d457567332aa6989e753ea289f30ea2bfbc80bc0/pstack), based on version **0.15.28**. The skills and workflows are ordinary files you can read, edit, and install without the original repository.
 
 [Features](#what-pstack-brings) · [Why Capy](#how-this-port-plays-to-capys-strengths) · [Differences and limits](#what-does-not-carry-over-from-cursor) · [Get started](#get-started) · [Full catalog](docs/skill-catalog.md)
+
+## Updated for pstack 0.15.28
+
+Upstream pstack 0.15.28 at revision d4575673 adds `/maintain-formal-verification-skill`.
+It brings a formal verification back in line after the covered code changes and says
+whether each failure is drift or a bug. Generated formal checks now record their covered
+code and sync commit, and TLA+ is the default model checker. Setup offers a formal
+verification skill once. Sharpen and the guide prose are updated. See the
+[update record](docs/updates/0.15.28.md).
 
 ## Upstream revision 4382e687
 
@@ -83,7 +92,7 @@ The original Cursor plugin uses Cursor's tools, subagents, model choices, and ed
 
 ## What pstack brings
 
-The suite includes **55 ported pstack skills, including 24 principles, and 23 complete playbooks**. Five bundled support skills bring the main catalog to **60**. The separate Benny automation pack contains its own setup, triage, and reproduction workflows.
+The suite includes **56 ported pstack skills, including 24 principles, and 23 complete playbooks**. Five bundled support skills bring the main catalog to **61**. The separate Benny automation pack contains its own setup, triage, and reproduction workflows.
 
 | Work you need to do | What the workflow adds |
 | --- | --- |
@@ -93,7 +102,7 @@ The suite includes **55 ported pstack skills, including 24 principles, and 23 co
 | Fix a bug or build a feature | The [bug-fix](.agents/skills/poteto-mode/playbooks/bug-fix.md), [feature](.agents/skills/poteto-mode/playbooks/feature.md), and [refactoring](.agents/skills/poteto-mode/playbooks/refactoring.md) playbooks require scoped changes and verification. [tdd](.agents/skills/tdd/SKILL.md) establishes a failing test first when an appropriate test path exists. |
 | Improve performance or diagnose a runtime symptom | [Performance work](.agents/skills/poteto-mode/playbooks/perf-issue.md) measures a baseline. [hillclimb](.agents/skills/poteto-mode/playbooks/hillclimb.md) repeats measured experiments. Runtime and trace forensics separate evidence-backed diagnosis from a speculative fix. |
 | Challenge a change before shipping | [interrogate](.agents/skills/interrogate/SKILL.md) brings independent adversarial reviewers. [blast-radius](.agents/skills/blast-radius/SKILL.md) checks what else a small-looking change could affect. The coordinator evaluates findings rather than applying every review comment mechanically. |
-| Prove user-visible behavior | [create-verification-skill](.agents/skills/create-verification-skill/SKILL.md) builds a project-specific verification workflow. [maintain-verification-skill](.agents/skills/maintain-verification-skill/SKILL.md) keeps it aligned with the application. [create-formal-verification-skill](.agents/skills/create-formal-verification-skill/SKILL.md) verifies a race, invariant, or other property that tests rarely reach. [Visual parity](.agents/skills/poteto-mode/playbooks/visual-parity.md) requires comparison of the rendered result. |
+| Prove user-visible behavior | [create-verification-skill](.agents/skills/create-verification-skill/SKILL.md) builds a project-specific verification workflow. [maintain-verification-skill](.agents/skills/maintain-verification-skill/SKILL.md) keeps it aligned with the application. [create-formal-verification-skill](.agents/skills/create-formal-verification-skill/SKILL.md) verifies a race, invariant, or other property that tests rarely reach. [maintain-formal-verification-skill](.agents/skills/maintain-formal-verification-skill/SKILL.md) brings it back in line after the covered code changes. [Visual parity](.agents/skills/poteto-mode/playbooks/visual-parity.md) requires comparison of the rendered result. |
 | Get a PR ready, then land it deliberately | [Babysit](.agents/skills/poteto-mode/playbooks/babysit.md) handles conflicts, CI, and review feedback. [Shipping](.agents/skills/poteto-mode/playbooks/shipping.md) separately requires independent review of the current change and lands only the verified bottom-up portion of a stack. |
 | Run a migration or a longer program | Autonomous-run, orchestrate, both autopilot playbooks, multi-phase planning, safe pause, and session pickup preserve owners, dependencies, progress, and handoffs. [figure-it-out](.agents/skills/figure-it-out/SKILL.md) designs a task-specific playbook when a bundled one does not fit. |
 | Learn from work and communicate it clearly | [recall](.agents/skills/recall/SKILL.md) rebuilds context. [reflect](.agents/skills/reflect/SKILL.md) proposes improvements from observed work. [automate-me](.agents/skills/automate-me/SKILL.md) drafts a personal workflow. [show-me-your-work](.agents/skills/show-me-your-work/SKILL.md) records decisions. Writing and comment-review skills keep explanations and code readable. |
@@ -269,7 +278,7 @@ All skill bodies, playbooks, role prompts, Benny sources, references, scripts, s
 
 | Find it here | Contents |
 | --- | --- |
-| [.agents/skills](.agents/skills/) | 60 full skills, with [23 playbooks](.agents/skills/poteto-mode/playbooks/) under poteto-mode |
+| [.agents/skills](.agents/skills/) | 61 full skills, with [23 playbooks](.agents/skills/poteto-mode/playbooks/) under poteto-mode |
 | [.agents/roles](.agents/roles/) | Poteto and Comment Sicko role prompts |
 | [.agents/automations/benny](.agents/automations/benny/) | Dormant setup, triage, reproduction, templates, and references |
 | [scripts](.agents/skills/poteto-mode/scripts/) | Task and model validators, PR watcher, orchestration ledger, and audit tools |

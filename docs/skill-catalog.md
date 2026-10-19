@@ -19,6 +19,7 @@
 - [in-your-own-words](../.agents/skills/in-your-own-words/SKILL.md)
 - [interrogate](../.agents/skills/interrogate/SKILL.md)
 - [ketchup](../.agents/skills/ketchup/SKILL.md)
+- [maintain-formal-verification-skill](../.agents/skills/maintain-formal-verification-skill/SKILL.md)
 - [maintain-verification-skill](../.agents/skills/maintain-verification-skill/SKILL.md)
 - [make-bot-ui](../.agents/skills/make-bot-ui/SKILL.md)
 - [no-comments](../.agents/skills/no-comments/SKILL.md)

@@ -1,12 +1,12 @@
 {
   "upstream_repository": "cursor/plugins",
-  "revision": "4382e687a50b8d2c5ce4d141d001186589cff8d5",
-  "subtree": "28b372cc7c490a963c9407d681427a0503745eb8",
-  "version": "0.15.25",
+  "revision": "d457567332aa6989e753ea289f30ea2bfbc80bc0",
+  "subtree": "06803099e18ed488c8c2a2fda118ce772b4e2a77",
+  "version": "0.15.28",
   "files": [
     {
       "source": ".cursor-plugin/plugin.json",
-      "source_sha256": "b75609951c8a558e74f1eb20e15493933754eb2695fd2059d7f435f913889bb3",
+      "source_sha256": "884a2b21bd0cee611e6f469d139f33a0d2eb0be67d9f4ee388c683434ad995df",
       "destination": "pstack.json"
     },
     {
@@ -21,7 +21,7 @@
     },
     {
       "source": "README.md",
-      "source_sha256": "4de92d6b1fdcc6f7c79913ab24a70a7bd0cabacbdd788112271398a47b907c97",
+      "source_sha256": "90de91beb5655913705e0107740b0b4c735032c53582a3ceaae7c007530047fd",
       "destination": "README.md"
     },
     {
@@ -101,12 +101,12 @@
     },
     {
       "source": "docs/guide/01-setup.md",
-      "source_sha256": "aa98b876e635ce34803a8587cd66772de7cdf9e0f9217614a97b0462d6eafbfa",
+      "source_sha256": "384655bdecc713122ca69a485723c58462002a1d512415e94e48597d0dce2fa5",
       "destination": "docs/guide/01-setup.md"
     },
     {
       "source": "docs/guide/02-poteto-mode.md",
-      "source_sha256": "823262786c149affc1a037798ddd669855dd12c60938da40aed98d54a63cd026",
+      "source_sha256": "1a0a5b9c88bf325f108cfda3b81b38c7eb936f6b30a2d2bb651d834a5c8dac2a",
       "destination": "docs/guide/02-poteto-mode.md"
     },
     {
@@ -126,12 +126,12 @@
     },
     {
       "source": "docs/guide/06-verify-and-ship.md",
-      "source_sha256": "f9cb57c88e3c1732ed8e22dce8023d7425cbb69ea4e237ddd486cb88273d2b10",
+      "source_sha256": "5c16c88bf377bf5ea5ffd4cd9dc1a83f19a0415090cc4645865d16a5500d1cab",
       "destination": "docs/guide/06-verify-and-ship.md"
     },
     {
       "source": "docs/guide/07-overnight.md",
-      "source_sha256": "03142cbeebd6f90211a5841d02faa90a0810d0993c9ffccf4045b463c472339c",
+      "source_sha256": "b767a5dc5d7257efdb5cc8cfac92acfbb18fe8e023a3438339f4b45ce4a9264a",
       "destination": "docs/guide/07-overnight.md"
     },
     {
@@ -141,17 +141,17 @@
     },
     {
       "source": "docs/guide/09-make-it-yours.md",
-      "source_sha256": "003d2f5ed526dd9f95f8fd2ea78dc98a29ee68caa96569d2042a575ca971bdf7",
+      "source_sha256": "50642f7f894988f7c263700f46478e7aed7eb94a257683350d91a9a0d70dc141",
       "destination": "docs/guide/09-make-it-yours.md"
     },
     {
       "source": "docs/guide/10-recipes-and-pitfalls.md",
-      "source_sha256": "63f33aef9f60dd62200ae1da16c4394ff618c8345d21f735ab54299f3336a682",
+      "source_sha256": "1a583bad627b61e4ec4f996acdb1bc4772e0fad4d6c8769c9787dfd157396f47",
       "destination": "docs/guide/10-recipes-and-pitfalls.md"
     },
     {
       "source": "docs/guide/README.md",
-      "source_sha256": "49d92cfe91e01c04bd1150e5b000ee4fd4dfda8ce789b66a9dda98f7e5456e00",
+      "source_sha256": "5c888d034d38f380789fad57c2c6fa7307ace803a0622cdde9e57fa2afe182de",
       "destination": "docs/guide/README.md"
     },
     {
@@ -191,7 +191,7 @@
     },
     {
       "source": "plugin.json",
-      "source_sha256": "68f0ddbdda23d1e663b48c881f1b896305a3dcdc320ff83c65dd24cd9ac6850f",
+      "source_sha256": "ce66690a6352aa6b28b2f9b184125f37be43958fed97e27ff630ac845354b734",
       "destination": "pstack.json"
     },
     {
@@ -246,7 +246,7 @@
     },
     {
       "source": "skills/create-formal-verification-skill/SKILL.md",
-      "source_sha256": "5f5c08d6f5787ce18ffc9f018113e9cc6e7ddcc7878aa7ae94ef56978978497b",
+      "source_sha256": "6c934cd15a9583533ff9b7a9cad62775d7e80402d26d3ba7f74f79ea21a1d8eb",
       "destination": ".agents/skills/create-formal-verification-skill/SKILL.md"
     },
     {
@@ -325,6 +325,11 @@
       "destination": ".agents/skills/ketchup/SKILL.md"
     },
     {
+      "source": "skills/maintain-formal-verification-skill/SKILL.md",
+      "source_sha256": "0c96f54293542d3818b68754562b338073958781a9684454611dca37592e2d2c",
+      "destination": ".agents/skills/maintain-formal-verification-skill/SKILL.md"
+    },
+    {
       "source": "skills/maintain-verification-skill/SKILL.md",
       "source_sha256": "515c0eaa054b3f6be1b1fb06f2c2f173c80fddb58bbcac57576f89c479bc68e8",
       "destination": ".agents/skills/maintain-verification-skill/SKILL.md"
@@ -341,7 +346,7 @@
     },
     {
       "source": "skills/poteto-help/SKILL.md",
-      "source_sha256": "ef80c5480b4e9403635036282a9f90d9c3e79ca65e5fb74f96583f320c00c029",
+      "source_sha256": "e0938291e8b82db4f8d35bdbb0ac3ae2a4c76fcb3607f91a4cc7aabfff3a4823",
       "destination": ".agents/skills/poteto-help/SKILL.md"
     },
     {
@@ -351,7 +356,7 @@
     },
     {
       "source": "skills/poteto-help/references/recipes.md",
-      "source_sha256": "5fb97a805976a82db0aba5cc8943e88d0cb38b17a0d6b8e89a44633677febb1a",
+      "source_sha256": "a69696c4496bed3e852e7c4527071989e2e6d99937ba7f984ed188eb8dd8aff0",
       "destination": ".agents/skills/poteto-help/references/recipes.md"
     },
     {
@@ -736,12 +741,12 @@
     },
     {
       "source": "skills/setup-pstack/SKILL.md",
-      "source_sha256": "d61b47256a18155a81c8e5ef95e3cc6569ce8c18317c35c4dd9c8015cf68cb59",
+      "source_sha256": "b45512f6ca5e96e81681984683b7472bfe892581da3a89a73cca4159438f29ed",
       "destination": ".agents/skills/setup-pstack/SKILL.md"
     },
     {
       "source": "skills/sharpen/SKILL.md",
-      "source_sha256": "6bcd73916696eb9c5b79b6f960983760c34bcc28937c11142dd8d86b5107aa46",
+      "source_sha256": "d895695fcc29b832bf118b842c1d7cf356a69622d63c9d49b40a0c97d8496c80",
       "destination": ".agents/skills/sharpen/SKILL.md"
     },
     {

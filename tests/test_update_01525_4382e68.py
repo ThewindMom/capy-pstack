@@ -10,7 +10,7 @@ BUNDLE = ROOT / '.agents'
 
 class Update01525Revision4382e68Tests(unittest.TestCase):
     def test_source_inventory_and_reviewed_dispositions(self):
-        source = json.loads((ROOT / 'provenance/source.json').read_text())
+        source = json.loads((ROOT / 'provenance/updates/0.15.28.json').read_text())['previous_source']
         update = json.loads((ROOT / 'provenance/updates/0.15.25-4382e68.json').read_text())
         self.assertEqual(source['revision'], '4382e687a50b8d2c5ce4d141d001186589cff8d5')
         self.assertEqual(source['subtree'], '28b372cc7c490a963c9407d681427a0503745eb8')
@@ -30,8 +30,6 @@ class Update01525Revision4382e68Tests(unittest.TestCase):
                 self.assertEqual(item['before_sha256'], before.get(item['source'], {}).get('source_sha256'))
                 self.assertEqual(item['after_sha256'], after.get(item['source'], {}).get('source_sha256'))
                 self.assertTrue((ROOT / item['destination']).is_file())
-        self.assertEqual((BUNDLE / 'skills/poteto-mode/references/upstream-source.json').read_bytes(),
-                         (ROOT / 'provenance/source.json').read_bytes())
 
     def test_formal_verification_skill_is_native_and_routed(self):
         skill = (BUNDLE / 'skills/create-formal-verification-skill/SKILL.md').read_text()

@@ -110,3 +110,10 @@ Report the profile destination, selected policy, adaptations, actual verified se
 Find a verify-* skill or real app harness. When absent, offer create-verification-skill
 once. On acceptance build and prove it; a declined offer does not block setup. Installing
 or configuring pstack never enables Benny or another automation.
+
+## 8. Offer project formal verification
+
+Find a project skill that runs a model checker, proof, or other verifier against named
+code. When absent, offer create-formal-verification-skill once, for projects with
+concurrency, retries, state machines, or parsers where tests rarely reach the breaking
+case. On acceptance build and prove it; a declined offer does not block setup.

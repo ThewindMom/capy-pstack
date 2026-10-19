@@ -150,7 +150,7 @@
       "mode": "644"
     },
     "skills/create-formal-verification-skill/SKILL.md": {
-      "sha256": "1db8b643ee47839e8f48a193a050a6edb22a18a8e38c8ab015fd5b0d69693f51",
+      "sha256": "1f0b388338674cca95314589f8c2f963ca69bd62557f2bfb0f5c66695c913caf",
       "mode": "644"
     },
     "skills/create-skill/SKILL.md": {
@@ -225,6 +225,10 @@
       "sha256": "9b8962081ec183ce17e06666ddd418b485314e956f5d61bd7d756c98bae78eb4",
       "mode": "644"
     },
+    "skills/maintain-formal-verification-skill/SKILL.md": {
+      "sha256": "14b7bfd247561819ec181dfbfddd0cf9daab1e5859406625fa0f389abf2ab863",
+      "mode": "644"
+    },
     "skills/maintain-verification-skill/SKILL.md": {
       "sha256": "5ad163963b5d4be6533f832295dfdd063d3079a0d100e0b85fed722cc3ac3941",
       "mode": "644"
@@ -238,7 +242,7 @@
       "mode": "644"
     },
     "skills/poteto-help/SKILL.md": {
-      "sha256": "b9e31225faec23e0390841cf237e4d3caeeab51c40ac077f2839b054e9e7a985",
+      "sha256": "4a256f7a90e787862123067599a9575264ece20807d4a2343c23a2282c768aee",
       "mode": "644"
     },
     "skills/poteto-help/references/prompting.md": {
@@ -246,7 +250,7 @@
       "mode": "644"
     },
     "skills/poteto-help/references/recipes.md": {
-      "sha256": "aa96310879f1c7431b21d3f48e76602c7106725dcb347fcbb9a0fbf8dba14925",
+      "sha256": "7ecc40dbb52937d6b67b95a6ecbc2c7d52fde8feff12de4784572e49ea6cfc37",
       "mode": "644"
     },
     "skills/poteto-mode/SKILL.md": {
@@ -358,7 +362,7 @@
       "mode": "644"
     },
     "skills/poteto-mode/references/upstream-source.json": {
-      "sha256": "81d8697bcc51d086f4443f2d033247fe75f58563348d5b3fd9e9983c7a662038",
+      "sha256": "2536f2c12d1d57c249e3b272a0720e557f0921984ae43f38ef55c4af1953a48b",
       "mode": "644"
     },
     "skills/poteto-mode/scripts/bootstrap.ts": {
@@ -578,11 +582,11 @@
       "mode": "644"
     },
     "skills/setup-pstack/SKILL.md": {
-      "sha256": "73dcd9cf72085062178c475b7920b9e06f02837d9338c0f61db6a9d02497a9aa",
+      "sha256": "234f934e50ab1c827770640aa628f9fa8dcf2a4fef3ce1e147b6d3f4a5ca27cc",
       "mode": "644"
     },
     "skills/sharpen/SKILL.md": {
-      "sha256": "8eb9f9751fce14ef9a214529fd197017a6e2d30d6d2042cd22edad6e64c9a582",
+      "sha256": "d6440e3f2e7109bf4f48b50922baf1afa0bd4db4571895d3167267fb6bb8d4cc",
       "mode": "644"
     },
     "skills/show-me-your-work/SKILL.md": {

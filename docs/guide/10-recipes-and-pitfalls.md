@@ -12,6 +12,14 @@ use /how first to understand how this initialization works. then use /why to fig
 
 Mechanics first, history second. Each skill's report tells you which sources it searched, so you know what the answer is grounded in.
 
+## Aim a task before it starts
+
+```text
+/sharpen write the onboarding doc for the new billing service.
+```
+
+The agent asks how an expert would do the task, what you're really after, and whether the ask says too much or too little. It keeps one outside check that the result is right, then does the work. For the restatement alone, with no playbook, use `/in-your-own-words`.
+
 ## Get a second opinion on a design
 
 ```text
@@ -43,6 +51,14 @@ The qualifiers do real work. "don't change anything yet" keeps it read-only, and
 ```
 
 "if there's a cheap test path" matters. Forcing a test through brittle mocks proves less than running the real command, and the playbook is allowed to say so.
+
+## Prove a property tests rarely reach
+
+```text
+/create-formal-verification-skill the retry queue. a message must never be delivered twice.
+```
+
+You get one property checked in every case within a stated scope, a counterexample in your code's terms if the code already breaks it, and a project skill the next agent runs on any change to that code.
 
 ## Keep a run honest while you're away
 
@@ -77,6 +93,14 @@ You rarely need more words. You need the right name, and [the principles page](0
 ```
 
 That's the whole prompt. [`/bro`](../../.agents/skills/bro/SKILL.md) restates the last message like one human talking to another, no jargon, shorter. Use it when a reply is technically thorough and you still don't know what it said.
+
+## Catch up on a thread you left running
+
+```text
+/ketchup
+```
+
+[`/ketchup`](../../.agents/skills/ketchup/SKILL.md) tells you in plain words what changed since your last message, then lists each call waiting on you with its pick, evidence, and risk. It changes nothing while it reports.
 
 ## The pitfalls
 

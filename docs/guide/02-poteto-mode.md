@@ -25,7 +25,7 @@ flowchart TD
     J --> K
 ```
 
-The diagram shows the common routes. There are also playbooks for hillclimbing a metric, diagnosing runtime symptoms and captured traces, prototypes, visual parity, authoring and evaluating skills, autonomous runs, babysitting a PR or stack to merge-ready, shipping a verified stack, running a PR queue or a stack on autopilot, orchestrating project-scale programs, session pickup, pausing safely, multi-phase plans, and worktree cleanup. The [playbook directory](../../.agents/skills/poteto-mode/playbooks) has the full set.
+The diagram shows the common routes. There are also playbooks for hillclimbing a metric, diagnosing runtime symptoms and captured traces, prototypes, visual parity, authoring and evaluating skills, autonomous runs, opening a PR, babysitting a PR or stack to merge-ready, shipping a verified stack, running a PR queue or a stack on autopilot, orchestrating project-scale programs, session pickup, pausing safely, multi-phase plans, and worktree cleanup. The [playbook directory](../../.agents/skills/poteto-mode/playbooks) has the full set.
 
 ## Say the goal, not the ceremony
 
@@ -58,7 +58,16 @@ it the relevant context.
 Name the expected result, the observed result, a reproducible input, and constraints that
 affect the solution. Include paths or evidence when you have them. Leave out invented causes
 and tool-by-tool instructions. For a noisy report, ask the agent to restate the problem and
-separate observations from guesses before it investigates.
+separate observations from guesses before it investigates. For the restatement alone, with
+no playbook, run [`/in-your-own-words`](../../.agents/skills/in-your-own-words/SKILL.md).
+
+When you're unsure whether a task is aimed right, put [`/sharpen`](../../.agents/skills/sharpen/SKILL.md) in front of it:
+
+```text
+/sharpen write a migration guide for the v2 config format.
+```
+
+Before it starts, the agent asks how a top expert would do the task, what you're really after, and whether the ask is over- or underspecified. It relaxes constraints that don't serve the goal only within your authorization, leaves your choices open, and keeps one outside check that the result is right. Then it does the work.
 
 ## Switch tasks with "new task"
 
