@@ -4,9 +4,17 @@
 
 Start with the problem, investigate before changing code, compare designs when the choice matters, and verify the actual result. Then use Capy's isolated task machines, durable threads, and event-driven PR follow-up to carry the work through.
 
-This repository contains the full, self-contained Capy port of [Lauren Tan's pstack for Cursor](https://github.com/cursor/plugins/tree/d457567332aa6989e753ea289f30ea2bfbc80bc0/pstack), based on version **0.15.28**. The skills and workflows are ordinary files you can read, edit, and install without the original repository.
+This repository contains the full, self-contained Capy port of [Lauren Tan's pstack for Cursor](https://github.com/cursor/plugins/tree/88d47514b82e7c44f00f2b2a72ff6dd12158038c/pstack), based on version **0.15.29**. The skills and workflows are ordinary files you can read, edit, and install without the original repository.
 
 [Features](#what-pstack-brings) · [Why Capy](#how-this-port-plays-to-capys-strengths) · [Differences and limits](#what-does-not-carry-over-from-cursor) · [Get started](#get-started) · [Full catalog](docs/skill-catalog.md)
+
+## Updated for pstack 0.15.29
+
+Upstream pstack 0.15.29 at revision 88d47514 restores `/sharpen` to its original prompt.
+It names what a top professional would add, their raw material, methods and tools, and an
+outside check, then hands back the rewritten prompt without doing the task. The native
+skill keeps its authorization bound and preference preservation. Help, recipes, and the
+guide are updated. See the [update record](docs/updates/0.15.29.md).
 
 ## Updated for pstack 0.15.28
 

@@ -12,13 +12,13 @@ use /how first to understand how this initialization works. then use /why to fig
 
 Mechanics first, history second. Each skill's report tells you which sources it searched, so you know what the answer is grounded in.
 
-## Aim a task before it starts
+## Sharpen a prompt before you send it
 
 ```text
 /sharpen write the onboarding doc for the new billing service.
 ```
 
-The agent asks how an expert would do the task, what you're really after, and whether the ask says too much or too little. It keeps one outside check that the result is right, then does the work. For the restatement alone, with no playbook, use `/in-your-own-words`.
+The agent names what an expert would do that you didn't ask for, the raw material they'd start from, their methods and tools, and an outside check that the result is right. It hands back your prompt rewritten to ask for that and doesn't do the task. Send the rewrite when it reads right. For the restatement alone, with no playbook, use `/in-your-own-words`.
 
 ## Get a second opinion on a design
 

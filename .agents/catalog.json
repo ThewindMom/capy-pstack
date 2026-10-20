@@ -242,7 +242,7 @@
       "mode": "644"
     },
     "skills/poteto-help/SKILL.md": {
-      "sha256": "4a256f7a90e787862123067599a9575264ece20807d4a2343c23a2282c768aee",
+      "sha256": "00638029a7fcbd02d38a6c02da73d43967d1c04b36f4942e4c6a49b08a9b684b",
       "mode": "644"
     },
     "skills/poteto-help/references/prompting.md": {
@@ -250,7 +250,7 @@
       "mode": "644"
     },
     "skills/poteto-help/references/recipes.md": {
-      "sha256": "7ecc40dbb52937d6b67b95a6ecbc2c7d52fde8feff12de4784572e49ea6cfc37",
+      "sha256": "7e52d2cdd535a8234dcc7b2d5c31de1df25a25e14ca4bd3a215abf79f57ac8a5",
       "mode": "644"
     },
     "skills/poteto-mode/SKILL.md": {
@@ -362,7 +362,7 @@
       "mode": "644"
     },
     "skills/poteto-mode/references/upstream-source.json": {
-      "sha256": "2536f2c12d1d57c249e3b272a0720e557f0921984ae43f38ef55c4af1953a48b",
+      "sha256": "2faab6779eb08270f4304c2aca3ccdc3b9c923630cb88d60056660e976173054",
       "mode": "644"
     },
     "skills/poteto-mode/scripts/bootstrap.ts": {
@@ -586,7 +586,7 @@
       "mode": "644"
     },
     "skills/sharpen/SKILL.md": {
-      "sha256": "d6440e3f2e7109bf4f48b50922baf1afa0bd4db4571895d3167267fb6bb8d4cc",
+      "sha256": "24801eacfdc0761c55c54403902aa42bb250ea9d3199e4c13c5bcc91a6d8bca5",
       "mode": "644"
     },
     "skills/show-me-your-work/SKILL.md": {

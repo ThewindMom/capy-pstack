@@ -1,12 +1,12 @@
 {
   "upstream_repository": "cursor/plugins",
-  "revision": "d457567332aa6989e753ea289f30ea2bfbc80bc0",
-  "subtree": "06803099e18ed488c8c2a2fda118ce772b4e2a77",
-  "version": "0.15.28",
+  "revision": "88d47514b82e7c44f00f2b2a72ff6dd12158038c",
+  "subtree": "34a0b817e5ea92375bb10f20b15cf750d4e8095a",
+  "version": "0.15.29",
   "files": [
     {
       "source": ".cursor-plugin/plugin.json",
-      "source_sha256": "884a2b21bd0cee611e6f469d139f33a0d2eb0be67d9f4ee388c683434ad995df",
+      "source_sha256": "079de0bc2c331df98ecf388b84c938a3a61910f49a1cc37e680d9e2ca9bcd324",
       "destination": "pstack.json"
     },
     {
@@ -21,7 +21,7 @@
     },
     {
       "source": "README.md",
-      "source_sha256": "90de91beb5655913705e0107740b0b4c735032c53582a3ceaae7c007530047fd",
+      "source_sha256": "b928886260bd551b0c8f3e58617a5dc3ad8dfc1293d096b1ef81b84007532486",
       "destination": "README.md"
     },
     {
@@ -106,7 +106,7 @@
     },
     {
       "source": "docs/guide/02-poteto-mode.md",
-      "source_sha256": "1a0a5b9c88bf325f108cfda3b81b38c7eb936f6b30a2d2bb651d834a5c8dac2a",
+      "source_sha256": "d168829def6c410b1afd87d1a6eb297df385f89faa9b31260684074e9e4eb52a",
       "destination": "docs/guide/02-poteto-mode.md"
     },
     {
@@ -146,7 +146,7 @@
     },
     {
       "source": "docs/guide/10-recipes-and-pitfalls.md",
-      "source_sha256": "1a583bad627b61e4ec4f996acdb1bc4772e0fad4d6c8769c9787dfd157396f47",
+      "source_sha256": "006d8282db567aeae57398d5de1f3a802af2e3ac1a1f564198c384183fca3f92",
       "destination": "docs/guide/10-recipes-and-pitfalls.md"
     },
     {
@@ -191,7 +191,7 @@
     },
     {
       "source": "plugin.json",
-      "source_sha256": "ce66690a6352aa6b28b2f9b184125f37be43958fed97e27ff630ac845354b734",
+      "source_sha256": "8a5811042556a0a981e9fdd08a2c726be76458833d64b484acaa611291308c2a",
       "destination": "pstack.json"
     },
     {
@@ -346,7 +346,7 @@
     },
     {
       "source": "skills/poteto-help/SKILL.md",
-      "source_sha256": "e0938291e8b82db4f8d35bdbb0ac3ae2a4c76fcb3607f91a4cc7aabfff3a4823",
+      "source_sha256": "67c77ee5e91c19809b01d08cc73cc2870a52fb95fc64dc33328bf8ff9e49891c",
       "destination": ".agents/skills/poteto-help/SKILL.md"
     },
     {
@@ -356,7 +356,7 @@
     },
     {
       "source": "skills/poteto-help/references/recipes.md",
-      "source_sha256": "a69696c4496bed3e852e7c4527071989e2e6d99937ba7f984ed188eb8dd8aff0",
+      "source_sha256": "f2d573014f72f7c798b1998b45f4360a8a83e7b8026c4ed9074e56c5a9d49338",
       "destination": ".agents/skills/poteto-help/references/recipes.md"
     },
     {
@@ -746,7 +746,7 @@
     },
     {
       "source": "skills/sharpen/SKILL.md",
-      "source_sha256": "d895695fcc29b832bf118b842c1d7cf356a69622d63c9d49b40a0c97d8496c80",
+      "source_sha256": "563dfc460c605d311e650726288e2f1cbd61eab817db178d6e7e29643e07e7a2",
       "destination": ".agents/skills/sharpen/SKILL.md"
     },
     {
